@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery File Upload Example</title>
+</head>
+<body>
+<button id="getImg">get img</button>
+<input id="input" type="hidden" value="/users/media/showImage/1">
+<br>
+<!-- <img src="/users/media/showImage/1"> -->
+<br>
+<div id="img">the image</div>
+
+<br>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script>
+$(function () {
+    $('#getImg').click(function(){
+    	$.ajax({
+    		url: "/users/media/showImage/1",
+    		cache: false,
+    		success: function(){
+    			var img=$('<img>').attr('src', '/users/media/showImage/1');
+    	    	$('#img').append(img);
+    			//$('#img').append('<img src="data">');
+    		}
+        }); 
+        /* var id=$('#input').val();
+        var img=$('<img>').attr('src', id);
+    	$('#img').append(img);
+ */    }); 
+});
+</script>
+
+</body> 
+</html>

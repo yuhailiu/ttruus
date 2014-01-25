@@ -1,0 +1,52 @@
+
+
+<!-- - - - - - - - - - - - - - Top Panel - - - - - - - - - - - - - - - - -->
+
+<div class="top-line clearfix  ui-corner-all">
+
+	<div class="topcenter">
+		<ul id="topleft">
+
+			<li class="ui-state-default ui-corner-all" title=".ui-icon-home"><a
+				href="/users/login/confirm"> <span class="ui-icon ui-icon-home"></span>
+			</a></li>
+			<li><a href="">| 加入</a></li>
+			<li><a href="">| 关于 </a></li>
+		</ul>
+
+		<ul id="topright">
+			<li class="ui-state-default ui-corner-all" title="退出"><a
+				href="/users/login/logout"> <span class="ui-icon ui-icon-extlink"></span>
+			</a></li>
+			<li class="ui-state-default ui-corner-all" title="用户设置"><a
+				href="/users/setting/index"> <span class="ui-icon ui-icon-wrench"></span>
+			</a></li>
+
+			<li id="top_user_email"></li>
+		</ul>
+	</div>
+
+
+</div>
+<!--/ .top-line-->
+<!-- - - - - - - - - - - - - end Top Panel - - - - - - - - - - - - - - - -->
+<div class="wrap">
+	<!-- - - - - - - - - - - - - - Header - - - - - - - - - - - - - - - - -->
+
+	<header id="header" class="clearfix">
+
+		<a href="/" id="logo">
+			<h1>
+				<span class="tcolor">ttruus</span>
+			</h1>
+		</a>
+	</header>
+	<!--/ #header-->
+	<!-- - - - - - - - - - - - - - end Header - - - - - - - - - - - - - - - - -->
+</div>
+<script type="text/javascript">
+$(function(){
+    $("#top_user_email").text($("#user_email_value").val());
+});
+</script>
+

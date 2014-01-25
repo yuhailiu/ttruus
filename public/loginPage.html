@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Login - ttruus</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        <meta name="description" content="信息分享" />
+	    <meta name="author" content="ttruus" />
+	    
+	    <!-- styles -->
+	    <link href="/css/myStyle.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/1140.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/start/jquery-ui-1.10.3.custom.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">	     
+		<script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
+		
+		<!--[if lt IE 9]><script type="text/javascript" src="/js/html5.js"></script><![endif]-->         
+		<script src="/js/jquery-ui-1.10.3.custom.js" type="text/javascript"></script>
+        <script src="/js/login.js" type="text/javascript"></script>
+        
+        <!-- validation js -->        
+		<script src="/js/jquery.mockjax.js"></script>
+		<script src="/js/jquery.validate.js"></script>
+
+
+        <!--  ttruus ico -->
+        <link href="/css/myStyle.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/1140.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/start/jquery-ui-1.10.3.custom.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+    </head>
+    <body class="h-style-1 text-1">
+    <!-- - - - - - - - - - - - - - Top Panel - - - - - - - - - - - - - - - - -->	
+
+    <div class="top-line clearfix">
+	
+	   <div class="wrap myfont">
+			<a href=""> 主页 </a>
+			<a href=""> 加入 </a>
+			<a href=""> 关于 </a>
+	   </div><!--/ .wrap-->
+	
+    </div><!--/ .top-line-->
+    <!-- - - - - - - - - - - - - end Top Panel - - - - - - - - - - - - - - - -->	
+
+    <div class="wrap">
+	
+	
+	<!-- - - - - - - - - - - - - - Header - - - - - - - - - - - - - - - - -->	
+	
+	<header id="header" class="clearfix">
+		
+		<a href="index.html" id="logo">
+			<h1><span class="tcolor">ttruus</span></h1>
+		</a>
+		<div id="myregister" >
+			<a href="register.html" >|   注册</a>
+		</div><!-- #myRegister-->
+		<div id="mylogin" >
+			<a href="users/login" >登录</a>
+		</div><!-- #mylogin -->
+		
+		
+	</header><!--/ #header-->
+	
+	
+	
+	<!-- - - - - - - - - - - - - - end Header - - - - - - - - - - - - - - - - -->	
+	
+		
+       <!-- beging the container --> 
+       <div class="container">
+            <!-- - - - - - - - - - - - - - - Main - - - - - - - - - - - - - - - - -->
+	<div class="banner">
+		<h1> 一个帐户，畅享 ttruus 所有服务！ </h1>
+		<h2 class="hidden-small"> 使用您的 ttruus 帐户登录 </h2>
+	</div>
+		<div class="card signin-card clearfix">
+		<img class="profile-img" alt="" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png">
+		<p class="profile-name"></p>
+		<form action="/users/login/process" method="post" name="Login" enctype="multipart/form-data" id="loginform">						
+			<input name="email" type="email"  id="Email" placeholder="电子邮件" value="">							
+			<input name="password" type="password"  id="Passwd" placeholder="密码" value="">
+			          
+			<input name="submit" type="submit" id="submit-button" class="rc-button rc-button-submit" value="登陆">								
+			<label class="remember">
+				<input id="PersistentCookie" type="checkbox" checked="checked" value="yes" name="PersistentCookie">
+				<span> 保持登录状态 </span>
+			</label>
+			<input type="hidden" value="1" name="rmShown">
+			<a id="link-forgot-passwd" class="need-help-reverse" href="https://accounts.google.com/RecoverAccount?continue=http%3A%2F%2Fwww.google.com.hk%2F"> 需要帮助？ </a>
+		  </form>	</div>
+	<p class="create-account">
+  		<a id="link-signup" href="https://accounts.google.com/SignUp?continue=http%3A%2F%2Fwww.google.com.hk%2F&amp;hl=zh-CN" id="link-signup">
+  		创建帐户
+  		</a>
+  	</p>
+	
+	<!-- - - - - - - - - - - - - - - End Main - - - - - - - - - - - - - - -->		
+	<form action="">
+		<label for="email">email</label>
+		<input name="email" type="email" id="temail">
+	</form>
+
+
+            
+        
+        <!--foot with copy right  -->        
+        <footer id="footer" class="clearfix">
+			 <div id="myfooter">
+				<a href="">帮助 |</a>
+				<a href=""> 发送反馈 |</a>
+				<a href=""> 隐私权和使用条款</a>
+			 </div>			
+			 <div class="adjective clearfix">
+				<div class="copyright">Copyright &copy; 2013. ttruus. All rights reserved</div>				
+			 </div><!--/ .adjective-->					
+	     </footer><!--/ #footer-->
+        </div> <!-- /container -->
+
+    </div>
+    </body>
+</html>

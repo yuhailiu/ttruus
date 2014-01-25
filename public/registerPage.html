@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Register - ttruus</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        <meta name="description" content="信息分享" />
+	    <meta name="author" content="ttruus" />
+	    
+	    <!-- styles -->
+	    <link href="/css/myStyle.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/1140.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/start/jquery-ui-1.10.3.custom.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">	     
+		<script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
+		
+		<!--[if lt IE 9]><script type="text/javascript" src="/js/html5.js"></script><![endif]-->        
+		<script src="/js/jquery-ui-1.10.3.custom.js" type="text/javascript"></script>
+         
+         <!-- validation js -->        
+		<script src="/js/jquery.mockjax.js"></script>
+		<script src="/js/jquery.validate.js"></script>
+        <script src="/js/register.js" type="text/javascript"></script>
+
+
+        <!--  ttruus ico -->
+        <link href="/css/myStyle.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/1140.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/start/jquery-ui-1.10.3.custom.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">
+		<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+    </head>
+    <body class="h-style-1 text-1">
+    <!-- - - - - - - - - - - - - - Top Panel - - - - - - - - - - - - - - - - -->	
+
+    <div class="top-line clearfix">
+	
+	   <div class="wrap myfont">
+			<a href="/"> 主页 </a>
+			<a href=""> 加入 </a>
+			<a href=""> 关于 </a>
+	   </div><!--/ .wrap-->
+	
+    </div><!--/ .top-line-->
+    <!-- - - - - - - - - - - - - end Top Panel - - - - - - - - - - - - - - - -->	
+
+    <div class="wrap">
+	
+	
+	<!-- - - - - - - - - - - - - - Header - - - - - - - - - - - - - - - - -->	
+	
+	<header id="header" class="clearfix">
+		
+		<a href="index.html" id="logo">
+			<h1><span class="tcolor">ttruus</span></h1>
+		</a>
+		<div id="myregister" >
+			<a href="/users/register" >|   注册</a>
+		</div><!-- #myRegister-->
+		<div id="mylogin" >
+			<a href="/users/login" >登录</a>
+		</div><!-- #mylogin -->
+		
+		
+	</header><!--/ #header-->
+	
+	
+	
+	<!-- - - - - - - - - - - - - - end Header - - - - - - - - - - - - - - - - -->	
+	
+		
+       <!-- beging the container --> 
+       <div class="container">
+            <div class="banner">
+	<h1>一个帐户，畅享 ttruus 所有服务！</h1>
+	<h2 class="hidden-small">建立您的 ttruus 帐户</h2>
+</div>
+<section class="register">
+
+<div class="clearfix">
+    <div class="sign-up">
+        <div class="signup-box">
+        <form action="/users/register/process" autocomplete="off" method="post" name="Register" enctype="multipart/form-data" id="registerForm">        
+        <table>
+        <tr>
+        	<td><strong>名称</strong></td>
+		</tr>
+        <tr>    
+        	<td>
+            	<input name="first_name" type="text" required="required" class="form-element " id="first_lname" placeholder="名字" value="">
+        	</td>
+        </tr>
+        <tr>    
+        	<td>
+                <input name="last_name" type="text" required="required" class="form-element" id="last_name" placeholder="姓氏" value="">           
+        	</td>
+        </tr>
+        <tr>    
+        	<td>
+                <strong><label for="Email">我目前使用的电子邮箱</label></strong>
+            </td>
+        </tr>
+        <tr>    
+        	<td>   
+             <input name="email" type="email" required="required" class="form-element" id="Email" placeholder="...@ttruus.com" value="">                
+            </td>
+            <td class="status"></td>
+        </tr>
+        
+        <tr>    
+        	<td>   
+                <strong><label for="password">建立ttruus密码</label></strong>
+            </td>
+        </tr>
+		<tr>    
+        	<td>   
+             <input name="password" type="password" required="required" class="form-element" id="password" value="">            
+       
+            </td>
+        </tr>
+		<tr>    
+        	<td>   
+                <strong><label for="confirm_password">确认ttruus密码</label></strong>
+            </td>
+        </tr>
+		<tr>    
+        	<td>   
+             <input name="confirm_password" type="password" required="required" class="form-element" value=""> 
+             </td>
+        </tr>
+               
+      	<tr>    
+        	<td>
+        		<input name="submit" type="submit" id="submit-button" value="注册">
+        	</td>
+        </tr>
+                
+        </table>		
+        </form>        
+        </div>
+    </div>
+</div>
+</section>
+<p></p>
+            
+        
+        <!--foot with copy right  -->        
+        <footer id="footer" class="clearfix">
+			 <div id="myfooter">
+				<a href="">帮助 |</a>
+				<a href=""> 发送反馈 |</a>
+				<a href=""> 隐私权和使用条款</a>
+			 </div>			
+			 <div class="adjective clearfix">
+				<div class="copyright">Copyright &copy; 2013. ttruus. All rights reserved</div>				
+			 </div><!--/ .adjective-->					
+	     </footer><!--/ #footer-->
+        </div> <!-- /container -->
+
+    </div>
+    </body>
+</html>

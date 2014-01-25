@@ -1,0 +1,331 @@
+
+.top-line {
+	background-color: 	#ADD8E6;	//LightBlue
+}
+
+.navigation {
+	background-color:	#1E90FF;	//DodgerBlue
+}
+
+.orange:hover {
+	background:		#1E90FF !important; //change the color to DodgerBlue
+}
+
+.button:hover {
+	background:		#1E90FF !important; //change the color to DodgerBlue
+}
+
+#showuser, #mylogin, #myregister {
+	width:			50px;	
+	font-size:		150%;
+	text-align:		right;
+	margin-right:	20px;
+	height:			28px;
+	vertical-align: baseline;
+	float:			right;
+	
+}
+#mylogin{
+	width:			50px;
+	margin-right:	0;
+}
+
+.navigation {
+
+ 	border-bottom: 6px solid #1E90EF;
+}
+
+div#myfooter {
+	font-size: 		150%;
+	margin-left: 	auto;
+	margin-right: 	auto;
+	width:			300px;
+}
+
+
+a {
+	color: 	#1E90FF;
+}
+/*
+*the following style for the login page
+*/
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+
+.signin-card {
+    padding: 40px;
+    width: 274px;
+}
+.card {
+    margin-bottom: 20px;
+}
+.card {
+    background-color: #F7F7F7;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    margin: 0 auto 25px;
+    padding: 20px 25px 30px;
+    width: 304px;
+}
+
+.clearfix {
+}
+
+.signin-card .profile-img {
+    border-radius: 50%;
+    display: block;
+    height: 96px;
+    margin: 0 auto 10px;
+    width: 96px;
+}
+
+.hidden-label {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 0;
+    overflow: hidden;
+    position: absolute !important;
+    visibility: hidden;
+    width: 0;
+}
+
+
+
+.signin-card #Email, .signin-card #Passwd, .signin-card .captcha {
+    direction: ltr;
+    font-size: 16px;
+    height: 44px;
+	margin-left:	auto;
+	margin-right:	auto;
+}
+
+.signin-card #Passwd {
+    margin-top: -1px;
+}
+
+.signin-card input[type="email"], .signin-card input[type="password"], .signin-card input[type="text"], .signin-card input[type="submit"] {
+    //-moz-box-sizing: border-box;
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+   	width: 	282px;
+    z-index: 1;
+}
+
+#Email {
+    margin-bottom: 0;
+	
+}
+
+.card .rc-button {
+    padding: 0;
+    width: 100%;
+}
+button, input[type="button"], input[type="submit"] {
+    font-family: Arial,sans-serif;
+}
+.rc-button-submit {
+    background-color: #1E90FF;
+    //background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED);
+    border: 1px solid #3079ED;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+}
+.rc-button {
+    -moz-user-select: none;
+    //background-color: #F5F5F5;
+    //background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+    color: #444444;
+    cursor: default;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    height: 36px;
+    line-height: 36px;
+    min-width: 46px;
+    padding: 0 8px;
+    text-align: center;
+    transition: all 0.218s ease 0s;
+}
+
+.card *:first-child {
+    margin-top: 0;
+}
+
+.need-help-reverse {
+    float: right;
+}
+
+.banner {
+    text-align: center;
+}
+
+.banner h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+.banner h1 {
+    color: #555555;
+    font-family: 'Open Sans',arial;
+    font-size: 42px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.banner h2 {
+    margin-bottom: 15px;
+}
+.banner h2 {
+    color: #555555;
+    font-family: 'Open Sans',arial;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+p.create-account {
+	text-align: 	center;
+	font-size:		150%;
+}
+hgroup {
+	animation: 0.25s linear 0.25s normal none 1 all;
+    display: block;
+    opacity: 1;
+    position: absolute;
+    top: 30%;
+	left: 20px;
+}
+.sign-up {
+    clear: both;
+	margin-left: auto;
+    margin-right: auto;
+    width: 362px;
+}
+ .signup-box {
+    border: 0 none;
+}
+.signup-box {
+    background: none repeat scroll 0 0 #F1F1F1;
+    border: 1px solid #E5E5E5;
+    margin: 0;
+    padding: 25px;
+}
+.form-element {
+    margin: 0 0 0.5em;
+    position: relative;
+}
+
+label {
+    display: inline-block;
+    position: relative;
+}
+
+input[type="email"], input[type="password"]{
+	width: 285px;
+}
+
+strong {
+    color: #222222;
+}
+
+button.g-button, input.g-button[type="submit"] {
+    height: 29px;
+    line-height: 29px;
+    margin: 0;
+    vertical-align: bottom;
+}
+.g-button-submit {
+    background-color: #4D90FE;
+    background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED);
+    border: 1px solid #3079ED;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+}
+.error {
+	color: red;
+}
+
+#captcha_image {
+	width: 136px;
+	height: 28px;
+}
+
+#submit-button {
+	width:	304px;
+}
+#topfirstname {
+	position: absolute;
+	font-size: 150%;
+	top: 70px;
+    z-index: 1000;
+	padding-left: 5px;
+    left: 200px;
+	
+}
+
+#topleft {
+	width:			200px;	
+	float:			left;
+	margin-left:	20px;
+}
+#topleft > li{
+	float: left;
+	margin-right: 5px;
+}
+
+#topright {
+	float: right;
+	font-size:		150%;
+	width:			200px;
+	margin-right:	20px;
+}
+#topright > li{
+	float: right;
+	margin-right: 5px;
+	position: relative;
+}
+
+#topleft, #topright{
+	font-size: 	110%;
+}
+
+.topcenter {
+	max-width: 1220px; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+.mycenter {
+	margin-left: auto; 
+	margin-right: auto;
+}
+.showInfoTd {
+	width: 200px;
+	font-size: 120%;
+}
+#showInfo {
+	float: left;
+}
+#showPhoto {
+	width: 300px;
+	float: left;
+}
+#tabs-1 {
+	height: 800px;
+}
+
+
+
+
+
+
