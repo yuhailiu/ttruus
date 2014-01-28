@@ -1,38 +1,40 @@
 $(function() {
-//jQuery UI	
- 	$("#submit-button").button();
- 	
- 	
-//validation  
- 	$("#loginform").validate({
-		rules: {
-			
-			password: {
-				required: true,
-				minlength: 5
+	// jQuery UI
+	$("#submit-button").button();
+
+	// validation
+	$("#loginform").validate({
+		rules : {
+			password : {
+				required : true,
+				minlength : 6,
+				maxlength : 22,
+				password : true,
 			},
-			email: {
-				required: true,
-				email: true,
-				remote: "/users/login/checkEmail"
+			email : {
+				required : true,
+				email : true,
+				remote : "/users/login/checkEmail"
 			},
-			
+
 		},
-		messages: {
-			
-			password: {
-				required: "请输入密码",
-				minlength: "密码的长度至少为5个字符"					
+		message : {
+			email : {
+				remote : "该用户邮箱没有注册"
 			},
-			
-			email: {
-				email: "请输入正确的电子邮箱地址",
-				required: "请输入电子邮箱地址",
-				remote: "该邮箱地址用户不存在"			
-			},
-			
-		}
+		},
+		// disable the submit
+		submitHandler : function(form) {
+			form.submit();
+		},
+
+		// submitHandler: function(form) {
+		// jQuery(form).ajaxSubmit({
+		// target: "#result"
+		// });
+		//			
+		// },
+		onkeyup : false,
 	});
-	
 
 });

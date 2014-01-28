@@ -26,7 +26,8 @@ class RegisterFilter extends InputFilter
             'required' => true,
             'filters' => array(
                 array(
-                    'name' => 'StripTags'
+                    'name' => 'StripTags',
+                    'name' => 'Zend\Filter\StringTrim'
                 )
             ),
             'validators' => array(
@@ -45,7 +46,8 @@ class RegisterFilter extends InputFilter
             'required' => true,
             'filters' => array(
                 array(
-                    'name' => 'StripTags'
+                    'name' => 'StripTags',
+                    'name' => 'Zend\Filter\StringTrim'
                 )
             ),
             'validators' => array(
@@ -63,16 +65,18 @@ class RegisterFilter extends InputFilter
             'name' => 'password',
             'required' => true,
             'filters' => array(
-            		array(
-            				'name' => 'StripTags'
-            		)
+                array(
+                    'name' => 'StripTags',
+                    'name' => 'Zend\Filter\StringTrim'
+                )
             ),
             'validators' => array(
                 array(
                     'name' => 'StringLength',
                     'options' => array(
                         'encoding' => 'UTF-8',
-                        'min' => 8
+                        'min' => 6,
+                        'man' => 22
                     )
                 )
             )
@@ -80,6 +84,12 @@ class RegisterFilter extends InputFilter
         
         $this->add(array(
             'name' => 'confirm_password',
+            'filters' => array(
+            		array(
+            				'name' => 'StripTags',
+            				'name' => 'Zend\Filter\StringTrim'
+            		)
+            ),
             'required' => true
         ));
     }

@@ -89,4 +89,38 @@ $(function(){
         });
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    
+//validation
+ 	
+	$("#userSet").validate({
+	rules: {
+		first_name: {
+			required: true,
+			maxlength: 18,
+			username: true,
+		},
+		last_name: {
+			required: true,
+			maxlength: 18,
+			username: true,
+		},
+		telephone1:{
+			telephone: true,
+		},
+		telephone2:{
+			telephone: true,
+		},
+		address:{
+			address: true,
+			maxlength: 140,
+		}
+		
+	},
+//	disable the submit
+	submitHandler: function(form) {
+		form.submit();		
+	},
+	onkeyup: false,
+	});
+
 });

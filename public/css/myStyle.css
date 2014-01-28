@@ -312,9 +312,11 @@ button.g-button, input.g-button[type="submit"] {
 .showInfoTd {
 	width: 200px;
 	font-size: 120%;
+	margin-top: 10px;
 }
 #showInfo {
 	float: left;
+	width: 800px;
 }
 #showPhoto {
 	width: 300px;

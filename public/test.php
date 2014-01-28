@@ -1,8 +1,11 @@
 <?php
-echo 'test';
-//echo $this->render('footer1.phtml');
+namespace Users;
 
-echo $this->partial('footer1.phtml', array(
-		'from' => 'Team Framework',
-		'subject' => 'view partials'));
+
+$myUtil = new Users\Tools\MyUtils();
+echo 'my test page<br>';
+$email = "l.yuhai@gmail.com";
+echo 'email address ='. $email.'<br>';
+//$flag = $myUtil->isValidateEmail($email);
+echo 'is a validate email?'. $flag; 
 ?>

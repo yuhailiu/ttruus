@@ -9,6 +9,9 @@ use Users\Form\LoginForm;
 use Users\Form\LoginFilter;
 use Users\Model\User;
 use Users\Model\UserTable;
+use Users\Tools\MyUtils;
+use Zend\Validator\EmailAddress;
+
 
 class LoginController extends AbstractActionController
 {
@@ -49,6 +52,10 @@ class LoginController extends AbstractActionController
         }
         
         $post = $this->request->getPost();
+        
+        // purify the html
+        $purifyHtml = new MyUtils();
+        $post = $purifyHtml->purifyHtml($post);
         
         $form = $this->getServiceLocator()->get('LoginForm');
         
@@ -132,19 +139,28 @@ class LoginController extends AbstractActionController
 
     public function checkEmailAction()
     {
-        
-        // disable the layout
-        $this->layout('layout/disable');
-        $flag = "true";
         $email = $_GET['email'];
-        $userTable = $this->getServiceLocator()->get('UserTable');
         
-        try {
-            $userTable->getUserByEmail($email);
-        } catch (\Exception $e) {
+        // validate the email address
+        $validator = new EmailAddress();
+        if ($validator->isValid($email)) {
+            $userTable = $this->getServiceLocator()->get('UserTable');
             
-            $flag = "false";
+            try {
+                $userTable->getUserByEmail($email);
+                $result = "true";
+            } catch (\Exception $e) {
+                
+                $result = "false";
+            }
+        } else {
+            // email is invalid; return false the reasons
+            $result = "false";
         }
-        echo $flag;
+        // Directly return the Response
+        $response = $this->getEvent()->getResponse();
+        $response->setContent($result);
+        
+        return $response;
     }
 }

@@ -17,7 +17,8 @@ class UserSetFilter extends InputFilter
             'filters' => array(
                 array(
                     'name' => 'StripTags'
-                )
+                ),
+                array('name' => 'Zend\Filter\StringTrim'),
             ),
             'validators' => array(
                 array(
@@ -25,7 +26,7 @@ class UserSetFilter extends InputFilter
                     'options' => array(
                         'encoding' => 'UTF-8',
                         'max' => 18
-                    )
+                    ),
                 )
             )
         ));
@@ -36,7 +37,8 @@ class UserSetFilter extends InputFilter
             'filters' => array(
                 array(
                     'name' => 'StripTags'
-                )
+                ),
+                array('name' => 'Zend\Filter\StringTrim'),
             ),
             'validators' => array(
                 array(

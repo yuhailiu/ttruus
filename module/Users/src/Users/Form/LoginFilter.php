@@ -22,6 +22,12 @@ class LoginFilter extends InputFilter
         $this->add(array(
             'name'       => 'password',
             'required'   => true,
+            'filters' => array(
+            		array(
+            				'name' => 'StripTags',
+            				'name' => 'Zend\Filter\StringTrim'
+            		)
+            ),
         ));
     }
 }

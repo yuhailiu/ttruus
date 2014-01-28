@@ -10,6 +10,10 @@ use Users\Form\LoginFilter;
 use Users\Model\User;
 use Users\Model\UserTable;
 use Zend\Validator\Regex;
+use Users\Tools\MyUtils;
+use Users\src\Users\Controller\Test;
+use Users\src\Users\Controller\MyTest1;
+use Users\Model\MyTest;
 
 class SettingController extends AbstractActionController
 {
@@ -62,7 +66,8 @@ class SettingController extends AbstractActionController
         $post = $this->request->getPost();
         
         //Purify html
-        $post = $this->purifyHtml($post);
+        $purifyHtml = new MyUtils();
+        $post = $purifyHtml->purifyHtml($post);
         
         //get the relative table and form
         $userTable = $this->getServiceLocator()->get('UserTable');
@@ -75,18 +80,20 @@ class SettingController extends AbstractActionController
         //validate the telephone no
         $flag = $this->validateTel($post->telephone1) ? $this->validateTel($post->telephone2) : false;
         
+        //validate the user name
+        $utils = new MyUtils();
+        $flag_name = $utils->isValidateName($post['first_name']) ? $utils->isValidateName($post['last_name']) : false;
+        $flag_address =$utils->isValidateAddress($post['address']);
         
-        if (!$form->isValid() || !$flag) {
+        if (!$form->isValid() || !$flag || !$flag_name || !$flag_address) {
 
-            return $this->redirect()->toRoute('users/setting', array(
-            		'action' => 'index',
+            $model = new ViewModel(array(
+            		'error' => true,
+                    'user' => $user,
+            		//'userSetForm'  => $form,
             ));
-//             $model = new ViewModel(array(
-//             		'error' => true,
-//             		'userSetForm'  => $form,
-//             ));
-//             $model->setTemplate('users/login/index');
-//             return $model;
+            $model->setTemplate('users/utils/error');
+            return $model;
             
         }
         //$data = $form->getData();
@@ -112,19 +119,12 @@ class SettingController extends AbstractActionController
         return $flag;
     }
     
-    /*
-     * @param array 
-     * return array
+    /**
+     * if has new property in data update the user relative otherwise keep user's original
+     * @param User $user
+     * @param Array $data
+     * @return User
      */
-    protected function purifyHtml($post){
-        require_once 'vendor/htmlpurifier-4.6.0/library/HTMLPurifier.auto.php';
-        $config = \HTMLPurifier_Config::createDefault();
-        $purifier = new \HTMLPurifier($config);
-        foreach ($post as $key => $value) {
-        	$post[$key] = $purifier->purify($post[$key]);
-        }
-        return $post;
-    }
     protected function exchangeArray($user, $data)
     {
         $user->id		= (isset($data['id'])) ? $data['id'] : $user->id;
@@ -148,3 +148,4 @@ class SettingController extends AbstractActionController
     public function confirmAction()
     {}
 }
+

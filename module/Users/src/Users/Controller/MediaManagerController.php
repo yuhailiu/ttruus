@@ -192,16 +192,23 @@ class MediaManagerController extends AbstractActionController
         $userTable = $this->getServiceLocator()->get('UserTable');
         $user = $userTable->getUser($userId);
         
-        //sleep(5);
         
         // Fetch Configuration from Module Config
         $uploadPath = $this->getFileUploadLocation();
         
+        //bind the thumbnail path
         if ($this->params()->fromRoute('subaction') == 'thumb') {
             $filename = $uploadPath . "/" . $user->thumbnail;
         } else {
             $filename = $uploadPath . "/" . $user->filename;
         }
+        
+        //bind the logo path 
+        if ($this->params()->fromRoute('subaction') == 'logo') {
+            $filename = $uploadPath . "/" . logo . $userId;
+        } 
+        
+        //throw new \Exception("the path--".$filename);
         
         $file = file_get_contents($filename);
         

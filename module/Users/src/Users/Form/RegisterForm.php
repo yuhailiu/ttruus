@@ -20,7 +20,7 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'last_name',
-                'placeholder' => '姓氏(小于20个字符)'
+                'placeholder' => '姓氏(小于18个字符)'
             ),
             'options' => array(
                 'label' => '姓氏'
@@ -34,7 +34,7 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'first_name',
-                'placeholder' => '名字(小于20个字符)',
+                'placeholder' => '名字(小于18个字符)',
                 'autofocus' => 'autofocus'
             ),
             'options' => array(
@@ -63,7 +63,7 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'password',
-                'placeholder' => '密码(5到14个字符)'
+                'placeholder' => '密码(5到22个字符)'
             ),
             'options' => array(
                 'label' => '建立密码'

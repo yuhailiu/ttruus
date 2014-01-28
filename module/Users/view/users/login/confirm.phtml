@@ -15,9 +15,9 @@ $addinfo = '<i style="color: #90EE90;">请补充您的信息</i>'
 
 	<div id="tabs">
 		<ul>
+			<li><a href="#tabs-2">组织管理</a></li>
 			<li><a href="#tabs-1">个人资料</a></li>
-			<li><a href="#tabs-2">Second</a></li>
-			<li><a href="#tabs-3">Third</a></li>
+			<li><a href="#tabs-3">任务管理</a></li>
 		</ul>
 		<div id="tabs-1">
 			<div id="showPhoto">
@@ -125,15 +125,15 @@ $addinfo = '<i style="color: #90EE90;">请补充您的信息</i>'
     			     </tr>
     			     <tr>
     			         <td>
-    			             <?php if ($user->org_name == null){
+    			             <?php if ($org->org_name == null){
     			         	echo $addinfo;
-    			         }else {echo $user->org_name;}?>
+    			         }else {echo $org->org_name;}?>
     			              
     			         </td>
     			         <td>
-    			             <?php if ($user->org_des == null){
+    			             <?php if ($org->org_des == null){
     			         	echo $addinfo;
-    			         }else {echo $user->org_des;}?>
+    			         }else {echo $org->org_des;}?>
     			         </td>
     			     </tr>
     		</table>
@@ -144,12 +144,12 @@ $addinfo = '<i style="color: #90EE90;">请补充您的信息</i>'
 			</div>
 		</div>
 	
-	   <div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna,
-		blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque
-		sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
-	   <div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin
-		eu, felis. Pellentesque nisi urna, interdum eget, sagittis et,
-		consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
+	   <div id="tabs-2">
+	   <?php echo $this->partial('users/login/manageOrg', array('user' => $user, 'org' => $org))?>
+	   </div>
+	   <div id="tabs-3">
+	   add the tasks managements here.
+	   </div>
 </div>
 </div>
 <!-- /.wrap -->
