@@ -1,4 +1,6 @@
-<?php $this->headTitle()->prepend('Register'); ?>
+<?php $this->headTitle()->prepend('Register'); 
+require 'module/Users/view/users/utils/user_label.php';
+?>
 
 <script src="/js/register.js" type="text/javascript"></script>
 <script src="/js/captcha.js" type="text/javascript"></script>
@@ -31,13 +33,12 @@ $_SESSION['captcha_id'] = $str;
 <!-- end the captcha -->
 
 <div class="banner">
-	<h1>一个帐户，畅享 ttruus 所有服务！</h1>
-	<h2 class="hidden-small">建立您的 ttruus 帐户</h2>
+	<h1><?php echo $user_labels[title1]?></h1>
+	<h2 class="hidden-small"><?php echo $user_labels[title2]?></h2>
 </div>
 <section class="register">
 <?php if ($this->error): ?>
-<p class="error">There were one or more isues with your submission.
-		Please correct them as indicated below.</p>
+<p class="error"><?php echo $user_labels[registerError]?></p>
 <?php endif ?>
 
 <div class="clearfix">
@@ -57,7 +58,7 @@ $_SESSION['captcha_id'] = $str;
         ?>
         <fieldset>
             <legend>
-                <strong>名称</strong>
+                <strong><?php echo $user_labels[name]?></strong>
             </legend>
             
                 <?php 
@@ -108,13 +109,13 @@ $_SESSION['captcha_id'] = $str;
                 
                 <td>
                     <div id="captchaimage"><a href="" 
-                        id="refreshimg" title="换一张"><img src="/captcha/images/image.php?<?php echo time(); ?>" 
-                        alt="请点击" id="captcha_image"/></a></div> 
+                        id="refreshimg" title="<?php echo $user_labels[changeImg]?>"><img src="/captcha/images/image.php?<?php echo time(); ?>" 
+                        alt="<?php echo $user_labels[click]?>" id="captcha_image"/></a></div> 
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" maxlength="6" class="form-element" name="captcha" id="captcha" placeholder="验证码"/>
+                    <input type="text" maxlength="6" class="form-element" name="captcha" id="captcha" placeholder="<?php echo $user_labels[captcha]?>"/>
                 </td>
             </tr>
             <tr>
@@ -122,7 +123,7 @@ $_SESSION['captcha_id'] = $str;
 	  			<td class="field">
 		  			<div id="termswrap">
 			  			<input id="terms" type="checkbox" name="terms" checked="checked"/>
-			            <label id="lterms" for="terms"><strong>我已阅读并接受</strong><a href="/protocal.html">《ttruus用户协议》</a></label>
+			            <label id="lterms" for="terms"><strong><?php echo $user_labels[accept]?></strong><a href="/protocal.html"><?php echo $user_labels[terms]?></a></label>
 		            </div> <!-- /termswrap -->
 	  			</td>
 	  		 </tr>

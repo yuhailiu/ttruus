@@ -1,6 +1,6 @@
 <?php
 $this->headTitle()->prepend('Confirm');
-$addinfo = '<i style="color: #90EE90;">请补充您的信息</i>'
+require 'module/Users/view/users/utils/user_label.php';
 ?>
 <!-- prepare information -->
 <input type="hidden" id="user_email_value" value="<?php echo $user->email; ?>">
@@ -15,137 +15,20 @@ $addinfo = '<i style="color: #90EE90;">请补充您的信息</i>'
 
 	<div id="tabs">
 		<ul>
-			<li><a href="#tabs-2">组织管理</a></li>
-			<li><a href="#tabs-1">个人资料</a></li>
-			<li><a href="#tabs-3">任务管理</a></li>
+			<li><a href="#tabs-2"><?php echo $user_labels[orgManagement]?></a></li>
+			<li><a href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
+			<li><a href="#tabs-3"><?php echo $user_labels[taskManagement]?></a></li>
 		</ul>
 		<div id="tabs-1">
-			<div id="showPhoto">
-                <?php 
-                    echo $this->partial('layout/showTnPhoto.phtml', array(
-                        'user_firstname' => $user->firstname,
-                        'user_id' => $user->id
-                    ));
-                ?>
-            </div>
-			<br>
-			<br>
-			<div id="showInfo">
-			<h5>基本信息</h5>
-    			<table>
-    			     <tr>
-    			         <td class="showInfoTd">名字：</td>
-    			         <td >
-    			         <?php echo $user->first_name;?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">姓氏：</td>
-    			         <td>
-    			         <?php echo $user->last_name;?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">性别:</td>
-    			         <td>
-    			         <?php if ($user->sex == 1) {
-    			         	echo '男';
-    			         }elseif ($user->sex == 2){
-                            echo '女';
-                         }else {
-                         	echo $addinfo;
-                         }
-    			         ?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">职位：</td>
-    			         <td>
-    			         <?php if ($user->title == null){
-    			         	echo $addinfo;
-    			         }else {echo $user->title;}?>
-    			         </td>
-    			     </tr>
-    			     
-    			     <tr>
-    			         <td class="showInfoTd">用户创建时间：</td>
-    			         <td>
-    			         <?php echo $user->create_time;?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">信息最后一次修改时间:</td>
-    			         <td>
-    			         <?php echo $user->last_modify;?>
-    			         </td>
-    			     </tr>
-    			     
-    			</table>
-    		<hr>	
-			<h5>通讯信息</h5>
-			 <table>
-    			     <tr>
-    			         <td class="showInfoTd">电子邮箱：</td>
-    			         <td class="">
-    			         <?php echo $user->email;?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">电话 1：</td>
-    			         <td>
-    			         <?php if ($user->telephone1 == null){
-    			         	echo $addinfo;
-    			         }else {echo $user->telephone1;}?>
-    			         
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">电话 2：</td>
-    			         <td>
-    			         <?php if ($user->telephone2 == null){
-    			         	echo $addinfo;
-    			         }else {echo $user->telephone2;}?>
-    			         </td>
-    			     </tr>
-    			     <tr>
-    			         <td class="showInfoTd">通信地址：</td>
-    			         <td>
-    			         <?php if ($user->address == null){
-    			         	echo $addinfo;
-    			         }else {echo $user->address;}?>
-    			         </td>
-    			     </tr>
-    		</table>
-    		<hr>	
-    		<h5>创建的组织信息</h5>
-    		<table>
-    			     <tr>
-    			         <td class="showInfoTd">组织名称：</td>
-    			         <td class="showInfoTd">组织简介：</td>
-    			     </tr>
-    			     <tr>
-    			         <td>
-    			             <?php if ($org->org_name == null){
-    			         	echo $addinfo;
-    			         }else {echo $org->org_name;}?>
-    			              
-    			         </td>
-    			         <td>
-    			             <?php if ($org->org_des == null){
-    			         	echo $addinfo;
-    			         }else {echo $org->org_des;}?>
-    			         </td>
-    			     </tr>
-    		</table>
-    		
-    		<hr>	
-    		<h6>工作信息</h6>
-    		
-			</div>
+		<?php echo $this->partial('users/login/personalInfo', array(
+		    'user' => $user, 
+		    'org' => $org))?>	
 		</div>
 	
 	   <div id="tabs-2">
-	   <?php echo $this->partial('users/login/manageOrg', array('user' => $user, 'org' => $org))?>
+	   <?php echo $this->partial('users/login/manageOrg', array(
+	       'user' => $user, 
+	       'org' => $org))?>
 	   </div>
 	   <div id="tabs-3">
 	   add the tasks managements here.

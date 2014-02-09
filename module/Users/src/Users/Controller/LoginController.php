@@ -11,6 +11,7 @@ use Users\Model\User;
 use Users\Model\UserTable;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
+use Users\Form\UserForm;
 
 
 class LoginController extends AbstractActionController

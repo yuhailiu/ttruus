@@ -11,17 +11,20 @@ class UserSetForm extends Form
 
     public function __construct($name = null)
     {
+        // get the labal information
+        require 'module/Users/view/users/utils/user_label.php';
+        
         parent::__construct('registerForm');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
         
         $this->add(array(
-        		'name' => 'id',
-        		'attributes' => array(
-        				'type' => 'text',
-        				'required' => 'required',
-        				'id' => 'user_id_value'
-        		),
+            'name' => 'id',
+            'attributes' => array(
+                'type' => 'text',
+                'required' => 'required',
+                'id' => 'user_id_value'
+            )
         ));
         
         $this->add(array(
@@ -33,7 +36,7 @@ class UserSetForm extends Form
                 'id' => 'last_name'
             ),
             'options' => array(
-                'label' => '*姓氏：'
+                'label' => '*' . $user_labels[lastName] . ':'
             )
         ));
         
@@ -46,7 +49,7 @@ class UserSetForm extends Form
                 'id' => 'first_name'
             ),
             'options' => array(
-                'label' => '*名字：'
+                'label' => '*' . $user_labels[firstName] . ':'
             )
         ));
         
@@ -57,7 +60,7 @@ class UserSetForm extends Form
                 'id' => 'sex'
             ),
             'options' => array(
-                'label' => '性别：'
+                'label' => $user_labels[sex] . ':'
             )
         ));
         $this->add(array(
@@ -66,10 +69,10 @@ class UserSetForm extends Form
                 'type' => 'text',
                 'class' => 'form-element',
                 'id' => 'telephone1',
-                'placeholder' => '例如：139010888xx'
+                'placeholder' => $user_labels[telephone1Prompt]
             ),
             'options' => array(
-                'label' => '电话1：'
+                'label' => $user_labels[telephone1] . ':'
             )
         ));
         $this->add(array(
@@ -78,10 +81,10 @@ class UserSetForm extends Form
                 'type' => 'text',
                 'class' => 'form-element',
                 'id' => 'telephone2',
-                'placeholder' => '例如：010-656588xx'
+                'placeholder' => $user_labels[telephone2Prompt]
             ),
             'options' => array(
-                'label' => '电话2：'
+                'label' => $user_labels[telephone2] . ':'
             )
         ));
         $this->add(array(
@@ -92,11 +95,11 @@ class UserSetForm extends Form
                 'id' => 'address',
                 'rows' => 8,
                 'cols' => 60,
-                'placeholder' => '例如：北京市 朝阳区 xx大厦 100号, 邮编：1000xx'
-                
-            ),
+                'placeholder' => $user_labels[addressPrompt]
+            )
+            ,
             'options' => array(
-                'label' => '地址：'
+                'label' => $user_labels[address] . ':'
             )
         ));
         $this->add(array(
@@ -105,10 +108,10 @@ class UserSetForm extends Form
                 'type' => 'text',
                 'class' => 'form-element',
                 'id' => 'title',
-                'placeholder' => '例如：项目经理'
+                'placeholder' => $user_labels[positionPrompt]
             ),
             'options' => array(
-                'label' => '职位：'
+                'label' => $user_labels[position] . ':'
             )
         ));
         
@@ -116,11 +119,11 @@ class UserSetForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type' => 'submit',
-                'value' => '保存',
+                'value' => $user_labels[update],
                 'id' => 'submit-button',
                 'style' => 'width: 100px;'
             )
-            
-        ));
+        )
+        );
     }
 }

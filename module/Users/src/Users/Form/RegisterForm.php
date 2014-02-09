@@ -9,6 +9,9 @@ class RegisterForm extends Form
 
     public function __construct($name = null)
     {
+        //get the labal information
+        require 'module/Users/view/users/utils/user_label.php';
+        
         parent::__construct('registerForm');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
@@ -20,10 +23,10 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'last_name',
-                'placeholder' => '姓氏(小于18个字符)'
+                'placeholder' => $user_labels[lastNamePrompt]
             ),
             'options' => array(
-                'label' => '姓氏'
+                'label' => $user_labels[lastName]
             )
         ));
         
@@ -34,11 +37,11 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'first_name',
-                'placeholder' => '名字(小于18个字符)',
+                'placeholder' => $user_labels[firstNamePrompt],
                 'autofocus' => 'autofocus'
             ),
             'options' => array(
-                'label' => '名字'
+                'label' => $user_labels[firstName]
             )
         ));
         
@@ -52,7 +55,7 @@ class RegisterForm extends Form
                 'placeholder' => '...@ttruus.com'
             ),
             'options' => array(
-                'label' => '我目前使用的电子邮箱'
+                'label' => $user_labels[email]
             )
         ));
         
@@ -63,10 +66,10 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'password',
-                'placeholder' => '密码(5到22个字符)'
+                'placeholder' => $user_labels[passwordPrompt]
             ),
             'options' => array(
-                'label' => '建立密码'
+                'label' => $user_labels[password]
             )
         ));
         
@@ -76,10 +79,10 @@ class RegisterForm extends Form
                 'type' => 'password',
                 'required' => 'required',
                 'class' => 'form-element',
-                'placeholder' => '确认密码'
+                'placeholder' => $user_labels[confirmPassword]
             ),
             'options' => array(
-                'label' => '确认密码'
+                'label' => $user_labels[confirmPassword]
             )
         ));
         
@@ -87,7 +90,7 @@ class RegisterForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type' => 'submit',
-                'value' => '注册',
+                'value' => $user_labels[register],
                 'id' => 'submit-button'
             )
             

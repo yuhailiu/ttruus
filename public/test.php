@@ -1,11 +1,17 @@
 <?php
-namespace Users;
+echo 'locale test';
 
+ini_set('intl.default_locale', 'de-DE');
+echo locale_get_default();
+echo '; ';
+locale_set_default('fr');
 
-$myUtil = new Users\Tools\MyUtils();
-echo 'my test page<br>';
-$email = "l.yuhai@gmail.com";
-echo 'email address ='. $email.'<br>';
-//$flag = $myUtil->isValidateEmail($email);
-echo 'is a validate email?'. $flag; 
+echo locale_get_default();
+echo Locale::getDefault();
+ini_set('intl.default_locale', 'de-DE');
+echo 'Locale::getDefault()';
+echo '; ';
+Locale::setDefault('fr');
+echo Locale::getDefault();
+
 ?>

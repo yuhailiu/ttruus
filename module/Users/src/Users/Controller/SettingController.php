@@ -14,6 +14,7 @@ use Users\Tools\MyUtils;
 use Users\src\Users\Controller\Test;
 use Users\src\Users\Controller\MyTest1;
 use Users\Model\MyTest;
+use Users\Form\UserForm;
 
 class SettingController extends AbstractActionController
 {
@@ -33,11 +34,10 @@ class SettingController extends AbstractActionController
 
     public function indexAction()
     {
- 
         $this->layout('layout/myaccount');
         $userTable = $this->getServiceLocator()->get('UserTable');
         
-        $user_id = (int)$this->getAuthService()
+        $user_id = (int) $this->getAuthService()
             ->getStorage()
             ->read();
         
@@ -57,95 +57,201 @@ class SettingController extends AbstractActionController
         return $viewModel;
     }
 
+    public function changePasswordAction()
+    {
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        
+        $user_id = (int) $this->getAuthService()
+            ->getStorage()
+            ->read();
+        
+        // check empty and verify
+        if (! $user_id) {
+            return $this->redirect()->toRoute('users/login');
+        }
+        $user = $userTable->getUser($user_id);
+        $form = $this->getServiceLocator()->get('ChangePasswordForm');
+        
+        $viewModel = new ViewModel(array(
+            'user' => $user,
+            'form' => $form
+        ));
+        return $viewModel;
+    }
+
+    public function processPasswordAction()
+    {
+        $post = $this->request->getPost();
+        
+        // Purify html
+        $purifyHtml = new MyUtils();
+        $post = $purifyHtml->purifyHtml($post);
+        
+        // Is new password same as the confirm password
+        if ($post->password != $post->confirm_password) {
+        	return $this->showError("the passwords are not same");
+        }
+        
+        $id = (int) $post->id;
+        
+        // get the relative table and form
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        $user = $userTable->getUser($id);
+        
+        // compare the old password, if false return to error
+        $old_password = md5($post->old_password);
+        if ($user->password != $old_password) {
+             return $this->showError('old password isn\'t right');
+        }
+        
+        try {
+            $userTable->updatePasswordById($id, $post->password);
+        } catch (\Exception $e) {
+            return $this->showError('error when update DB');
+        }
+        
+        // $this->updatePassword($id, $post->password);
+        
+        return $this->redirect()->toRoute('users/setting', array(
+            'action' => 'passwordConfirm'
+        ));
+    }
+
+    protected function showError($message)
+    {
+        $model = new ViewModel(array(
+            'error' => true,
+            'message' => $message,
+            //'user' => $user
+        ));
+        $model->setTemplate('users/utils/error');
+        return $model;
+    }
+
     public function processAction()
     {
-        if (!$this->request->isPost()) {
-        	return $this->redirect()->toRoute('users/setting');
+        if (! $this->request->isPost()) {
+            return $this->redirect()->toRoute('users/setting');
         }
         
         $post = $this->request->getPost();
         
-        //Purify html
+        // Purify html
         $purifyHtml = new MyUtils();
         $post = $purifyHtml->purifyHtml($post);
         
-        //get the relative table and form
+        $id = (int) $post->id;
+        
+        // get the relative table and form
         $userTable = $this->getServiceLocator()->get('UserTable');
-        $user = $userTable->getUser($post->id);
+        $user = $userTable->getUser($id);
         
         $form = $this->getServiceLocator()->get('UserSetForm');
         
         $form->setData($post);
         
-        //validate the telephone no
+        // validate the telephone no
         $flag = $this->validateTel($post->telephone1) ? $this->validateTel($post->telephone2) : false;
         
-        //validate the user name
+        // validate the user name
         $utils = new MyUtils();
         $flag_name = $utils->isValidateName($post['first_name']) ? $utils->isValidateName($post['last_name']) : false;
-        $flag_address =$utils->isValidateAddress($post['address']);
+        $flag_address = $utils->isValidateAddress($post['address']);
         
-        if (!$form->isValid() || !$flag || !$flag_name || !$flag_address) {
-
+        // throw new \Exception("from setting process--tel--".$flag."--name--".$flag_name."--address--".$flag_address);
+        
+        if (! $form->isValid() || ! $flag || ! $flag_name || ! $flag_address) {
+            
             $model = new ViewModel(array(
-            		'error' => true,
-                    'user' => $user,
-            		//'userSetForm'  => $form,
+                'error' => true,
+                'user' => $user
             ));
             $model->setTemplate('users/utils/error');
             return $model;
-            
         }
-        //$data = $form->getData();
-        //exchange data
+        // $data = $form->getData();
+        // exchange data
         $user = $this->exchangeArray($user, $post);
         
         // Save user
-		$this->getServiceLocator()->get('UserTable')->saveUser($user);
-		
+        $this->getServiceLocator()
+            ->get('UserTable')
+            ->saveUser($user);
+        
         return $this->redirect()->toRoute('users/login', array(
             'action' => 'confirm'
         ));
     }
-    
-    protected function validateTel($tel){
+
+    protected function validateTel($tel)
+    {
         $flag = true;
         
-        if ($tel){
-        	$validator = new Regex(array('pattern' => '/(^(\d{3,4}-)?\d{7,8})$|(1[0-9][0-9]{9})$|(^(\d{3,4}-)?\d{7,8}-)/'));
-        	$flag = $validator->isValid($tel);
+        if ($tel) {
+            $validator = new Regex(array(
+                'pattern' => '/(^(\d{3,4}-)?\d{7,8})$|(1[0-9][0-9]{9})$|(^(\d{3,4}-)?\d{7,8}-)/'
+            ));
+            $flag = $validator->isValid($tel);
         }
         
         return $flag;
     }
-    
+
     /**
      * if has new property in data update the user relative otherwise keep user's original
-     * @param User $user
-     * @param Array $data
+     *
+     * @param User $user            
+     * @param Array $data            
      * @return User
      */
     protected function exchangeArray($user, $data)
     {
-        $user->id		= (isset($data['id'])) ? $data['id'] : $user->id;
-		$user->first_name		= (isset($data['first_name'])) ? $data['first_name'] : $user->first_name;
-		$user->last_name		= (isset($data['last_name'])) ? $data['last_name'] : $user->last_name;
-		$user->email	= (isset($data['email'])) ? $data['email'] : $user->email;
-		$user->password	= (isset($data['password'])) ? $data['password'] : $user->password;
-		$user->filename	= (isset($data['filename'])) ? $data['filename'] : $user->filename;
-		$user->thumbnail	= (isset($data['thumbnail'])) ? $data['thumbnail'] : $user->thumbnail;
-		$user->create_time =  (isset($data['create_time'])) ? $data['create_time'] : $user->create_time;
-		$user->last_modify = (isset($data['last_modify'])) ? $data['last_modify'] : $user->last_modify;
-		$user->sex	= (isset($data['sex'])) ? $data['sex'] : $user->sex;
-		$user->telephone1 =  (isset($data['telephone1'])) ? $data['telephone1'] : $user->telephone1;
-		$user->telephone2 =  (isset($data['telephone2'])) ? $data['telephone2'] : $user->telephone2;
-		$user->address =  (isset($data['address'])) ? $data['address'] : $user->address;
-		$user->title =  (isset($data['title'])) ? $data['title'] : $user->title; 
-
-		return $user;
+        $user->id = (isset($data['id'])) ? $data['id'] : $user->id;
+        $user->first_name = (isset($data['first_name'])) ? $data['first_name'] : $user->first_name;
+        $user->last_name = (isset($data['last_name'])) ? $data['last_name'] : $user->last_name;
+        $user->email = (isset($data['email'])) ? $data['email'] : $user->email;
+        $user->password = (isset($data['password'])) ? $data['password'] : $user->password;
+        $user->filename = (isset($data['filename'])) ? $data['filename'] : $user->filename;
+        $user->thumbnail = (isset($data['thumbnail'])) ? $data['thumbnail'] : $user->thumbnail;
+        $user->create_time = (isset($data['create_time'])) ? $data['create_time'] : $user->create_time;
+        $user->last_modify = (isset($data['last_modify'])) ? $data['last_modify'] : $user->last_modify;
+        $user->sex = (isset($data['sex'])) ? $data['sex'] : $user->sex;
+        $user->telephone1 = (isset($data['telephone1'])) ? $data['telephone1'] : $user->telephone1;
+        $user->telephone2 = (isset($data['telephone2'])) ? $data['telephone2'] : $user->telephone2;
+        $user->address = (isset($data['address'])) ? $data['address'] : $user->address;
+        $user->title = (isset($data['title'])) ? $data['title'] : $user->title;
+        
+        return $user;
     }
 
-    public function confirmAction()
-    {}
+    /**
+     * get user by the authorized id
+     *
+     * @return User
+     */
+    protected function getUser()
+    {
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        
+        $user_id = (int) $this->getAuthService()
+            ->getStorage()
+            ->read();
+        
+        // check empty and verify
+        if (! $user_id) {
+            return $this->redirect()->toRoute('users/login');
+        }
+        $user = $userTable->getUser($user_id);
+        return $user;
+    }
+
+    public function passwordConfirmAction()
+    {
+        $user = $this->getUser();
+        $viewModel = new ViewModel(array(
+            'user' => $user
+        ));
+        return $viewModel;
+    }
 }
 

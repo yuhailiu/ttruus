@@ -8,6 +8,9 @@ class LoginForm extends Form
 {
     public function __construct($name = null)
     {
+        //get the labal information
+        require 'module/Users/view/users/utils/user_label.php';
+        
         parent::__construct('Login');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype','multipart/form-data');
@@ -19,11 +22,11 @@ class LoginForm extends Form
                 'type'  => 'email',
 				'required' => 'required',
                 'id' => 'Email',
-                'placeholder' => '电子邮件',
+                'placeholder' => $user_labels[email],
                 'autofocus' => 'autofocus'
             ),
             'options' => array(
-                'label' => 'Email',
+                'label' => $user_labels[email],
             ),
         )); 
         
@@ -33,10 +36,10 @@ class LoginForm extends Form
                 'type'  => 'password',
 				'required' => 'required',
                 'id' => 'Passwd',
-                'placeholder' => '密码'
+                'placeholder' => $user_labels[password]
             ),
             'options' => array(
-                'label' => 'Password',
+                'label' => $user_labels[password],
             ),
         )); 
 
@@ -45,7 +48,7 @@ class LoginForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => '登陆',
+                'value' => $user_labels[login],
                 'id' => 'submit-button',
                 'class' => 'rc-button rc-button-submit'
             ),

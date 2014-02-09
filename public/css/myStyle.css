@@ -39,9 +39,8 @@ div#myfooter {
 	font-size: 		150%;
 	margin-left: 	auto;
 	margin-right: 	auto;
-	width:			300px;
+	width:			250px;
 }
-
 
 a {
 	color: 	#1E90FF;
@@ -287,7 +286,7 @@ button.g-button, input.g-button[type="submit"] {
 #topright {
 	float: right;
 	font-size:		150%;
-	width:			200px;
+	width:			300px;
 	margin-right:	20px;
 }
 #topright > li{
@@ -315,19 +314,46 @@ button.g-button, input.g-button[type="submit"] {
 	margin-top: 10px;
 }
 #showInfo {
-	float: left;
-	width: 800px;
+	padding-left: 20px;
 }
-#showPhoto {
+
+/* #showPhoto {
 	width: 300px;
 	float: left;
-}
-#tabs-1 {
+} */
+#tabs-1{
 	height: 800px;
 }
-
-
-
-
-
+.tab-left, .tab-right {
+	height: 780px
+}
+.tab-left {
+	width: 200px;
+	float: left;
+	border-right:thin solid #DCDCDC;
+}
+.tab-right {
+	float: left;
+	width: 930px;
+}
+.shortcut-menue dt{
+	background: none repeat scroll 0 0 #F3F3F3;
+	width: 200px;
+	border-top: thin solid #DCDCDC;
+	border-right: thin solid #DCDCDC;
+	border-bottom: thin solid #DCDCDC;
+	font-size: 120%;
+	height: 38px;
+    line-height: 38px;
+}
+.iconSize {
+	width: 19px; 
+	float: left; 
+	margin-top: 10px
+}
+.iconText {
+	float: left; 
+	margin-top: 10px; 
+	margin-left: 6px
+}
 

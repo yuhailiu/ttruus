@@ -8,6 +8,7 @@ use Users\Form\RegisterFilter;
 use Users\Model\User;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
+use Users\Form\UserForm;
 
 class RegisterController extends AbstractActionController
 {

@@ -8,6 +8,9 @@ class ImageUploadForm extends Form
 {
     public function __construct($name = null)
     {
+        //get the labal information
+        require 'module/Users/view/users/utils/user_label.php';
+        
         parent::__construct('Upload');
         $this->setAttribute('method', 'post');
         $this->setAttribute('id', 'photoUploadForm');
@@ -27,7 +30,7 @@ class ImageUploadForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => '提交更新',
+                'value' => $user_labels[update],
                 'id' => 'submit-button'
             ),
         )); 

@@ -131,6 +131,11 @@ class Module implements AutoloaderProviderInterface
     					$form->setInputFilter($sm->get('UserSetFilter'));
     					return $form;
     				},
+    				'ChangePasswordForm' => function ($sm) {
+    					$form = new \Users\Form\ChangePasswordForm();
+    					//$form->setInputFilter($sm->get('UserSetFilter'));
+    					return $form;
+    				},
     				
     				// FILTERS
     				'LoginFilter' => function ($sm) {
@@ -146,7 +151,6 @@ class Module implements AutoloaderProviderInterface
     				'UserSetFilter' => function ($sm) {
     					return new \Users\Form\UserSetFilter();
     				},
-    				
     				
     			),
     			'invokables' => array(),

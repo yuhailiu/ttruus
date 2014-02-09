@@ -1,4 +1,4 @@
-
+<?php require_once 'default_label.php';?>
 
 <!-- - - - - - - - - - - - - - Top Panel - - - - - - - - - - - - - - - - -->
 
@@ -10,18 +10,18 @@
 			<li class="ui-state-default ui-corner-all" title=".ui-icon-home"><a
 				href="/users/login/confirm"> <span class="ui-icon ui-icon-home"></span>
 			</a></li>
-			<li><a href="">| 加入</a></li>
-			<li><a href="">| 关于 </a></li>
+			<li><a href="">| <?php echo $labels[join]; ?></a></li>
+			<li><a href="">| <?php echo $labels[about]; ?> </a></li>
 		</ul>
 
 		<ul id="topright">
-			<li class="ui-state-default ui-corner-all" title="退出"><a
+			<li class="ui-state-default ui-corner-all" title="<?php echo $labels[logout]; ?>"><a
 				href="/users/login/logout"> <span class="ui-icon ui-icon-extlink"></span>
 			</a></li>
-			<li class="ui-state-default ui-corner-all" title="用户设置"><a
+			<li class="ui-state-default ui-corner-all" title="<?php echo $labels[userSet]; ?>"><a
 				href="/users/setting/index"> <span class="ui-icon ui-icon-wrench"></span>
 			</a></li>
-
+			<li ><a><?php echo date("D Y-m-d")?></a></li>
 			<li id="top_user_email"></li>
 		</ul>
 	</div>
