@@ -254,6 +254,12 @@ button.g-button, input.g-button[type="submit"] {
 .error {
 	color: red;
 }
+.success {
+	color: red;
+}
+.error {
+	color: red;
+}
 
 #captcha_image {
 	width: 136px;
@@ -317,13 +323,6 @@ button.g-button, input.g-button[type="submit"] {
 	padding-left: 20px;
 }
 
-/* #showPhoto {
-	width: 300px;
-	float: left;
-} */
-#tabs-1{
-	height: 800px;
-}
 .tab-left, .tab-right {
 	height: 780px
 }
@@ -357,3 +356,25 @@ button.g-button, input.g-button[type="submit"] {
 	margin-left: 6px
 }
 
+#resetPassword {
+	width: 600px;
+}
+
+#resetPassword > li{
+	font-size: 120%;
+	float: left;
+	padding-left: 40px; 
+	width: 156px;
+	border: thin solid #DCDCDC;
+	margin-left: 2px;
+	border-radius:25px;
+}
+
+.focusBackgroud {
+	background-color: #ADD8E6;
+}
+.captcha {
+	width: 100px;
+	float: left;
+	margin-top: 10px;
+}

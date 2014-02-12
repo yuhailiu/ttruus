@@ -78,52 +78,77 @@ class SettingController extends AbstractActionController
         ));
         return $viewModel;
     }
-
+    
+    /**
+     * change the password when the user can provide the old password
+     * 
+     * @return confirm page if success or back when false
+     */
     public function processPasswordAction()
     {
         $post = $this->request->getPost();
         
-        // Purify html
-        $purifyHtml = new MyUtils();
-        $post = $purifyHtml->purifyHtml($post);
+        //Is validate password?
+        $util = new MyUtils();
+        if (!$util->isValidatePassword($post->password)) {
+        	return $this->showError("the new password isn't validate");
+        }
         
-        // Is new password same as the confirm password
+        // Is new password same as the confirm password?
         if ($post->password != $post->confirm_password) {
-        	return $this->showError("the passwords are not same");
+            return $this->showError("the passwords are not same");
         }
         
-        $id = (int) $post->id;
-        
-        // get the relative table and form
-        $userTable = $this->getServiceLocator()->get('UserTable');
-        $user = $userTable->getUser($id);
-        
-        // compare the old password, if false return to error
-        $old_password = md5($post->old_password);
-        if ($user->password != $old_password) {
-             return $this->showError('old password isn\'t right');
+        // Is validate form?
+        $form = $this->getServiceLocator()->get('ChangePasswordForm');
+        $form->setData($post);
+        if (! $form->isValid()) {
+            $user = new User();
+            $user->id = $post->id;
+            $model = new ViewModel(array(
+                'error' => true,
+                'form' => $form,
+                'user' => $user
+            ));
+            $model->setTemplate('users/setting/change-password');
+            return $model;
+        } else {
+            
+            // Purify html
+            $post = $util->purifyHtml($post);
+            
+            $id = (int) $post->id;
+            
+            // get the relative table and form
+            $userTable = $this->getServiceLocator()->get('UserTable');
+            $user = $userTable->getUser($id);
+            
+            // compare the old password, if false return to error
+            $old_password = md5($post->old_password);
+            if ($user->password != $old_password) {
+                return $this->showError('old password isn\'t right');
+            } else {
+                
+                try {
+                    //Update the password by id
+                    $userTable->updatePasswordById($id, $post->password);
+                    return $this->redirect()->toRoute('users/setting', array(
+                        'action' => 'passwordConfirm'
+                    ));
+                } catch (\Exception $e) {
+                    return $this->showError('error when update DB');
+                }
+            }
         }
-        
-        try {
-            $userTable->updatePasswordById($id, $post->password);
-        } catch (\Exception $e) {
-            return $this->showError('error when update DB');
-        }
-        
-        // $this->updatePassword($id, $post->password);
-        
-        return $this->redirect()->toRoute('users/setting', array(
-            'action' => 'passwordConfirm'
-        ));
     }
 
     protected function showError($message)
     {
         $model = new ViewModel(array(
             'error' => true,
-            'message' => $message,
-            //'user' => $user
-        ));
+            'message' => $message
+        // 'user' => $user
+                ));
         $model->setTemplate('users/utils/error');
         return $model;
     }
@@ -244,7 +269,12 @@ class SettingController extends AbstractActionController
         $user = $userTable->getUser($user_id);
         return $user;
     }
-
+    
+    /**
+     * If setting is successful, show confirm message and 
+     * close the window in 5 seconds
+     * @return \Zend\View\Model\ViewModel
+     */
     public function passwordConfirmAction()
     {
         $user = $this->getUser();

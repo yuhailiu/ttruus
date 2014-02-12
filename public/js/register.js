@@ -18,6 +18,7 @@ $(function() {
 	}).ajaxError(function(a, b, e) {
 		throw e;
 	});
+	
 	// validation
 	$("#registerForm").validate({
 		rules : {
@@ -67,18 +68,6 @@ $(function() {
 			},
 
 		},
-		// disable the submit
-		submitHandler : function(form) {
-			form.submit();
-		},
-
-		// submitHandler: function(form) {
-		// jQuery(form).ajaxSubmit({
-		// target: "#result"
-		// });
-		//			
-		// },
-		onkeyup : false,
 	});
 
 });

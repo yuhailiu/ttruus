@@ -1,5 +1,5 @@
-<?php require_once 'footer_label.php';?>
-<div name="footer">
+<?php require 'layout_label.php';?>
+<div id="foot">
 	<!--footer with copy right  -->
 	<div class="wrap">
 
@@ -25,21 +25,6 @@ echo date('Y');
 <!-- validation js -->
 <script src="/js/jquery.validate.js"></script>
 <script src="/js/localization/messages_zh.js"></script>
+<script src="/js/jquery.validate.regex.js"></script>
 
-<script type="text/javascript">
-$(function(){
-	//validate password(6-22)
-	jQuery.validator.addMethod("password", function(value, element) {
-		return this.optional(element) || /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]*$/.test(value);
-	});
-	//validate the text,allow chinese charactor
-	jQuery.validator.addMethod("username", function(value, element) {
-		return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9])*$/.test(value);
-	});
-	//validate address allow space and ","
-	jQuery.validator.addMethod("address", function(value, element) {
-		return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9]|[,]|[\s])*$/.test(value);
-	});
 
-});
-</script>

@@ -31,11 +31,14 @@ class RegisterController extends AbstractActionController
         $post = $this->request->getPost();
         
         // purify the $post
-        $purifyHtml = new MyUtils();
-        $post = $purifyHtml->purifyHtml($post);
-        
-        // validate the user name
         $utils = new MyUtils();
+        $post = $utils->purifyHtml($post);
+        
+        // validate the user name and password
+        if (!$utils->isValidatePassword($post->password)) {
+        	throw new \Exception("the input password isn't validate");
+        }
+        
         $flag_name = $utils->isValidateName($post['first_name']) ? $utils->isValidateName($post['last_name']) : false;
         
         $form = $this->getServiceLocator()->get('RegisterForm');

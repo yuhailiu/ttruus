@@ -11,7 +11,7 @@ use Users\Model\User;
 use Users\Model\UserTable;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
-use Users\Form\UserForm;
+use Zend\Json\Json;
 
 
 class LoginController extends AbstractActionController
@@ -54,9 +54,12 @@ class LoginController extends AbstractActionController
         
         $post = $this->request->getPost();
         
-        // purify the html
-        $purifyHtml = new MyUtils();
-        $post = $purifyHtml->purifyHtml($post);
+        // validate and purify the html
+        $util = new MyUtils();
+        if (!$util->isValidatePassword($post->password)) {
+        	throw new \Exception("the input password isn't validate");
+        }
+        $post = $util->purifyHtml($post);
         
         $form = $this->getServiceLocator()->get('LoginForm');
         
@@ -164,4 +167,67 @@ class LoginController extends AbstractActionController
         
         return $response;
     }
+    
+    /**
+     * Return a confirm email and a randomPassword form
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function resetPasswordAction()
+    {
+        $form = $this->getServiceLocator()->get('ConfirmEmailForm');
+        $randomPasswordForm = $this->getServiceLocator()->get('RandomPasswordForm');
+        $viewModel = new ViewModel(array(
+        	'form' => $form,
+            'randomPasswordForm' => $randomPasswordForm,
+        ));
+        return $viewModel;
+    }
+    
+    /**
+     * generate a random password and send it to user's email box
+     * 
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    
+    public function genRandomPasswordAction()
+    {
+        $post = $this->request->getPost();
+        $email = $post->email;
+        $message = "I am in genRand";
+        
+        $utils = new MyUtils();
+        
+        $flag = $utils->isValidateEmail($email);
+        
+        if ($flag) {
+        	//gen a password 
+        	//save the password to DB
+        	//mail the password to mailbox
+            $to = "l.yuhai@gmail.com";
+            $subject = "Test mail";
+            $message = "Hello! This is a simple email message.";
+            $from = "l.yuhai@sap.com";
+            $headers = "From: $from";
+            mail($to,$subject,$message,$headers);
+            $message = $message."Mail Sent from sap.";
+        }else {
+            $message = $message."It is not a validate email.";
+        }
+        
+        $phpNative = array(
+        	'message' => $message
+        );
+        
+        $json = Json::encode($phpNative);
+        
+        // Directly return the Response
+        $result = $json;
+        $response = $this->getEvent()->getResponse();
+        $response->setContent($result);
+        
+        return $response;
+        
+        throw new \Exception("I am in genRandomPassword.".$post->email);
+    }
+   
 }

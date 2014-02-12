@@ -11,6 +11,7 @@ return array(
         'invokables' => array(
             'Users\Controller\Index' => 'Users\Controller\IndexController',
             'Users\Controller\Login' => 'Users\Controller\LoginController',
+            'Users\Controller\ResetPassword' => 'Users\Controller\ResetPasswordController',
             'Users\Controller\Register' => 'Users\Controller\RegisterController',
             'Users\Controller\Setting' => 'Users\Controller\SettingController',
             'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
@@ -43,6 +44,19 @@ return array(
                     				),
                     				'defaults' => array(
                     						'controller' => 'Users\Controller\Login',
+                    						'action'     => 'index',
+                    				),
+                    		),
+                    ),//end of login
+                    'resetPassword' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => '/resetPassword[/:action]',
+                    				'constraints' => array(
+                    						'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    				),
+                    				'defaults' => array(
+                    						'controller' => 'Users\Controller\ResetPassword',
                     						'action'     => 'index',
                     				),
                     		),

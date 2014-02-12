@@ -69,6 +69,7 @@ class UserSetForm extends Form
                 'type' => 'text',
                 'class' => 'form-element',
                 'id' => 'telephone1',
+                'autofocus' => 'autofocus',
                 'placeholder' => $user_labels[telephone1Prompt]
             ),
             'options' => array(

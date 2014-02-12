@@ -11,7 +11,7 @@ require 'module/Users/view/users/utils/user_label.php';
 			<li><a href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
 
 		</ul>
-		<div id="tabs-1">
+		<div id="tabs-1" style="height: 800px">
 		  <div class="tab-left">
 			<div id="showPhoto">
                 <?php 
@@ -20,7 +20,6 @@ require 'module/Users/view/users/utils/user_label.php';
                     'user_id' => $user->id
                 ));
                 ?>
-                <br>
                 <br>
 				<div>
                     <?php if ($this->error): ?>
@@ -72,7 +71,6 @@ require 'module/Users/view/users/utils/user_label.php';
           </div>
           <div class="tab-right">   
                  <!-- userSetForm -->
-                 <br>
 			     <br>
             <div id="showInfo">
                 <?php if ($this->error): ?>

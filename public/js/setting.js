@@ -10,8 +10,8 @@ $(function(){
 			$( this ).removeClass( "ui-state-hover" );
 		}
 	);
-	
-	 	
+
+
  	//upload and preview the pic
 	'use strict';
     // Change this to the location of your server-side upload handler:
@@ -50,7 +50,7 @@ $(function(){
             .append($('<p class="text-danger"/>').text("必须是小于2M的图像文件"));
     	}
 	}).on('fileuploaddone', function (e, data) {
-		
+
 
 		var id = imgUrl=$('#imgUrl').val();
 		var imgUrl = '/users/media/showImage/' + id +'/thumb?dummy=' + new Date().getTime();
@@ -61,17 +61,17 @@ $(function(){
 			url: imgUrl,
 			cache: false,
 			success: function(){
-				
+
 				var img=$('<img>').attr({
 					'src': imgUrl,
 					'class': 'ui-state-default ui-corner-all',
 					'style': 'height: 130px; width: 130px;'				
 						});
-				
+
 				//window.open(img);
 				$("#dialog-link").append(img);
 				//$('#userImg').replaceWith(img);
-				
+
 				//show the dialog window
 				//$( "#dialog" ).dialog( "open" );
 				//event.preventDefault();
@@ -91,36 +91,36 @@ $(function(){
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
     
 //validation
- 	
-	$("#userSet").validate({
-	rules: {
-		first_name: {
-			required: true,
-			maxlength: 18,
-			username: true,
-		},
-		last_name: {
-			required: true,
-			maxlength: 18,
-			username: true,
-		},
-		telephone1:{
-			telephone: true,
-		},
-		telephone2:{
-			telephone: true,
-		},
-		address:{
-			address: true,
-			maxlength: 140,
-		}
-		
-	},
-//	disable the submit
-	submitHandler: function(form) {
-		form.submit();		
-	},
-	onkeyup: false,
-	});
-
+    //user setting form
+    $("#userSet").validate({
+    	rules:{
+    		first_name:{
+    			required: true,
+    			username: true,
+    			maxlength: 18,
+    		},
+		    last_name:{
+		    	required: true,
+		    	username: true,
+		    	maxlength: 18,
+		    },
+		    title:{
+		    	username: true,
+		    	maxlength: 30,
+		    },
+		    address:{
+		    	address: true,
+		    	maxlength: 140,
+		    },
+		    telephone1:{
+		    	telephone: true,
+		    	maxlength: 15,
+			},
+			telephone2:{
+		    	telephone: true,
+		    	maxlength: 15,
+			},
+    	}
+    });
+    
 });

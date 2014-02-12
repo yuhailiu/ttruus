@@ -18,7 +18,7 @@ $(function() {
 			},
 
 		},
-		message : {
+		messages : {
 			email : {
 				remote : "该用户邮箱没有注册"
 			},

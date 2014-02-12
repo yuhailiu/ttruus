@@ -62,7 +62,11 @@ class Module implements AutoloaderProviderInterface
         	$controller = $e->getTarget(); // The controller which is dispatched
         	$controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
         
-        	if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))) {
+        	if (!in_array($controllerName, array(
+        	    'Users\Controller\Index', 
+        	    'Users\Controller\Register', 
+        	    'Users\Controller\ResetPassword', 
+        	    'Users\Controller\Login'))) {
         		$controller->layout('layout/myaccount');
         	}
         });
@@ -133,7 +137,17 @@ class Module implements AutoloaderProviderInterface
     				},
     				'ChangePasswordForm' => function ($sm) {
     					$form = new \Users\Form\ChangePasswordForm();
-    					//$form->setInputFilter($sm->get('UserSetFilter'));
+    					$form->setInputFilter($sm->get('ChangePasswordFilter'));
+    					return $form;
+    				},
+    				'ConfirmEmailForm' => function ($sm) {
+    					$form = new \Users\Form\ConfirmEmailForm();
+    					//$form->setInputFilter($sm->get('ChangePasswordFilter'));
+    					return $form;
+    				},
+    				'RandomPasswordForm' => function ($sm) {
+    					$form = new \Users\Form\ConfirmRandomPasswordForm();
+    					//$form->setInputFilter($sm->get('ChangePasswordFilter'));
     					return $form;
     				},
     				
@@ -150,6 +164,9 @@ class Module implements AutoloaderProviderInterface
     				},
     				'UserSetFilter' => function ($sm) {
     					return new \Users\Form\UserSetFilter();
+    				},
+    				'ChangePasswordFilter' => function ($sm) {
+    					return new \Users\Form\ChangePasswordFilter();
     				},
     				
     			),

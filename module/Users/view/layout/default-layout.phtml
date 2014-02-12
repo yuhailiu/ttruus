@@ -1,5 +1,5 @@
 <?php echo $this->doctype(); 
-require_once 'default_label.php';
+require_once 'layout_label.php';
 ?>
 
 <html lang="zh">
@@ -9,7 +9,7 @@ require_once 'default_label.php';
         <?php echo $this->headTitle($this->translate('ttruus'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
-        <meta name="description" content="信息分享" />
+        <meta name="description" content=<?php echo $labels[shareInfo]; ?> />
 	    <meta name="author" content="ttruus" />
 	    
 	    <!-- styles -->

@@ -19,7 +19,7 @@ require 'module/Users/view/users/utils/user_label.php';
 			<li><a href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
 			<li><a href="#tabs-3"><?php echo $user_labels[taskManagement]?></a></li>
 		</ul>
-		<div id="tabs-1">
+		<div id="tabs-1" style="height: 800px">
 		<?php echo $this->partial('users/login/personalInfo', array(
 		    'user' => $user, 
 		    'org' => $org))?>	
