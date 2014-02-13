@@ -23,18 +23,6 @@ $(function() {
 				remote : "该用户邮箱没有注册"
 			},
 		},
-		// disable the submit
-		submitHandler : function(form) {
-			form.submit();
-		},
-
-		// submitHandler: function(form) {
-		// jQuery(form).ajaxSubmit({
-		// target: "#result"
-		// });
-		//			
-		// },
-		onkeyup : false,
 	});
 
 });

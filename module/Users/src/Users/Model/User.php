@@ -17,6 +17,7 @@ class User
     public $telephone2;
     public $address;
     public $title;
+    public $captcha;
     
     
 
@@ -41,6 +42,7 @@ class User
 		$this->telephone2 =  (isset($data['telephone2'])) ? $data['telephone2'] : null;
 		$this->address =  (isset($data['address'])) ? $data['address'] : null;
 		$this->title =  (isset($data['title'])) ? $data['title'] : null;
+		$this->captcha =  (isset($data['captcha'])) ? $data['captcha'] : null;
 	}
 	
 	public function getArrayCopy()

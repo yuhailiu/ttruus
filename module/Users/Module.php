@@ -142,12 +142,14 @@ class Module implements AutoloaderProviderInterface
     				},
     				'ConfirmEmailForm' => function ($sm) {
     					$form = new \Users\Form\ConfirmEmailForm();
-    					//$form->setInputFilter($sm->get('ChangePasswordFilter'));
     					return $form;
     				},
-    				'RandomPasswordForm' => function ($sm) {
-    					$form = new \Users\Form\ConfirmRandomPasswordForm();
-    					//$form->setInputFilter($sm->get('ChangePasswordFilter'));
+    				'ConfirmCaptchaForm' => function ($sm) {
+    					$form = new \Users\Form\ConfirmCaptchaForm();
+    					return $form;
+    				},
+    				'ResetPasswordForm' => function ($sm) {
+    					$form = new \Users\Form\ResetPasswordForm();
     					return $form;
     				},
     				

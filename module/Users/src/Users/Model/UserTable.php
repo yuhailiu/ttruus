@@ -32,7 +32,8 @@ class UserTable
             'telephone1' => $user->telephone1,
             'telephone2' => $user->telephone2,
             'address' => $user->address,
-            'title' => $user->title
+            'title' => $user->title,
+            'captcha' => $user->captcha
         );
         
         $id = (int) $user->id;
@@ -128,5 +129,26 @@ class UserTable
         ), array(
             'id' => $id
         ));
+    }
+    
+    /**
+     * 
+     * @param int $id
+     * @param int $captcha
+     * 
+     * throw exception if false
+     */
+    public function updateCaptchaById($id, $captcha)
+    {
+        try {
+            $this->tableGateway->update(array(
+            		'captcha' => $captcha
+            ), array(
+            		'id' => $id
+            ));
+            
+        } catch (\Exception $e) {
+            throw new \SqlException($e); 
+        }
     }
 }

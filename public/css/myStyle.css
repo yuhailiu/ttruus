@@ -375,6 +375,7 @@ button.g-button, input.g-button[type="submit"] {
 }
 .captcha {
 	width: 100px;
-	float: left;
-	margin-top: 10px;
+	//float: left;
+	margin-top: 15px;
+	margin-bottom: 0px;
 }
