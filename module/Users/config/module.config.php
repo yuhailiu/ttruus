@@ -10,6 +10,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Users\Controller\Index' => 'Users\Controller\IndexController',
+            'Users\Controller\Test' => 'Users\Controller\TestController',
             'Users\Controller\Login' => 'Users\Controller\LoginController',
             'Users\Controller\ResetPassword' => 'Users\Controller\ResetPasswordController',
             'Users\Controller\Register' => 'Users\Controller\RegisterController',
@@ -35,6 +36,19 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                    'test' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => '/test[/:action]',
+                    				'constraints' => array(
+                    						'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    				),
+                    				'defaults' => array(
+                    						'controller' => 'Users\Controller\Test',
+                    						'action'     => 'index',
+                    				),
+                    		),
+                    ),//end of test
                     'login' => array(
                     		'type'    => 'Segment',
                     		'options' => array(

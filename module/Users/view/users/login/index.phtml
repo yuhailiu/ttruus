@@ -3,16 +3,14 @@
     require 'module/Users/view/users/utils/user_label.php';
     
 ?>
-
 <!-- - - - - - - - - - - - - - - Main - - - - - - - - - - - - - - - - -->
+<!-- prepare varible for js -->
+<input type="hidden" id="jsNoSuchEmail" value="<?php echo $user_labels[jsNoSuchEmail]?>">
 	<div class="banner">
 		<h1> <?php echo $user_labels[title1]?> </h1>
 		<h2 class="hidden-small"><?php echo $user_labels[title2]?> </h2>
-		<div id="error">
-	   <?php if ($this->error): ?>
+		<div id="error" hidden="hidden">
             <p class="error"><?php echo $user_labels[loginError]?></p>
-			<p><?php echo $this->errorMessage;?></p>			
-       <?php endif ?>
 	</div>
 		
 	</div>
@@ -38,11 +36,9 @@
             echo $this->formElement($form->get('password'));
             echo $this->formElementErrors($form->get('password'));
             ?>
-            <?php if ($this->error): ?>
-                <p class="error">
+                <p class="error" id="noMatch" hidden="hidden">
                    <?php echo $user_labels[invalidatePassword]?>
                 </p>
-            <?php endif ?>
             <?php 
             echo $this->formElement($form->get('submit'));
             echo $this->formElementErrors($form->get('submit'));
@@ -56,6 +52,9 @@
 			</label>
 			<a id="link-forgot-passwd" class="need-help-reverse" href="/users/resetPassword/index"> <?php echo $user_labels[forgetPassword]?>？ </a>
 		  <?php echo $this->form()->closeTag() ?>
+		  <div id="loadingImg" hidden="hidden" class="mycenter" style="width: 20px;" >
+		      <img alt="loading" src="/images/loading.gif">
+		  </div>
 	</div>
 	<p class="create-account">
   		<a id="link-signup" href="/users/register" id="link-signup">

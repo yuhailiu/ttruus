@@ -12,7 +12,8 @@ use Users\Model\UserTable;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
 use Zend\Json\Json;
-
+use Zend\Log\Writer\Stream;
+use Zend\Log\Logger;
 
 class LoginController extends AbstractActionController
 {
@@ -46,66 +47,107 @@ class LoginController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * fail login
+     *
+     * @return Response false
+     */
+    protected function returnIndexError()
+    {
+        // Directly return the Response
+        $response = $this->getEvent()->getResponse();
+        $response->setContent(false);
+        
+        return $response;
+    }
+    
+    /**
+     * success login
+     * 
+     * @return Reponse true
+     */
+    protected function returnLoginSuccess()
+    {
+        // Directly return the Response
+        $response = $this->getEvent()->getResponse();
+        $response->setContent(true);
+        
+        return $response;
+    }
+
+    /**
+     * check password is match email in usertable
+     *
+     * @param string $password            
+     * @param string $email            
+     * @return boolean
+     */
+    protected function isValidateUser($password, $email)
+    {
+        // check it in the DB
+        // get the user id
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        try {
+            $user = $userTable->getUserByEmail($email);
+            if ($user->password == md5($password)) {
+                // write it in AuthService
+                $this->getAuthService()
+                    ->getStorage()
+                    ->write($user->id);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            //write a error log
+            MyUtils::writelog("error at isValidateUser--".$e);
+            return false;
+        }
+    }
+
+    /**
+     * get password and email from page
+     *
+     * @return login page with error if false
+     * @return confirm page with user id
+     */
     public function processAction()
     {
+        //sleep 10 seconds
+        //sleep(10);
+        
         if (! $this->request->isPost()) {
             return $this->redirect()->toRoute('users/login');
         }
         
         $post = $this->request->getPost();
-        
-        // validate and purify the html
-        $util = new MyUtils();
-        if (!$util->isValidatePassword($post->password)) {
-        	throw new \Exception("the input password isn't validate");
-        }
-        $post = $util->purifyHtml($post);
-        
         $form = $this->getServiceLocator()->get('LoginForm');
         
+        // validate the passoword
+        if (! MyUtils::isValidatePassword($post->password)) {
+            return $this->returnIndexError();
+        }
+        
+        // validate login form
         $form->setData($post);
-        if (! $form->isValid()) {
-            $model = new ViewModel(array(
-                'error' => true,
-                'form' => $form
-            ));
-            $model->setTemplate('users/login/index');
-            return $model;
-        } else {
-            // check authentication...
+        if ($form->isValid()) {
             
-            $this->getAuthService()
-                ->getAdapter()
-                ->setIdentity($this->request->getPost('email'))
-                ->setCredential($this->request->getPost('password'));
-            
-            $result = $this->getAuthService()->authenticate();
-            
-            if ($result->isValid()) {
-                
-                // get the user id
-                $userTable = $this->getServiceLocator()->get('UserTable');
-                $user = $userTable->getUserByEmail($this->request->getPost('email'));
-                
-                $this->getAuthService()
-                    ->getStorage()
-                    ->write($user->id);
-                
-                return $this->redirect()->toRoute('users/login', array(
-                    'action' => 'confirm'
-                ));
+            // Is validate users
+            if ($this->isValidateUser($post->password, $post->email)) {
+                // return to success 
+                return $this->returnLoginSuccess();
             } else {
-                $model = new ViewModel(array(
-                    'error' => true,
-                    'form' => $form
-                ));
-                $model->setTemplate('users/login/index');
-                
-                return $model;
+                return $this->returnIndexError();
             }
+        } else {
+            return $this->returnIndexError();
         }
     }
 
+    /**
+     *
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|\Zend\View\Model\ViewModel
+     */
     public function confirmAction()
     {
         $userTable = $this->getServiceLocator()->get('UserTable');
@@ -167,67 +209,4 @@ class LoginController extends AbstractActionController
         
         return $response;
     }
-    
-    /**
-     * Return a confirm email and a randomPassword form
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function resetPasswordAction()
-    {
-        $form = $this->getServiceLocator()->get('ConfirmEmailForm');
-        $randomPasswordForm = $this->getServiceLocator()->get('RandomPasswordForm');
-        $viewModel = new ViewModel(array(
-        	'form' => $form,
-            'randomPasswordForm' => $randomPasswordForm,
-        ));
-        return $viewModel;
-    }
-    
-    /**
-     * generate a random password and send it to user's email box
-     * 
-     * @return \Zend\Stdlib\ResponseInterface
-     */
-    
-    public function genRandomPasswordAction()
-    {
-        $post = $this->request->getPost();
-        $email = $post->email;
-        $message = "I am in genRand";
-        
-        $utils = new MyUtils();
-        
-        $flag = $utils->isValidateEmail($email);
-        
-        if ($flag) {
-        	//gen a password 
-        	//save the password to DB
-        	//mail the password to mailbox
-            $to = "l.yuhai@gmail.com";
-            $subject = "Test mail";
-            $message = "Hello! This is a simple email message.";
-            $from = "l.yuhai@sap.com";
-            $headers = "From: $from";
-            mail($to,$subject,$message,$headers);
-            $message = $message."Mail Sent from sap.";
-        }else {
-            $message = $message."It is not a validate email.";
-        }
-        
-        $phpNative = array(
-        	'message' => $message
-        );
-        
-        $json = Json::encode($phpNative);
-        
-        // Directly return the Response
-        $result = $json;
-        $response = $this->getEvent()->getResponse();
-        $response->setContent($result);
-        
-        return $response;
-        
-        throw new \Exception("I am in genRandomPassword.".$post->email);
-    }
-   
 }
