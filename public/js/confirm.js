@@ -1,5 +1,6 @@
 $(function(){
 	$( "#tabs" ).tabs();
+	$(".confirm_button").button();
 	// Hover states on the static widgets
 	$( "#topright .ui-state-default, #topleft .ui-state-default" ).hover(
 		function() {

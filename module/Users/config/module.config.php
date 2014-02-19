@@ -118,10 +118,9 @@ return array(
                     'media' => array(
                     		'type'    => 'Segment',
                     		'options' => array(
-                    				'route'    => '/media[/:action[/:id[/:subaction]]]',
+                    				'route'    => '/media[/:action[/:email[/:subaction]]]',
                     				'constraints' => array(
                     						'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    						'id'     => '[a-zA-Z0-9_-]*',
                     						'subaction'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                     
                     				),

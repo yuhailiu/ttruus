@@ -1,33 +1,15 @@
 <h2>test logfile</h2>
 <?php
 
-class mytest
-{
+  $dbc = mysqli_connect('127.0.0.1', 'root', 'root', 'ttruus')
+    or die('Error connecting to MySQL server.');
 
-    public function mytest()
-    {
-        echo "I am in mytest";
-        //$writer = new Zend\Log\Writer\Stream('/datpa/log/logfile');
-        printf($writer);
-        printf("here is writer");
-        //throw new \Exception('Failed to create writer');
-        try {
-            $writer = new Zend\Log\Writer\Stream('/datpa/log/logfile');
-            printf($writer);
-            throw new \Exception('Failed to create writer');
-            if (! $writer) {
-                throw new Exception('Failed to create writer');
-            }
-            $logger = new Zend\Log\Logger();
-            $logger->addWriter($writer);
-            
-            $logger->info('Informational message');
-        } catch (\Exception $e) {
-            throw new \Exception($e);
-        }
-    }
-}
+  $sql = "select * from users";
+  $result = mysqli_query($dbc, $sql)
+    or die('Error querying database.');
+  foreach ($result as $rs){
+      echo '<pre>'. print_r($rs, true).'</pre>';
+  }
+  
 
-$mytest = new mytest();
-
-$mytest->mytest;
+  mysqli_close($dbc);

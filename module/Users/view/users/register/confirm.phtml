@@ -1,11 +1,8 @@
-<section class="register-confirm">
 <script src="/js/confirm.js" type="text/javascript"></script>
-
-<h2>谢谢，<?php echo $this->user_firstname; ?>已经成功的创建了用户!</h2>
-<p> 
-    <a href="/users/login" class="confirm_button">马上登陆
-    </a> 
-    <a href="/users/register" class="confirm_button">再注册一个用户
-    </a>
-</p>
-</section>
+<div class="wrap">
+    <h2>谢谢，<?php echo $_SESSION['username']; ?>已经成功的创建了用户!</h2>
+    <p> 
+        <a href="/users/login" class="confirm_button">马上登陆
+        </a> 
+    </p>
+</div>

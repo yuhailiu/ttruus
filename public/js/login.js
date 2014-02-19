@@ -2,12 +2,13 @@ $(function() {
 	// jQuery UI
 	$("#submit-button").button();
 
-	//prepare the options for ajax
+	// prepare the options for ajax
 	var options = {
-			beforeSubmit : showAjaxWaiting, // pre-submit callback
-			success : showResponse, // post-submit callback
+		beforeSubmit : showAjaxWaiting, // pre-submit callback
+		success : showResponse, // post-submit callback
+		dataType : 'json',
 	};
-	
+
 	// validation
 	$("#loginform").validate({
 		rules : {
@@ -34,34 +35,42 @@ $(function() {
 			jQuery(form).ajaxSubmit(options);
 		}
 	});
-	
-	//login for pre-submit callback
-	function showAjaxWaiting()
-	{
+
+	// login for pre-submit callback
+	function showAjaxWaiting() {
 		// show the loading img
 		$("#loadingImg").show();
-		
+
+		// disable the submit button and show loadingimg
+		$("#submit-button").bind("click", function(event) {
+			event.preventDefault();
+		});
+
 		// hide the error message
 		$("#error").hide();
 		$("#noMatch").hide();
 	}
-	
-	//login for call back
-	function showResponse(data)
-	{
-		if(!data){
+
+	// login for call back
+	function showResponse(data) {
+
+		if (!data.flag) {
 			// hide the loading img
 			$("#loadingImg").hide();
-			
-			//show the error message
+
+			// enable the button
+			$("#submit-button").unbind("click");
+
+			// show the error message
 			$("#error").show();
 			$("#noMatch").show();
+
+			// show the failedTimes
+			$("#errorTimes").text(data.failedTimes);
 		} else {
-			alert("sucess login");
-			window.location.href="login/confirm";
+			window.location.href = "login/confirm";
 		}
-			
-		
+
 	}
 
 });

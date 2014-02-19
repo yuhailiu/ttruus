@@ -21,8 +21,8 @@
 			<li class="ui-state-default ui-corner-all" title="<?php echo $labels[userSet]; ?>"><a
 				href="/users/setting/index"> <span class="ui-icon ui-icon-wrench"></span>
 			</a></li>
-			<li ><a><?php echo date("D Y-m-d")?></a></li>
-			<li id="top_user_email"></li>
+			<li ><a><?php echo date("D Y-m-d");  ?></a></li>
+			<li id="top_user_email"><?php echo $_SESSION['email'];?></li>
 		</ul>
 	</div>
 
@@ -43,9 +43,4 @@
 	<!--/ #header-->
 	<!-- - - - - - - - - - - - - - end Header - - - - - - - - - - - - - - - - -->
 </div>
-<script type="text/javascript">
-$(function(){
-    $("#top_user_email").text($("#user_email_value").val());
-});
-</script>
 

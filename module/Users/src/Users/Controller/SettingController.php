@@ -3,18 +3,10 @@ namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
-use Users\Form\LoginForm;
-use Users\Form\LoginFilter;
 use Users\Model\User;
-use Users\Model\UserTable;
 use Zend\Validator\Regex;
 use Users\Tools\MyUtils;
-use Users\src\Users\Controller\Test;
-use Users\src\Users\Controller\MyTest1;
-use Users\Model\MyTest;
-use Users\Form\UserForm;
+use Zend\Json\Json;
 
 class SettingController extends AbstractActionController
 {
@@ -34,23 +26,35 @@ class SettingController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->layout('layout/myaccount');
-        $userTable = $this->getServiceLocator()->get('UserTable');
-        
-        $user_id = (int) $this->getAuthService()
+        // $this->layout('layout/myaccount');
+        // check is it a league user, false return to login page
+        $email = $this->getAuthService()
             ->getStorage()
             ->read();
-        
         // check empty and verify
-        if (! $user_id) {
+        if (! $email) {
             return $this->redirect()->toRoute('users/login');
         }
-        $user = $userTable->getUser($user_id);
+        
+        // get user and user info by email
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
+        try {
+            $user = $userTable->getUserByEmail($email);
+            $userInfo = $userInfoTable->getUserInfoByEmail($email);
+        } catch (\Exception $e) {
+            MyUtils::writelog("can't get user or info in setting controller" . $e);
+            return $this->redirect()->toRoute('users/setting');
+        }
+        
+        // get image upload form
         $form = $this->getServiceLocator()->get('ImageUploadForm');
+        // get user info set form
         $userSetForm = $this->getServiceLocator()->get('UserSetForm');
         
         $viewModel = new ViewModel(array(
             'user' => $user,
+            'userInfo' => $userInfo,
             'form' => $form,
             'userSetForm' => $userSetForm
         ));
@@ -59,17 +63,10 @@ class SettingController extends AbstractActionController
 
     public function changePasswordAction()
     {
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
         $userTable = $this->getServiceLocator()->get('UserTable');
-        
-        $user_id = (int) $this->getAuthService()
-            ->getStorage()
-            ->read();
-        
-        // check empty and verify
-        if (! $user_id) {
-            return $this->redirect()->toRoute('users/login');
-        }
-        $user = $userTable->getUser($user_id);
+        $user = $userTable->getUserByEmail($email);
         $form = $this->getServiceLocator()->get('ChangePasswordForm');
         
         $viewModel = new ViewModel(array(
@@ -78,20 +75,37 @@ class SettingController extends AbstractActionController
         ));
         return $viewModel;
     }
-    
+
+    /**
+     * change an array to Json and return response
+     *
+     * @param array $array            
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    protected function returnJson($result)
+    {
+        $json = Json::encode($result);
+        $response = $this->getEvent()->getResponse();
+        $response->setContent($json);
+        
+        return $response;
+    }
+
     /**
      * change the password when the user can provide the old password
-     * 
+     *
      * @return confirm page if success or back when false
      */
     public function processPasswordAction()
     {
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
         $post = $this->request->getPost();
         
-        //Is validate password?
+        // Is validate password?
         $util = new MyUtils();
-        if (!$util->isValidatePassword($post->password)) {
-        	return $this->showError("the new password isn't validate");
+        if (! $util->isValidatePassword($post->password)) {
+            return $this->showError("the new password isn't validate");
         }
         
         // Is new password same as the confirm password?
@@ -103,39 +117,42 @@ class SettingController extends AbstractActionController
         $form = $this->getServiceLocator()->get('ChangePasswordForm');
         $form->setData($post);
         if (! $form->isValid()) {
-            $user = new User();
-            $user->id = $post->id;
-            $model = new ViewModel(array(
-                'error' => true,
-                'form' => $form,
-                'user' => $user
-            ));
-            $model->setTemplate('users/setting/change-password');
-            return $model;
+            $result = array(
+                'flag' => false,
+                'message' => "the form is invalidate"
+            );
+            return $this->returnJson($result);
         } else {
-            
-            // Purify html
-            $post = $util->purifyHtml($post);
-            
-            $id = (int) $post->id;
             
             // get the relative table and form
             $userTable = $this->getServiceLocator()->get('UserTable');
-            $user = $userTable->getUser($id);
+            $user = $userTable->getUserByEmail($email);
             
             // compare the old password, if false return to error
             $old_password = md5($post->old_password);
             if ($user->password != $old_password) {
-                return $this->showError('old password isn\'t right');
+                $result = array(
+                    'flag' => false,
+                    'message' => "the password is invalidate"
+                );
+                return $this->returnJson($result);
+                
+                // return $this->showError('old password isn\'t right');
             } else {
                 
                 try {
-                    //Update the password by id
-                    $userTable->updatePasswordById($id, $post->password);
-                    return $this->redirect()->toRoute('users/setting', array(
-                        'action' => 'passwordConfirm'
-                    ));
+                    // Update the password by id
+                    $userTable->updatePasswordByEmail($email, $post->password);
+                    $result = array(
+                        'flag' => true,
+                        'message' => "the password has been updated"
+                    );
+                    return $this->returnJson($result);
+                    // return $this->redirect()->toRoute('users/setting', array(
+                    // 'action' => 'passwordConfirm'
+                    // ));
                 } catch (\Exception $e) {
+                    MyUtils::writelog("can't write usertable in settingController", $e);
                     return $this->showError('error when update DB');
                 }
             }
@@ -155,21 +172,12 @@ class SettingController extends AbstractActionController
 
     public function processAction()
     {
+        require 'module/Users/src/Users/Tools/AuthUser.php';
         if (! $this->request->isPost()) {
             return $this->redirect()->toRoute('users/setting');
         }
         
         $post = $this->request->getPost();
-        
-        // Purify html
-        $purifyHtml = new MyUtils();
-        $post = $purifyHtml->purifyHtml($post);
-        
-        $id = (int) $post->id;
-        
-        // get the relative table and form
-        $userTable = $this->getServiceLocator()->get('UserTable');
-        $user = $userTable->getUser($id);
         
         $form = $this->getServiceLocator()->get('UserSetForm');
         
@@ -183,29 +191,38 @@ class SettingController extends AbstractActionController
         $flag_name = $utils->isValidateName($post['first_name']) ? $utils->isValidateName($post['last_name']) : false;
         $flag_address = $utils->isValidateAddress($post['address']);
         
-        // throw new \Exception("from setting process--tel--".$flag."--name--".$flag_name."--address--".$flag_address);
-        
         if (! $form->isValid() || ! $flag || ! $flag_name || ! $flag_address) {
-            
-            $model = new ViewModel(array(
-                'error' => true,
-                'user' => $user
-            ));
-            $model->setTemplate('users/utils/error');
-            return $model;
+            $result = array(
+                'flag' => false,
+                'message' => "the form is invalidate"
+            );
+            return $this->returnJson($result);
         }
-        // $data = $form->getData();
-        // exchange data
-        $user = $this->exchangeArray($user, $post);
+        $userTable = $this->serviceLocator->get('userTable');
+        $user = $userTable->getUserByEmail($email);
         
-        // Save user
-        $this->getServiceLocator()
-            ->get('UserTable')
-            ->saveUser($user);
+        //if first name and last name have been changed, update it
+        if ($user->first_name != $post->first_name || $user->last_name != $post->last_name) {
+            $user->first_name = $post->first_name;
+            $user->last_name = $post->last_name;
+            $userTable->updateUser($user);
+        }
         
-        return $this->redirect()->toRoute('users/login', array(
-            'action' => 'confirm'
-        ));
+        // get userInfo by email and update it
+        $userInfoTable = $this->serviceLocator->get('userInfoTable');
+        $userInfo = $userInfoTable->getUserInfoByEmail($email);
+        $userInfo->sex = $post->sex;
+        $userInfo->telephone1 = $post->telephone1;
+        $userInfo->telephone2 = $post->telephone2;
+        $userInfo->address = $post->address;
+        $userInfo->title = $post->title;
+        
+        $userInfoTable->updateUserInfo($userInfo);
+        $result = array(
+        		'flag' => true,
+        		'message' => "userinfo has been updated"
+        );
+        return $this->returnJson($result);
     }
 
     protected function validateTel($tel)
@@ -250,34 +267,28 @@ class SettingController extends AbstractActionController
     }
 
     /**
-     * get user by the authorized id
+     * get user by the authorized email
      *
      * @return User
      */
-    protected function getUser()
+    protected function getUser($email)
     {
         $userTable = $this->getServiceLocator()->get('UserTable');
-        
-        $user_id = (int) $this->getAuthService()
-            ->getStorage()
-            ->read();
-        
-        // check empty and verify
-        if (! $user_id) {
-            return $this->redirect()->toRoute('users/login');
-        }
-        $user = $userTable->getUser($user_id);
+        $user = $userTable->getUserByEmail($email);
         return $user;
     }
-    
+
     /**
-     * If setting is successful, show confirm message and 
+     * If setting is successful, show confirm message and
      * close the window in 5 seconds
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function passwordConfirmAction()
     {
-        $user = $this->getUser();
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        $user = $this->getUser($email);
         $viewModel = new ViewModel(array(
             'user' => $user
         ));

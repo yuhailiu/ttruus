@@ -21,7 +21,8 @@ echo date('Y');
 	</div>
 	<!-- /wrao -->
 </div>
-
+<!-- some global value for js -->
+<input id="alertTimeout" value="<?php echo $labels[alertTimeout]?>" type="hidden" >
 <!-- validation js -->
 <script src="/js/jquery.validate.js"></script>
 <script src="/js/localization/messages_zh.js"></script>
@@ -30,6 +31,7 @@ echo date('Y');
 <script>
 $(function(){
 	$("body").show();
+	
 });
 </script>
 

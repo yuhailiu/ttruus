@@ -11,13 +11,12 @@ $(function() {
 				left : "145px",
 				display : "inline"
 			}).appendTo("#registerForm").hide();
-	$(document).ajaxStart(function() {
-		loader.show();
-	}).ajaxStop(function() {
-		loader.hide();
-	}).ajaxError(function(a, b, e) {
-		throw e;
-	});
+	
+	//prepare the options for ajax submit
+	var options = {
+			beforeSubmit : showAjaxWaiting, // pre-submit callback
+			success : showResponse, // post-submit callback
+	};
 	
 	// validation
 	$("#registerForm").validate({
@@ -68,6 +67,33 @@ $(function() {
 			},
 
 		},
+		submitHandler : function(form) {
+			// Submit form by Ajax
+			jQuery(form).ajaxSubmit(options);
+		}
+
 	});
+	
+	//regist for pre-submit callback
+	function showAjaxWaiting()
+	{
+		// show the loading img
+		loader.show();
+	}
+	
+	//regist for call back
+	function showResponse(data)
+	{
+		if(data){
+			//redirect to confirm page
+			window.location.href="register/confirm";
+			
+		} else {
+			// hide the loading img
+			loader.hide();
+		}
+			
+		
+	}
 
 });

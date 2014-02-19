@@ -3,15 +3,15 @@
 <div id="files" class="files" style="height: 149px;">
 	<br> <a href="#" id="dialog-link"> <img alt="请更新您的头像"
 		class="ui-state-default ui-corner-all" id="photoImg" title="点击放大"
-		src="<?php echo $this->url('users/media', array('action' => 'showImage', 'id' => $this->user_id, 'subaction' => 'thumb'));?>"
+		src="<?php echo $this->url('users/media', array('action' => 'showImage', 'email' => $_SESSION['email'], 'subaction' => 'thumb'));?>"
 		style="height: 130px; width: 130px">
 	</a>
 </div>
 
 <!-- ui-dialog -->
-<div id="dialog" title="<?php echo $this->user_firstname;?>">
+<div id="dialog" title="<?php echo $_SESSION['username'];?>">
 	<p>
-		<input id="imgUrl" type="hidden" value="<?php echo $this->user_id; ?>">
+		<input id="imgUrl" type="hidden" value="<?php echo $_SESSION['email']; ?>">
 		<img id="userImg">
 	</p>
 </div>

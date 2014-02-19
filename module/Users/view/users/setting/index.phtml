@@ -73,10 +73,7 @@ require 'module/Users/view/users/utils/user_label.php';
                  <!-- userSetForm -->
 			     <br>
             <div id="showInfo">
-                <?php if ($this->error): ?>
-                    <p class="error">There were one or more isues with
-						your submission. Please correct them as indicated below.</p>
-                <?php endif ?>
+                <div class="error mycenter" id="settingError" hidden="hidden" style="width: 200px;"><?php echo $user_labels[systemBusy]?></div>
                 
                 <?php
                     $form = $this->userSetForm;
@@ -105,10 +102,11 @@ require 'module/Users/view/users/utils/user_label.php';
                 	    $("#male").attr("checked", "checked");
                 	}else if($("#sex_value").val()=='2'){
                 		$("#female").attr("checked", "checked");
+                	}else if($("#sex_value").val()=='3'){
+                		$("#unknown").attr("checked", "checked");
                 	}
                 });
                 </script>
-                <input type="hidden" id="user_id_value" name="id" value="<?php echo $user->id;?>" >
                 <table>
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('first_name')); ?></th>
@@ -133,16 +131,17 @@ require 'module/Users/view/users/utils/user_label.php';
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('sex')); ?></th>
     			         <td>
-    			             &nbsp&nbsp
-        			         <input type="hidden" id="sex_value" value="<?php echo $user->sex;?>">
-        			         <input type="radio" id="male" name="sex" value="1">&nbsp<?php echo $user_labels[male]?>&nbsp&nbsp
-        			         <input type="radio" id="female" name="sex" value="2">&nbsp<?php echo $user_labels[female]?>
+    			             &nbsp;&nbsp;
+        			         <input type="hidden" id="sex_value" value="<?php echo $userInfo->sex;?>">
+        			         <input type="radio" id="male" name="sex" value="1">&nbsp;<?php echo $user_labels[male]?>&nbsp;&nbsp;
+        			         <input type="radio" id="female" name="sex" value="2">&nbsp;<?php echo $user_labels[female]?>&nbsp;&nbsp;
+        			         <input type="radio" id="unknown" name="sex" value="3">&nbsp;<?php echo $user_labels[unknown]?>
     			         </td>
     			     </tr>
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('title')); ?></th>
     			         <td>
-    			         <input type="hidden" id="title_value" value="<?php echo $user->title;?>">
+    			         <input type="hidden" id="title_value" value="<?php echo $userInfo->title;?>">
     			             <?php 
                                 echo $this->formElement($form->get('title'));
                                 echo $this->formElementErrors($form->get('title'));
@@ -156,7 +155,7 @@ require 'module/Users/view/users/utils/user_label.php';
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('telephone1')); ?></th>
     			         <td>
-    			         <input type="hidden" id="telephone1_value" value="<?php echo $user->telephone1;?>">
+    			         <input type="hidden" id="telephone1_value" value="<?php echo $userInfo->telephone1;?>">
     			             <?php 
                                 echo $this->formElement($form->get('telephone1'));
                                 echo $this->formElementErrors($form->get('telephone1'));
@@ -166,7 +165,7 @@ require 'module/Users/view/users/utils/user_label.php';
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('telephone2')); ?></th>
     			         <td>
-    			         <input type="hidden" id="telephone2_value" value="<?php echo $user->telephone2;?>">
+    			         <input type="hidden" id="telephone2_value" value="<?php echo $userInfo->telephone2;?>">
     			             <?php 
                                 echo $this->formElement($form->get('telephone2'));
                                 echo $this->formElementErrors($form->get('telephone2'));
@@ -176,7 +175,7 @@ require 'module/Users/view/users/utils/user_label.php';
     			     <tr>
     			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('address')); ?></th>
     			         <td>
-    			         <input type="hidden" id="address_value" value="<?php echo $user->address;?>">
+    			         <input type="hidden" id="address_value" value="<?php echo $userInfo->address;?>">
     			             <?php 
                                 echo $this->formElement($form->get('address'));
                                 echo $this->formElementErrors($form->get('address'));
@@ -193,6 +192,9 @@ require 'module/Users/view/users/utils/user_label.php';
                         ?>
                 <?php echo $this->form()->closeTag()?>
                 </div>
+        		<div style="width:20px;"  class="mycenter">
+                    <img id="loadingImg" hidden="hidden" alt="" src="/images/loading.gif">
+        		</div>
 		  </div>  
 		</div>
 	</div>

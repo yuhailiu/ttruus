@@ -2,10 +2,8 @@
 namespace Users\Model;
 
 use Zend\Text\Table\Row;
-use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Captcha\Dumb;
 
 class UserTable
 {
@@ -17,6 +15,11 @@ class UserTable
         $this->tableGateway = $tableGateway;
     }
 
+    /**
+     * save user to users table, can't update
+     * 
+     * @param User $user
+     */
     public function saveUser(User $user)
     {
         $data = array(
@@ -24,39 +27,23 @@ class UserTable
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
             'password' => $user->password,
-            'filename' => $user->filename,
-            'thumbnail' => $user->thumbnail,
-            'create_time' => $user->create_time,
-            'last_modify' => null,
-            'sex' => $user->sex,
-            'telephone1' => $user->telephone1,
-            'telephone2' => $user->telephone2,
-            'address' => $user->address,
-            'title' => $user->title,
-            'captcha' => $user->captcha
+            'captcha' => $user->captcha,
+            'failedTimes' => $user->failedTimes
         );
+        $this->tableGateway->insert($data);
+    }
+    
+    /**
+     * update user to user table
+     */
+    public function updateUser(User $user)
+    {
         
-        $id = (int) $user->id;
-        if ($id == 0) {
-            $this->tableGateway->insert($data);
-        } else {
-            if ($this->getUser($id)) {
-                if (empty($data['password'])) {
-                    unset($data['password']);
-                }
-                // throw new \Exception("date first_name is ". $data['email']);
-                $this->tableGateway->update($data, array(
-                    'id' => $id
-                ));
-            } else {
-                throw new \Exception('User ID does not exist');
-            }
-        }
     }
 
     /**
      * Get all users
-     * 
+     *
      * @return ResultSet
      */
     public function fetchAll()
@@ -66,89 +53,88 @@ class UserTable
     }
 
     /**
-     * Get User account by UserId
-     * 
-     * @param string $id            
-     * @throws \Exception
-     * @return Row
-     */
-    public function getUser($id)
-    {
-        $id = (int) $id;
-        $rowset = $this->tableGateway->select(array(
-            'id' => $id
-        ));
-        $row = $rowset->current();
-        if (! $row) {
-            throw new \Exception("Could not find row $id");
-        }
-        return $row;
-    }
-
-    /**
      * Get User account by Email
-     * 
+     *
      * @param string $userEmail            
      * @throws \Exception
      * @return Row
      */
-    public function getUserByEmail($userEmail)
+    public function getUserByEmail($email)
     {
         $rowset = $this->tableGateway->select(array(
-            'email' => $userEmail
+            'email' => $email
         ));
         $row = $rowset->current();
         if (! $row) {
-            throw new \Exception("Could not find row $userEmail");
+            throw new \Exception("Could not find row $email");
         }
         return $row;
     }
 
     /**
-     * Delete User account by UserId
-     * 
-     * @param string $id            
+     * Delete User account by $email
+     *
+     * @param string $email            
      */
-    public function deleteUser($id)
+    public function deleteUser($email)
     {
         $this->tableGateway->delete(array(
-            'id' => $id
+            'email' => $email
         ));
     }
 
     /**
      * change the password
-     * @param int $id
-     * @param string $password
+     * 
+     * @param string $email            
+     * @param string $password            
      */
-    public function updatePasswordById($id, $password)
+    public function updatePasswordByEmail($email, $password)
     {
         $password = md5($password);
         $this->tableGateway->update(array(
             'password' => $password
         ), array(
-            'id' => $id
+            'email' => $email
         ));
     }
-    
+
     /**
-     * 
-     * @param int $id
+     *
+     * @param string $email            
      * @param int $captcha
-     * 
-     * throw exception if false
+     *            throw exception if false
      */
-    public function updateCaptchaById($id, $captcha)
+    public function updateCaptchaByEmail($email, $captcha)
     {
         try {
             $this->tableGateway->update(array(
-            		'captcha' => $captcha
+                'captcha' => $captcha
             ), array(
-            		'id' => $id
+                'email' => $email
             ));
-            
         } catch (\Exception $e) {
-            throw new \SqlException($e); 
+            throw new \SqlException($e);
+        }
+    }
+
+    /**
+     * increase 1 every failed login, if the times is over 10, throw exception
+     * 
+     * @param int $id            
+     * @param int $failedTimes            
+     * @throws \Exception
+     */
+    public function updateFailedTimesByEmail($email, $failedTimes)
+    {
+        try {
+            $this->tableGateway->update(array(
+                'failedTimes' => $failedTimes
+            ), array(
+                'email' => $email
+            ));
+        } catch (\Exception $e) {
+            throw new \Exception("failed to update failedTimes");
         }
     }
 }

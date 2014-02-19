@@ -2,8 +2,6 @@
 $this->headTitle()->prepend('Confirm');
 require 'module/Users/view/users/utils/user_label.php';
 ?>
-<!-- prepare information -->
-<input type="hidden" id="user_email_value" value="<?php echo $user->email; ?>">
 
 <div class="wrap">
 
@@ -21,7 +19,8 @@ require 'module/Users/view/users/utils/user_label.php';
 		</ul>
 		<div id="tabs-1" style="height: 800px">
 		<?php echo $this->partial('users/login/personalInfo', array(
-		    'user' => $user, 
+		    'user' => $user,
+		    'userInfo' => $userInfo,
 		    'org' => $org))?>	
 		</div>
 	

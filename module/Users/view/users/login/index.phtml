@@ -36,9 +36,13 @@
             echo $this->formElement($form->get('password'));
             echo $this->formElementErrors($form->get('password'));
             ?>
-                <p class="error" id="noMatch" hidden="hidden">
-                   <?php echo $user_labels[invalidatePassword]?>
-                </p>
+                <div class="error" id="noMatch" hidden="hidden">
+                    <p>
+                       <?php echo $user_labels[invalidatePassword]?>
+                       <br>
+                    <?php echo $user_labels['no']?><span id="errorTimes"></span><?php echo $user_labels['loginErrorTimes']?>
+                    </p>
+                </div>
             <?php 
             echo $this->formElement($form->get('submit'));
             echo $this->formElementErrors($form->get('submit'));

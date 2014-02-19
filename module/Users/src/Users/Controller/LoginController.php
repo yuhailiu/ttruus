@@ -3,17 +3,9 @@ namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
-use Users\Form\LoginForm;
-use Users\Form\LoginFilter;
-use Users\Model\User;
-use Users\Model\UserTable;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
 use Zend\Json\Json;
-use Zend\Log\Writer\Stream;
-use Zend\Log\Logger;
 
 class LoginController extends AbstractActionController
 {
@@ -24,11 +16,7 @@ class LoginController extends AbstractActionController
 
     public function getAuthService()
     {
-        if (! $this->authservice) {
-            $this->authservice = $this->getServiceLocator()->get('AuthService');
-        }
-        
-        return $this->authservice;
+          return  $this->authservice = $this->getServiceLocator()->get('AuthService');
     }
 
     public function logoutAction()
@@ -50,29 +38,31 @@ class LoginController extends AbstractActionController
     /**
      * fail login
      *
-     * @return Response false
+     * @param int $failedTimes            
+     * @return Response Json(flag = false, failedTimes)
      */
-    protected function returnIndexError()
+    protected function returnIndexError($failedTimes)
     {
-        // Directly return the Response
-        $response = $this->getEvent()->getResponse();
-        $response->setContent(false);
+        $result = array(
+            'flag' => false,
+            'failedTimes' => $failedTimes
+        );
         
-        return $response;
+        return $this->returnJson($result);
     }
-    
+
     /**
      * success login
-     * 
-     * @return Reponse true
+     *
+     * @return Reponse Json(flag = true, failedTimes = 0)
      */
     protected function returnLoginSuccess()
     {
-        // Directly return the Response
-        $response = $this->getEvent()->getResponse();
-        $response->setContent(true);
-        
-        return $response;
+        $result = array(
+            'flag' => true,
+            'failedTimes' => 0
+        );
+        return $this->returnJson($result);
     }
 
     /**
@@ -80,28 +70,63 @@ class LoginController extends AbstractActionController
      *
      * @param string $password            
      * @param string $email            
-     * @return boolean
+     * @return array (boolean flag, int failedTimes)
      */
     protected function isValidateUser($password, $email)
     {
         // check it in the DB
-        // get the user id
+        // get the user 
         $userTable = $this->getServiceLocator()->get('UserTable');
+        $failedTimes = 0;
         try {
             $user = $userTable->getUserByEmail($email);
-            if ($user->password == md5($password)) {
-                // write it in AuthService
-                $this->getAuthService()
-                    ->getStorage()
-                    ->write($user->id);
-                return true;
+            // if user->failedTimes > 10 then return false,
+            // others failed time add 1,then go ahead
+            $failedTimes = $user->failedTimes;
+            
+            //get the FAILED_TIMES
+            require 'module/Users/src/Users/Tools/appConfig.php';
+            if ($failedTimes > FAILED_TIMES) {
+                return array(
+                    'flag' => false,
+                    'failedTimes' => $failedTimes
+                );
             } else {
-                return false;
+                if ($user->password == md5($password)) {
+                    // write it in AuthService the session has been open here
+                    $this->getAuthService()
+                        ->getStorage()
+                        ->write($email);
+                    
+                    //save email and username to session
+                    $_SESSION['email'] = $user->email;
+                    $_SESSION['username'] = $user->first_name;
+                    
+                    // update failedTimes in DB with 0
+                    $userTable->updateFailedTimesByEmail($email, 0);
+                    return array(
+                        'flag' => true,
+                        'failedTimes' => 0
+                    );
+                    
+                } else {
+                    
+                    // update failedTimes in DB with add 1
+                    $userTable->updateFailedTimesByEmail($email, $failedTimes + 1);
+                    
+                    return array(
+                        'flag' => false,
+                        'failedTimes' => $failedTimes + 1
+                    );
+                }
             }
         } catch (\Exception $e) {
-            //write a error log
-            MyUtils::writelog("error at isValidateUser--".$e);
-            return false;
+            // write a error log
+            MyUtils::writelog("error at isValidateUser--" . $e);
+            return array(
+                'flag' => false,
+                'failedTimes' => $failedTimes
+            );
         }
     }
 
@@ -113,9 +138,6 @@ class LoginController extends AbstractActionController
      */
     public function processAction()
     {
-        //sleep 10 seconds
-        //sleep(10);
-        
         if (! $this->request->isPost()) {
             return $this->redirect()->toRoute('users/login');
         }
@@ -125,7 +147,7 @@ class LoginController extends AbstractActionController
         
         // validate the passoword
         if (! MyUtils::isValidatePassword($post->password)) {
-            return $this->returnIndexError();
+            return $this->returnIndexError(0);
         }
         
         // validate login form
@@ -133,40 +155,63 @@ class LoginController extends AbstractActionController
         if ($form->isValid()) {
             
             // Is validate users
-            if ($this->isValidateUser($post->password, $post->email)) {
-                // return to success 
+                $result = $this->isValidateUser($post->password, $post->email);
+                
+            // flag is true return true, others return false and times
+            if ($result['flag']) {
+                
+                // return to success
                 return $this->returnLoginSuccess();
             } else {
-                return $this->returnIndexError();
+                
+                // return failed with times
+                return $this->returnIndexError($result['failedTimes']);
             }
         } else {
-            return $this->returnIndexError();
+            return $this->returnIndexError(0);
         }
     }
 
     /**
+     *get the user id from AuthService
      *
-     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|\Zend\View\Model\ViewModel
+     * @return ViewModel with user_info and org
      */
     public function confirmAction()
     {
-        $userTable = $this->getServiceLocator()->get('UserTable');
-        $orgTable = $this->getServiceLocator()->get('OrgnizationTable');
-        
-        $user_id = (int) $this->getAuthService()
-            ->getStorage()
-            ->read();
-        
-        // check empty and verify
-        if (! $user_id) {
+        //get the user email, if false return to users/login
+        try {
+            require 'module/Users/src/Users/Tools/AuthUser.php';
+        } catch (\Exception $e) {
+            MyUtils::writelog("login failed".$e);
             return $this->redirect()->toRoute('users/login');
         }
+        $userEmail = $email;
+        
+//         $userEmail = $this->getAuthService()
+//             ->getStorage()
+//             ->read();
+        
+//         // check empty and verify
+//         if (! $userEmail) {
+//             return $this->redirect()->toRoute('users/login');
+//         }
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
+        $orgTable = $this->getServiceLocator()->get('OrgnizationTable');
         
         // if can not get the user redirect to login page
         try {
-            $user = $userTable->getUser($user_id);
+            $user = $userTable->getUserByEmail($userEmail);
         } catch (\Exception $e) {
             return $this->redirect()->toRoute('users/login');
+        }
+        
+        //if can not get the user info, plase null to it
+        try{
+            $userInfo = $userInfoTable->getUserInfoByEmail($userEmail);
+        } catch (\Exception $e){
+            $userInfo = null;
         }
         
         // if can't get org place null to it
@@ -178,6 +223,7 @@ class LoginController extends AbstractActionController
         $this->layout('layout/myaccount');
         $viewModel = new ViewModel(array(
             'user' => $user,
+            'userInfo' => $userInfo,
             'org' => $org
         ));
         return $viewModel;
@@ -208,5 +254,22 @@ class LoginController extends AbstractActionController
         $response->setContent($result);
         
         return $response;
+    }
+    
+    /**
+     * change an array to Json and return response
+     *
+     * @param array $array
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    protected function returnJson($result)
+    {
+    
+    	$json = Json::encode($result);
+    	 
+    	$response = $this->getEvent()->getResponse();
+    	$response->setContent($json);
+    	 
+    	return $response;
     }
 }
