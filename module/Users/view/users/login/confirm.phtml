@@ -26,7 +26,9 @@ require 'module/Users/view/users/utils/user_label.php';
 	
 	   <div id="tabs-2">
 	   <?php echo $this->partial('users/login/manageOrg', array(
-	       'user' => $user, 
+	       'user' => $user,
+	       'orgSearchForm' => $orgSearchForm, 
+	       'joinOrgForm' => $joinOrgForm, 
 	       'org' => $org))?>
 	   </div>
 	   <div id="tabs-3">
@@ -36,12 +38,6 @@ require 'module/Users/view/users/utils/user_label.php';
 </div>
 <!-- /.wrap -->
 
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script
-	src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script
-	src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
 <!-- The basic File Upload plugin -->
 <script src="/js/jquery.fileupload.js"></script>

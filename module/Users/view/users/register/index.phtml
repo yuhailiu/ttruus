@@ -37,13 +37,11 @@ $_SESSION['captcha_id'] = $str;
 	<h2 class="hidden-small"><?php echo $user_labels[title2]?></h2>
 </div>
 <section class="register">
-<?php if ($this->error): ?>
-<p class="error"><?php echo $user_labels[registerError]?></p>
-<?php endif ?>
 
 <div class="clearfix">
     <div class="sign-up">
         <div class="signup-box">
+        <div class="error mycenter" id="registerError" hidden="hidden" style="width: 150px;"><?php echo $user_labels[registerError]?></div>
         <?php
         $form = $this->form;
         $form->prepare();
@@ -57,6 +55,7 @@ $_SESSION['captcha_id'] = $str;
         echo $this->form()->openTag($form);
         ?>
         <fieldset>
+            
             <legend>
                 <strong><?php echo $user_labels[name]?></strong>
             </legend>
@@ -137,6 +136,10 @@ $_SESSION['captcha_id'] = $str;
         		
         <?php echo $this->form()->closeTag()?>
         </div>
+        <div style="width:20px;"  class="mycenter">
+                    <img id="loadingImg" hidden="hidden" alt="" src="/images/loading.gif">
+        		</div>
+        
     </div>
 </div>
 </section>

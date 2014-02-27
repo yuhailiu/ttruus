@@ -21,6 +21,8 @@ use Users\Model\OrgnizationTable;
 use Users\Model\Orgnization;
 use Users\Model\UserInfo;
 use Users\Model\UserInfoTable;
+use Users\Model\RequestJoin;
+use Users\Model\RequestJoinTable;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -91,6 +93,13 @@ class Module implements AutoloaderProviderInterface
                 },
                 
                 // DB
+                'MyAdapter' => function ($sm)
+                {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    return $dbAdapter;
+                },
+                
+                //tables
                 'UserTable' => function ($sm)
                 {
                     $tableGateway = $sm->get('UserTableGateway');
@@ -129,6 +138,19 @@ class Module implements AutoloaderProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Orgnization());
                     return new TableGateway('orgnization', $dbAdapter, null, $resultSetPrototype);
+                },
+                'RequestJoinTable' => function ($sm)
+                {
+                    $tableGateway = $sm->get('RequestJoinGateway');
+                    $table = new RequestJoinTable($tableGateway);
+                    return $table;
+                },
+                'RequestJoinGateway' => function ($sm)
+                {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new RequestJoin());
+                    return new TableGateway('request_join', $dbAdapter, null, $resultSetPrototype);
                 },
                 
                 // FORMS
@@ -175,6 +197,21 @@ class Module implements AutoloaderProviderInterface
                 'ResetPasswordForm' => function ($sm)
                 {
                     $form = new \Users\Form\ResetPasswordForm();
+                    return $form;
+                },
+                'OrgSetForm' => function ($sm)
+                {
+                    $form = new \Users\Form\OrgSetForm();
+                    return $form;
+                },
+                'OrgSearchForm' => function ($sm)
+                {
+                    $form = new \Users\Form\OrgSearchForm();
+                    return $form;
+                },
+                'JoinOrgForm' => function ($sm)
+                {
+                    $form = new \Users\Form\JoinOrgForm();
                     return $form;
                 },
                 

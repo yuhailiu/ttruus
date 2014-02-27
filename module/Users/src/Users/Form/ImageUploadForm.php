@@ -13,7 +13,7 @@ class ImageUploadForm extends Form
         
         parent::__construct('Upload');
         $this->setAttribute('method', 'post');
-        $this->setAttribute('id', 'photoUploadForm');
+        $this->setAttribute('id', 'fileupload');
         $this->setAttribute('enctype','multipart/form-data');
         
                
@@ -21,7 +21,8 @@ class ImageUploadForm extends Form
             'name' => 'imageupload',
             'attributes' => array(
                 'type'  => 'file',
-                'id' => 'up',
+                //'accept' => 'image.jpg',
+                'id' => 'uploadFile',
             ),
         )); 
         

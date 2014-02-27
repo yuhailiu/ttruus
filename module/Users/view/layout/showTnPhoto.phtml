@@ -1,17 +1,23 @@
+<!-- show the tn photo, need params: key(id/email), subaction(logo,thumb), title(for dialog), dialogUrl(1/logo) -->
+<?php 
+require 'module/Users/view/users/utils/user_label.php';
+?>
 <!-- show TnPhoto -->
 <script src="/js/photoDialog.js"></script>
 <div id="files" class="files" style="height: 149px;">
-	<br> <a href="#" id="dialog-link"> <img alt="请更新您的头像"
-		class="ui-state-default ui-corner-all" id="photoImg" title="点击放大"
-		src="<?php echo $this->url('users/media', array('action' => 'showImage', 'email' => $_SESSION['email'], 'subaction' => 'thumb'));?>"
-		style="height: 130px; width: 130px">
+	<br> <a href="#" id="dialog-link"> <img alt=<?php echo $user_labels[pleaseUpdate]?>
+		class="ui-state-default ui-corner-all" id="photoImg" title=<?php echo $user_labels[hitEnlarge]?>
+		src="<?php echo $this->url('users/media', array('action' => 'showImage', 'key' => $this->key, 'subaction' => $this->subaction));?>"
+		style="height: 130px; width: 120px">
 	</a>
+	<img id="waittingImg1" hidden="hidden" class="ui-state-default ui-corner-all" style="height: 130px; width: 120px" src="/images/loading.gif">
+    <input id="keyValue" type="hidden" value="<?php echo $this->key;?>">
 </div>
 
 <!-- ui-dialog -->
-<div id="dialog" title="<?php echo $_SESSION['username'];?>">
+<div id="dialog" title="<?php echo $this->title;?>">
 	<p>
-		<input id="imgUrl" type="hidden" value="<?php echo $_SESSION['email']; ?>">
+		<input id="imgUrl" type="hidden" value="<?php echo $this->dialogUrl; ?>">
 		<img id="userImg">
 	</p>
 </div>

@@ -379,3 +379,7 @@ button.g-button, input.g-button[type="submit"] {
 	margin-top: 15px;
 	margin-bottom: 0px;
 }
+
+.ui-widget-content a{
+	color: #1E90FF;
+}

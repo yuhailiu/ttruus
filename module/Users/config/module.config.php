@@ -15,8 +15,9 @@ return array(
             'Users\Controller\ResetPassword' => 'Users\Controller\ResetPasswordController',
             'Users\Controller\Register' => 'Users\Controller\RegisterController',
             'Users\Controller\Setting' => 'Users\Controller\SettingController',
-            'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
+            //'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
             'Users\Controller\MediaManager' => 'Users\Controller\MediaManagerController',
+            'Users\Controller\OrgManager' => 'Users\Controller\OrgManagerController',
         ),
     ),
     'router' => array(
@@ -101,6 +102,20 @@ return array(
                     				),
                     		),
                     ),//end of setting
+                    'orgmanager' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => '/orgmanager[/:action[/:id]]',
+                    				'constraints' => array(
+                    						'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    						'id'     => '[a-zA-Z0-9_-]*',
+                    				),
+                    				'defaults' => array(
+                    						'controller' => 'Users\Controller\OrgManager',
+                    						'action'     => 'index',
+                    				),
+                    		),
+                    ),//end of setting
                     'upload-manager' => array(
                     		'type'    => 'Segment',
                     		'options' => array(
@@ -118,7 +133,7 @@ return array(
                     'media' => array(
                     		'type'    => 'Segment',
                     		'options' => array(
-                    				'route'    => '/media[/:action[/:email[/:subaction]]]',
+                    				'route'    => '/media[/:action[/:key[/:subaction]]]',
                     				'constraints' => array(
                     						'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                     						'subaction'     => '[a-zA-Z][a-zA-Z0-9_-]*',

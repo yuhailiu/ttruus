@@ -25,9 +25,10 @@ class OrgnizationTable
             'org_address'   => $org->org_address,            
             'org_website'   => $org->org_website,            
             'org_logo'      => $org->org_logo,            
+            'org_logo_thumbnail'      => $org->org_logo_thumbnail,            
             'org_CT'        => $org->org_CT,            
             'org_LM'        => null, 
-            'org_creater_id'=> $org->org_creater_id, 
+            'org_creater_email'=> $org->org_creater_email, 
                        
         );
 
@@ -35,7 +36,7 @@ class OrgnizationTable
         if ($id == 0) {
             $this->tableGateway->insert($data);
         } else {
-            if ($this->getOrgnization($id)) {
+            if ($this->getOrgnizationById($id)) {
             	
                 $this->tableGateway->update($data, array('id' => $id));
             } else {
@@ -60,7 +61,7 @@ class OrgnizationTable
      * @throws \Exception
      * @return Row
      */    
-    public function getOrgnization($id)
+    public function getOrgnizationById($id)
     {
     	$id  = (int) $id;
     	$rowset = $this->tableGateway->select(array('id' => $id));
@@ -77,24 +78,24 @@ class OrgnizationTable
      * @throws \Exception
      * @return Row
      */
-    public function getOrgnizationByCreaterId($id)
+    public function getOrgnizationByCreaterEmail($email)
     {
-        $id  = (int) $id;
-        $rowset = $this->tableGateway->select(array('org_creater_id' => $id));
+        $rowset = $this->tableGateway->select(array('org_creater_email' => $email));
         $row = $rowset->current();
     	if (!$row) {
-    		throw new \Exception("Could not find row $id");
+    		throw new \Exception("Could not find row $email");
     	}
     	return $row;    
     }
     
     /**
      * Delete Orgnization by OrgId
-     * @param string $id
+     * @param int $id
      */
-    public function deleteUser($id)
+    public function deleteOrgById($id)
     {
-    	$this->tableGateway->delete(array('id' => $id));
+    	$id = (int)$id;
+        $this->tableGateway->delete(array('id' => $id));
     }
         
 }

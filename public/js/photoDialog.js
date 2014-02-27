@@ -20,8 +20,8 @@ $(function() {
 		$( "#dialog-link" ).click(function( event ) {
 			
 			//get the image URL
-			var id=$('#imgUrl').val();
-			imgUrl = "/users/media/showImage/"+ id + "?dummy=" + new Date().getTime();
+			var key=$('#imgUrl').val();
+			imgUrl = "/users/media/showImage/"+ key + "?dummy=" + new Date().getTime();
 			
 			//remove the last image
 			$("#userImg").remove();
@@ -51,9 +51,5 @@ $(function() {
 			}).done(function(){
 				$("#waittingImg").hide();
 			});
-			
-			
 		});
-		
-		
-	});
+});

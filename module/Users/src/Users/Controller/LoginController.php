@@ -188,18 +188,7 @@ class LoginController extends AbstractActionController
         }
         $userEmail = $email;
         
-//         $userEmail = $this->getAuthService()
-//             ->getStorage()
-//             ->read();
-        
-//         // check empty and verify
-//         if (! $userEmail) {
-//             return $this->redirect()->toRoute('users/login');
-//         }
         $userTable = $this->getServiceLocator()->get('UserTable');
-        $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
-        $orgTable = $this->getServiceLocator()->get('OrgnizationTable');
-        
         // if can not get the user redirect to login page
         try {
             $user = $userTable->getUserByEmail($userEmail);
@@ -208,6 +197,7 @@ class LoginController extends AbstractActionController
         }
         
         //if can not get the user info, plase null to it
+        $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
         try{
             $userInfo = $userInfoTable->getUserInfoByEmail($userEmail);
         } catch (\Exception $e){
@@ -215,16 +205,25 @@ class LoginController extends AbstractActionController
         }
         
         // if can't get org place null to it
+        $orgTable = $this->getServiceLocator()->get('OrgnizationTable');
         try {
-            $org = $orgTable->getOrgnizationByCreaterId($user->id);
+            $org = $orgTable->getOrgnizationByCreaterEmail($email);
         } catch (\Exception $e) {
             $org = null;
         }
+        
+        //get the relative forms
+        $orgSearchForm = $this->getServiceLocator()->get('OrgSearchForm');
+        $joinOrgForm = $this->getServiceLocator()->get('JoinOrgForm');
+        
+        
         $this->layout('layout/myaccount');
         $viewModel = new ViewModel(array(
             'user' => $user,
             'userInfo' => $userInfo,
-            'org' => $org
+            'org' => $org,
+            'orgSearchForm' => $orgSearchForm,
+            'joinOrgForm' => $joinOrgForm,
         ));
         return $viewModel;
     }

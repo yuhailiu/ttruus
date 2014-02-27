@@ -1,6 +1,8 @@
 <script src="/js/confirm.js" type="text/javascript"></script>
 <div class="wrap">
-    <h2>谢谢，<?php echo $_SESSION['username']; ?>已经成功的创建了用户!</h2>
+    <h2>谢谢，<b><?php 
+                session_start(); 
+                echo $_SESSION['username']; ?></b>已经成功的创建了用户!</h2>
     <p> 
         <a href="/users/login" class="confirm_button">马上登陆
         </a> 

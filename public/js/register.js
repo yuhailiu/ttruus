@@ -2,15 +2,6 @@ $(function() {
 	// jQuery UI
 	$("#submit-button").button();
 
-	// show a simple loading indicator
-	var loader = jQuery(
-			'<div id="loader"><img src="/images/loading.gif" alt="loading..." /></div>')
-			.css({
-				position : "relative",
-				top : "1em",
-				left : "145px",
-				display : "inline"
-			}).appendTo("#registerForm").hide();
 	
 	//prepare the options for ajax submit
 	var options = {
@@ -78,7 +69,14 @@ $(function() {
 	function showAjaxWaiting()
 	{
 		// show the loading img
-		loader.show();
+		$("#loadingImg").show();
+		
+		// disable the submit button and show loadingimg
+		$("#submit-button").bind("click", function(event) {
+			event.preventDefault();
+		});
+		
+		return true;
 	}
 	
 	//regist for call back
@@ -90,7 +88,13 @@ $(function() {
 			
 		} else {
 			// hide the loading img
-			loader.hide();
+			$("#loadingImg").hide();
+			
+			//show the register error
+			$("#registerError").show();
+			
+			// enable the button
+			$("#submit-button").unbind("click");
 		}
 			
 		

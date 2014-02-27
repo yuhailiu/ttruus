@@ -10,9 +10,10 @@ class Orgnization
     public $org_address;
     public $org_website;
     public $org_logo;
+    public $org_logo_thumbnail;
     public $org_CT;
     public $org_LM;
-    public $org_creater_id;
+    public $org_creater_email;
     
     
   
@@ -25,9 +26,10 @@ class Orgnization
 		$this->org_address		= (isset($data['org_address'])) ? $data['org_address'] : null;
 		$this->org_website		= (isset($data['org_website'])) ? $data['org_website'] : null;
 		$this->org_logo		= (isset($data['org_logo'])) ? $data['org_logo'] : null;
+		$this->org_logo_thumbnail		= (isset($data['org_logo_thumbnail'])) ? $data['org_logo_thumbnail'] : null;
 		$this->org_CT		= (isset($data['org_CT'])) ? $data['org_CT'] : null;
 		$this->org_LM		= (isset($data['org_LM'])) ? $data['org_LM'] : null;
-		$this->org_creater_id		= (isset($data['org_creater_id'])) ? $data['org_creater_id'] : null;
+		$this->org_creater_email		= (isset($data['org_creater_email'])) ? $data['org_creater_email'] : null;
 				
 	}
 

@@ -10,6 +10,7 @@
 		address:"有非法字符，该域只能包含字母，数字，空格，逗号或汉字",
 		telephone:"电话号码的格式不对",
 		password:"密码中有非法字符",
+		website:"网页地址格式不对",
 		
 		//the original message
 		required: "必选字段",

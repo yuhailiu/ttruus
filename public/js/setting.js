@@ -9,84 +9,28 @@ $(function() {
 				$(this).removeClass("ui-state-hover");
 			});
 
-	// upload and preview the pic
-	'use strict';
-	// Change this to the location of your server-side upload handler:
-	/*
-	 * var url = window.location.hostname === 'blueimp.github.io' ?
-	 * '//jquery-file-upload.appspot.com/' : 'server/php/';
-	 */
-	var url = '/users/media/processUpload';
-	// var url = '/server/php/';
-	$('#fileupload').fileupload(
-			{
-				url : url,
-				dataType : 'json',
-				// autoUpload: false,
-				acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
-				maxFileSize : 2000000, // 2 MB
-				// Enable image resizing, except for Android and Opera,
-				// which actually support image resizing, but fail to
-				// send Blob objects via XHR requests:
-				disableImageResize : /Android(?!.*Chrome)|Opera/
-						.test(window.navigator.userAgent),
-				previewMaxWidth : 130,
-				previewMaxHeight : 130,
-				previewCrop : true
-			}).on('fileuploadprocessalways', function(e, data) {
-		// remove the old photo img
-		$('#dialog-link').children(".ui-corner-all, .text-danger").remove();
 
-		// show waiting images
-		$('#waittingImg1').show();
+	// upload file
+	// prepare the options for upload
+	var uploadOptions = {
+		beforeSubmit : beforeUpload, // pre-submit callback
+		success : afterUpload, // post-submit callback
+		dataType : 'json', // 'xml', 'script', or 'json' (expected server
+	};
 
-		var index = data.index, file = data.files[index],
-		// node = $(data.context.children()[index]);
-		node = $('#photoImg');
-		if (file.error) {
-			$('#waittingImg1').hide();
-			node.append($('<p class="text-danger"/>').text("必须是小于2M的图像文件"));
+	// bind change to #uploadFile
+	$("#uploadFile").change(function() {
+		//check file size and type
+		if(checkImgType(this)){
+			//submit the upload form
+			$("#fileupload").ajaxSubmit(uploadOptions);
+		}else{
+			//show the error 
+			$("#uploadError").show();
+			
 		}
-	}).on(
-			'fileuploaddone',
-			function(e, data) {
-
-				var id = imgUrl = $('#imgUrl').val();
-				var imgUrl = '/users/media/showImage/' + id + '/thumb?dummy='
-						+ new Date().getTime();
-				// alert("upload done" + url);
-
-				// get the image and update the new one
-				$.ajax({
-					url : imgUrl,
-					cache : false,
-					success : function() {
-
-						var img = $('<img>').attr({
-							'src' : imgUrl,
-							'class' : 'ui-state-default ui-corner-all',
-							'style' : 'height: 130px; width: 130px;'
-						});
-
-						// window.open(img);
-						$("#dialog-link").append(img);
-						// $('#userImg').replaceWith(img);
-
-						// show the dialog window
-						// $( "#dialog" ).dialog( "open" );
-						// event.preventDefault();
-					},
-					complete : function() {
-						$('#waittingImg1').hide();
-					}
-				});
-			}).on('fileuploadfail', function(e, data) {
-		$.each(data.files, function(index, file) {
-			var error = $('<span class="text-danger"/>').text('文件上传失败.');
-			$('#dialog-link').append('<br>').append(error);
-		});
-	}).prop('disabled', !$.support.fileInput).parent().addClass(
-			$.support.fileInput ? undefined : 'disabled');
+		
+	});
 
 	// validation
 	// prepare the options
@@ -133,7 +77,62 @@ $(function() {
 	});
 });
 
-//confirm email pre-submit callback
+// upload form beforeUpload
+function beforeUpload() {
+	// hide the old photo img
+	$('#dialog-link').children(".ui-corner-all, .text-danger").hide();
+
+	// show waiting images
+	$('#waittingImg1').show();
+}
+
+// uplaod form afterUpload
+function afterUpload(data) {
+	if (data.flag) {
+		
+		//hide the error message
+		$("#uploadError").hide();
+		
+		//remove the old img
+		$('#dialog-link').children(".ui-corner-all, .text-danger").remove();
+		
+		var email = $('#imgUrl').val();
+		var imgUrl = '/users/media/showImage/' + email + '/thumb?dummy='
+				+ new Date().getTime();
+
+		// get the image and update the new one
+		$.ajax({
+			url : imgUrl,
+			cache : false,
+			success : function() {
+
+				var img = $('<img>').attr({
+					'src' : imgUrl,
+					'class' : 'ui-state-default ui-corner-all',
+					'style' : 'height: 130px; width: 120px;'
+				});
+
+				// window.open(img);
+				$("#dialog-link").append(img);
+			},
+			complete : function() {
+				$('#waittingImg1').hide();
+			}
+		});
+	} else {
+		
+		$('#waittingImg1').hide();
+		
+		//show old img
+		$('#dialog-link').children(".ui-corner-all, .text-danger").show();
+		
+		//show the error 
+		$("#uploadError").show();
+		
+	}
+}
+
+// user set form pre-submit callback
 function showAjaxWaiting() {
 
 	// show the loading img
@@ -150,17 +149,17 @@ function showAjaxWaiting() {
 	return true;
 }
 
-//confirm email post-submit callback
+// confirm email post-submit callback
 function showResponse(data) {
 	if (data.flag) {
-		//success redirect to login/confirm
-		window.location.href="/users/login/confirm";
+		// success redirect to login/confirm
+		window.location.href = "/users/login/confirm";
 
 	} else {
 		// failed
 		// hidden loadingimg
 		$("#loadingImg").hide();
-
+		
 		// enable the button
 		$("#submit-button").unbind("click");
 
@@ -168,4 +167,20 @@ function showResponse(data) {
 		$("#settingError").show();
 
 	}
+}
+
+function checkImgType(this_) {
+	
+	var filepath = $(this_).val();
+	var extStart = filepath.lastIndexOf(".");
+	var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+
+	if (ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext !=".JPEG") {
+		return false;
+	}
+	var f = this_.files[0];
+	if (f.size > 2 * 1024 * 1000 || f.fileSize > 2*1024*1000) {
+		return false;
+	}
+	return true;
 }

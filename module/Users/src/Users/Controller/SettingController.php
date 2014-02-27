@@ -184,7 +184,7 @@ class SettingController extends AbstractActionController
         $form->setData($post);
         
         // validate the telephone no
-        $flag = $this->validateTel($post->telephone1) ? $this->validateTel($post->telephone2) : false;
+        $flag = MyUtils::isValidateTel($post->telephone1) ? MyUtils::isValidateTel($post->telephone2) : false;
         
         // validate the user name
         $utils = new MyUtils();

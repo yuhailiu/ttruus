@@ -3,17 +3,11 @@ namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Users\Form\RegisterForm;
-use Users\Form\RegisterFilter;
 use Users\Model\User;
 use Users\Tools\MyUtils;
 use Zend\Validator\EmailAddress;
-use Users\Form\UserForm;
-use Users\Model\UserTable;
 use Users\Model\UserInfo;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Adapter\Driver\Mysqli\Connection;
-use Zend\Db\Adapter\Driver\Mysqli\Mysqli;
+use Users\Model\Orgnization;
 
 class RegisterController extends AbstractActionController
 {
@@ -40,10 +34,18 @@ class RegisterController extends AbstractActionController
      */
     public function processAction()
     {
+        //check the captcha code
+        session_start();
+        $post = $this->request->getPost();
+        $compare = strcasecmp($_SESSION['captcha_id'],$post->captcha);
+        if (0 != $compare) {
+        	return $this->returnResponse(false);
+        }
+        
         if (! $this->request->isPost()) {
             return $this->redirect()->toRoute('users/register');
         }
-        $post = $this->request->getPost();
+        
         
         // get MyUtils instance
         $utils = new MyUtils();
@@ -64,28 +66,23 @@ class RegisterController extends AbstractActionController
         if (! $form->isValid() || ! $flag_name) {
             return $this->returnResponse(false);
         } else {
-            //get Connection and begin a transaction
-            //$dbConection = new Connection();
-            //$dbConection->beginTransaction();
             
             // create user and init userInfo
             try {
                 $this->createUser($form->getData());
                 $this->initUserInfo($post->email);
+                $this->initOrg($post->email);
+                
                 
                 //write the firstname in session
-                session_start();
                 $_SESSION['username'] = $post->first_name;
-                //commit the connection
-                //$dbConection->commit();
             } catch (\Exception $e) {
                 
-                //rollback the transaction
-                //$dbConection->rollback();
                 MyUtils::writelog("error when register user" . $e);
                 // return false
                 return $this->returnResponse(false);
             }
+            
             return $this->returnResponse(true);
         }
     }
@@ -106,7 +103,13 @@ class RegisterController extends AbstractActionController
         
         return true;
     }
-
+    
+    /**
+     * init userInfo by the $email, default pic
+     * 
+     * @param string $email
+     * @return boolean
+     */
     protected function initUserInfo($email)
     {
         //create a userInfo with email
@@ -119,6 +122,30 @@ class RegisterController extends AbstractActionController
         //save it to table
         $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
         $userInfoTable->saveUserInfo($userInfo);
+        return true;
+    }
+    
+    /**
+     * init a default org by email with default logo pic, 
+     * but user can get it untill build user's own name
+     * default username is "default_org_1023"
+     * @param unknown $email
+     * @return boolean
+     */
+    protected function initOrg($email)
+    {
+        //create a org with email
+        $org = new Orgnization();
+        $data = array(
+            'org_creater_email' => $email,
+            'org_logo' => "logo",
+            'org_logo_thumbnail' => "tn_logo"
+        );
+        $org->exchangeArray($data);
+        
+        //save it to table
+        $orgTable = $this->getServiceLocator()->get('OrgnizationTable');
+        $orgTable->saveOrgnization($org);
         return true;
     }
 
