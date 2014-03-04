@@ -50,8 +50,9 @@ class RegisterController extends AbstractActionController
         // get MyUtils instance
         $utils = new MyUtils();
         
-        // validate the user name and password
-        if (! $utils->isValidatePassword($post->password)) {
+        // validate the user name and password and email
+        $validate = new EmailAddress();
+        if (! $utils->isValidatePassword($post->password) || !$validate->isValid($post->email)) {
             return $this->returnResponse(false);
         }
         
@@ -70,7 +71,7 @@ class RegisterController extends AbstractActionController
             // create user and init userInfo
             try {
                 $this->createUser($form->getData());
-                $this->initUserInfo($post->email);
+                $this->initUserInfo($form->getData());
                 $this->initOrg($post->email);
                 
                 
@@ -110,13 +111,10 @@ class RegisterController extends AbstractActionController
      * @param string $email
      * @return boolean
      */
-    protected function initUserInfo($email)
+    protected function initUserInfo($data)
     {
         //create a userInfo with email
         $userInfo = new UserInfo();
-        $data = array(
-            'email' => $email
-        );
         $userInfo->exchangeArray($data);
         
         //save it to table

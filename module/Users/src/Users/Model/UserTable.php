@@ -4,6 +4,7 @@ namespace Users\Model;
 use Zend\Text\Table\Row;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Users\Tools\MyUtils;
 
 class UserTable
 {
@@ -17,29 +18,16 @@ class UserTable
 
     /**
      * save user to users table, can't update
-     * 
-     * @param User $user
+     *
+     * @param User $user            
      */
     public function saveUser(User $user)
     {
-        $data = array(
-            'email' => $user->email,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'password' => $user->password,
-            'captcha' => $user->captcha,
-            'failedTimes' => $user->failedTimes
-        );
+        //prepare the data for update or insert
+        $data = MyUtils::exchangeObjectToData($user);
         $this->tableGateway->insert($data);
     }
-    
-    /**
-     * update user to user table
-     */
-    public function updateUser(User $user)
-    {
-        
-    }
+
 
     /**
      * Get all users
@@ -85,7 +73,7 @@ class UserTable
 
     /**
      * change the password
-     * 
+     *
      * @param string $email            
      * @param string $password            
      */
@@ -120,7 +108,7 @@ class UserTable
 
     /**
      * increase 1 every failed login, if the times is over 10, throw exception
-     * 
+     *
      * @param int $id            
      * @param int $failedTimes            
      * @throws \Exception

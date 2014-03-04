@@ -34,11 +34,19 @@
 	<!-- - - - - - - - - - - - - - Header - - - - - - - - - - - - - - - - -->
 
 	<header id="header" class="clearfix">
-        <h2>
+        <h2 style="width: auto; float: left;">
 		<a href="/" id="logo">
 				<span class="tcolor"><?php echo $labels[logo]?></span>
 		</a>
 		</h2>
+		<?php if($_SESSION['pendingNo'] > 0) :?>
+		<div class="ui-state-highlight ui-corner-all attention">
+		  <a href="/users/orgmanager/showPendingRequest" target="_blank">
+    		<span class="ui-icon ui-icon-info" style="margin-right: .3em; float: left;"></span>
+    		<?php echo $_SESSION['pendingNo']?>未读申请
+    	   </a>
+	   </div>
+	   <?php endif;?>
 	</header>
 	<!--/ #header-->
 	<!-- - - - - - - - - - - - - - end Header - - - - - - - - - - - - - - - - -->

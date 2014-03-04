@@ -6,6 +6,7 @@ use Zend\Text\Table\Row;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Users\Tools\MyUtils;
 
 class OrgnizationTable
 {
@@ -86,6 +87,27 @@ class OrgnizationTable
     		throw new \Exception("Could not find row $email");
     	}
     	return $row;    
+    }
+    
+    /**
+     * get orgnization by org_name and org_creater_email != email
+     * 
+     * @param string $orgName
+     * @param string $email
+     * @return \Zend\Db\Adapter\Driver\ResultInterface
+     */
+    public function getOrgByNameExcludeEmail($orgName, $email)
+    {
+        $sql = "SELECT * from orgnization where org_name =
+        '$orgName' and org_creater_email != '$email'  ORDER BY org_LM DESC LIMIT 0, 50 ";
+        $adapter = MyUtils::getBD_adapte();
+        $rowSet = $adapter->query($sql)->execute();
+        $rowSet->buffer();
+        if ($rowSet->count() == 0) {
+        	throw new \Exception("no row with the conditions");
+        }else{
+            return $rowSet;
+        }
     }
     
     /**

@@ -212,6 +212,17 @@ class LoginController extends AbstractActionController
             $org = null;
         }
         
+        //get the pending request
+        $requestJoin = $this->getServiceLocator()->get('RequestJoinTable');
+        try {
+            $rowSet = $requestJoin->getPendingRequestJoinByEmail($email);
+            $pendingNo = $rowSet->count();
+        } catch (\Exception $e) {
+            $pendingNo = 0;
+        }
+        //store the pendingNo to session
+        $_SESSION['pendingNo'] = $pendingNo;
+        
         //get the relative forms
         $orgSearchForm = $this->getServiceLocator()->get('OrgSearchForm');
         $joinOrgForm = $this->getServiceLocator()->get('JoinOrgForm');

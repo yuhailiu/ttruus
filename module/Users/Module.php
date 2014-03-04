@@ -23,6 +23,8 @@ use Users\Model\UserInfo;
 use Users\Model\UserInfoTable;
 use Users\Model\RequestJoin;
 use Users\Model\RequestJoinTable;
+use Users\Model\UserOrg;
+use Users\Model\UserOrgTable;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -93,11 +95,6 @@ class Module implements AutoloaderProviderInterface
                 },
                 
                 // DB
-                'MyAdapter' => function ($sm)
-                {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    return $dbAdapter;
-                },
                 
                 //tables
                 'UserTable' => function ($sm)
@@ -151,6 +148,19 @@ class Module implements AutoloaderProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new RequestJoin());
                     return new TableGateway('request_join', $dbAdapter, null, $resultSetPrototype);
+                },
+                'UserOrgTable' => function ($sm)
+                {
+                    $tableGateway = $sm->get('UserOrgGateway');
+                    $table = new UserOrgTable($tableGateway);
+                    return $table;
+                },
+                'UserOrgGateway' => function ($sm)
+                {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new UserOrg());
+                    return new TableGateway('user_org', $dbAdapter, null, $resultSetPrototype);
                 },
                 
                 // FORMS

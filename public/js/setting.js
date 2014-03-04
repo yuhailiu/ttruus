@@ -1,6 +1,7 @@
 $(function() {
 	$("#tabs").tabs();
 	$("#submit-button").button();
+	
 	// Hover states on the static widgets
 	$("#topright .ui-state-default, #topleft .ui-state-default").hover(
 			function() {
@@ -152,8 +153,17 @@ function showAjaxWaiting() {
 // confirm email post-submit callback
 function showResponse(data) {
 	if (data.flag) {
-		// success redirect to login/confirm
-		window.location.href = "/users/login/confirm";
+		// hide form and others
+		$("#showInfo").hide();
+		$("#loadingImg").hide();
+		
+		// show success message
+		$("#successUpdate").show();
+		
+		//close the window in 5 seconds
+		window.opener=null; 
+		window.open('', '_self', '');//mock open by self
+		setTimeout("window.close()", 5000);//close the window without prompt
 
 	} else {
 		// failed

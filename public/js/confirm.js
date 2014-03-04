@@ -70,6 +70,7 @@ $(function() {
 		beforeSubmit : beforeJoinOrgFormSubmit, // pre-submit callback
 		success : successJoinOrgFormSubmit, // post-submit callback
 		dataType : 'json', // 'xml', 'script', or 'json' (expected server
+		error : showError,
 	};
 
 	$("#joinOrgForm").validate({
@@ -90,12 +91,32 @@ $(function() {
 
 // JoinOrg submit call back
 function beforeJoinOrgFormSubmit() {
-
-	alert("before org");
+	
+	//show loading img
+	$("#dialogLoadingImg").show();
+	
+	//disable submit button
+	$("#joinOrg_submit_button").bind("click", function(event) {
+		event.preventDefault();
+	});
+	
 }
 
 function successJoinOrgFormSubmit(data) {
-	alert("sucess org");
+	
+	//enable the submit button
+	$("#joinOrg_submit_button").unbind("click");
+	//hide the loading img
+	$("#dialogLoadingImg").hide();
+	if(data.flag){
+		//hide the form
+		$("#joinOrg_div").hide();
+		//show the success message
+		$("#successJoinOrg_div").show();
+	}else{
+		//show the error message
+		$("#failedJoinOrg_div").show();
+	}
 }
 
 // orgSearchForm pre-submit callback
@@ -156,7 +177,10 @@ function showResponse(data) {
 			// bind the event to join button
 			// Link to open the dialog
 			$("#org_search_result_table a").click(function(event) {
+				//init the dialog, hide success, show form
 				var orgId = $(this).attr("id");
+				$("#joinOrg_div").show();
+				$("#successJoinOrg_div").hide();
 				$("#joinDialog").dialog("open");
 				$("#dialogOrgId").val(orgId);
 				event.preventDefault();
@@ -176,7 +200,6 @@ function showResponse(data) {
 						data : {
 							org_name : data.orgName,
 							currentPage : page,
-							totalPages : data.totalPages
 						},
 						type : 'POST',
 						success : showResponse,// show the items
@@ -202,4 +225,7 @@ function showResponse(data) {
 		$("#no_result_div").show();
 
 	}
+}
+function showError(){
+	alert("system busy, please try later");
 }

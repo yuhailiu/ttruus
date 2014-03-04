@@ -198,29 +198,34 @@ class SettingController extends AbstractActionController
             );
             return $this->returnJson($result);
         }
-        $userTable = $this->serviceLocator->get('userTable');
-        $user = $userTable->getUserByEmail($email);
-        
-        //if first name and last name have been changed, update it
-        if ($user->first_name != $post->first_name || $user->last_name != $post->last_name) {
-            $user->first_name = $post->first_name;
-            $user->last_name = $post->last_name;
-            $userTable->updateUser($user);
-        }
         
         // get userInfo by email and update it
         $userInfoTable = $this->serviceLocator->get('userInfoTable');
-        $userInfo = $userInfoTable->getUserInfoByEmail($email);
-        $userInfo->sex = $post->sex;
-        $userInfo->telephone1 = $post->telephone1;
-        $userInfo->telephone2 = $post->telephone2;
-        $userInfo->address = $post->address;
-        $userInfo->title = $post->title;
+        try {
+            
+            $userInfo = $userInfoTable->getUserInfoByEmail($email);
+        } catch (\Exception $e) {
+            return $this->returnJson(false);
+        }
         
-        $userInfoTable->updateUserInfo($userInfo);
+        
+        // mix the data and create a new userinfo
+        $userInfo = MyUtils::exchangeDataToObject($post, $userInfo);
+        
+        // update the UserInfo to db
+        try {
+            $userInfoTable->updateUserInfo($userInfo);
+        } catch (\Exception $e) {
+            MyUtils::writelog("failed to update user_info table");
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'failed to update DB'
+            ));
+        }
+        
         $result = array(
-        		'flag' => true,
-        		'message' => "userinfo has been updated"
+            'flag' => true,
+            'message' => "userinfo has been updated"
         );
         return $this->returnJson($result);
     }

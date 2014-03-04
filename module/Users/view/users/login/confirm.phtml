@@ -13,6 +13,7 @@ require 'module/Users/view/users/utils/user_label.php';
 
 	<div id="tabs">
 		<ul>
+		    <li><a href="#tabs-4">团队成员</a></li>
 			<li><a href="#tabs-2"><?php echo $user_labels[orgManagement]?></a></li>
 			<li><a href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
 			<li><a href="#tabs-3"><?php echo $user_labels[taskManagement]?></a></li>
@@ -34,6 +35,10 @@ require 'module/Users/view/users/utils/user_label.php';
 	   <div id="tabs-3">
 	   add the tasks managements here.
 	   </div>
+	   <div id="tabs-4" style="height: 800px">
+	   <?php echo $this->partial('users/org-manager/get-org-struct-by-org-id')?>
+	   </div>
+	   
 </div>
 </div>
 <!-- /.wrap -->
