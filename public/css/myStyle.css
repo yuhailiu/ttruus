@@ -290,10 +290,6 @@ button.g-button,input.g-button[type="submit"] {
 	font-size: 120%;
 }
 
-.error {
-	color: red;
-}
-
 #captcha_image {
 	width: 136px;
 	height: 28px;

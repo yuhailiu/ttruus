@@ -6,6 +6,15 @@ $(function() {
 		$( "#dialog" ).dialog({
 			autoOpen: false,
 			width: 800,
+			modal : true,
+			show : {
+				effect : "blind",
+				duration : 1000
+			},
+			hide : {
+				effect : "explode",
+				duration : 1000
+			},
 			buttons: [
 				{
 					text: "Ok",
