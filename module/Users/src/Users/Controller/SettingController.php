@@ -11,8 +11,6 @@ use Zend\Json\Json;
 class SettingController extends AbstractActionController
 {
 
-    protected $storage;
-
     protected $authservice;
 
     public function getAuthService()

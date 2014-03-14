@@ -445,3 +445,11 @@ button.g-button,input.g-button[type="submit"] {
 	width: 120px;
 	height: 130px;
 }
+.tdFormElement {
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+}
+td{
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}

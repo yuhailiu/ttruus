@@ -100,7 +100,6 @@ class LoginController extends AbstractActionController
                     
                     //save email and username to session
                     $_SESSION['email'] = $user->email;
-                    $_SESSION['username'] = $user->first_name;
                     
                     // update failedTimes in DB with 0
                     $userTable->updateFailedTimesByEmail($email, 0);
@@ -180,13 +179,12 @@ class LoginController extends AbstractActionController
     public function confirmAction()
     {
         //get the user email, if false return to users/login
-        try {
-            require 'module/Users/src/Users/Tools/AuthUser.php';
-        } catch (\Exception $e) {
-            MyUtils::writelog("login failed".$e);
-            return $this->redirect()->toRoute('users/login');
-        }
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+            
         $userEmail = $email;
+        
+        //get tabs id from route
+        $tabs = $this->params()->fromRoute('tabs');
         
         $userTable = $this->getServiceLocator()->get('UserTable');
         // if can not get the user redirect to login page
@@ -220,8 +218,12 @@ class LoginController extends AbstractActionController
         } catch (\Exception $e) {
             $pendingNo = 0;
         }
+        
         //store the pendingNo to session
         $_SESSION['pendingNo'] = $pendingNo;
+        $_SESSION['username'] = $userInfo->first_name;
+        $_SESSION['org_id'] = $org->id;
+        $_SESSION['org_name'] = $org->org_name;
         
         //get the relative forms
         $orgSearchForm = $this->getServiceLocator()->get('OrgSearchForm');
@@ -235,6 +237,7 @@ class LoginController extends AbstractActionController
             'org' => $org,
             'orgSearchForm' => $orgSearchForm,
             'joinOrgForm' => $joinOrgForm,
+            'tabs' => $tabs,
         ));
         return $viewModel;
     }

@@ -1,4 +1,5 @@
 $(function() {
+	
 	$("#tabs").tabs();
 	$(".confirm_button").button();
 	$("#joinOrg_submit_button").button();
@@ -86,6 +87,10 @@ $(function() {
 		}
 
 	});
+	
+	//select the focus tab
+	var id = $("#tabs_id_input").val();
+	$("#tabs_a_" + id).click();
 
 });
 

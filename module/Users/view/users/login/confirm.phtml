@@ -2,16 +2,16 @@
 $this->headTitle()->prepend('Confirm');
 require 'module/Users/view/users/utils/user_label.php';
 ?>
-
+<input id="tabs_id_input" type="hidden" value="<?php echo $this->tabs?>" />
 <div class="wrap">
 
 	<script src="/js/confirm.js" type="text/javascript"></script>
 	<div id="tabs">
 		<ul>
-			<li><a href="#tabs-2"><?php echo $user_labels[orgManagement]?></a></li>
-			<li><a href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
-			<li><a href="#tabs-3"><?php echo $user_labels[taskManagement]?></a></li>
-			<li id="org_member_li"><a href="#tabs-4"><?php echo $user_labels['orgMembers']?></a></li>
+			<li><a id="tabs_a_2" href="#tabs-2"><?php echo $user_labels[orgManagement]?></a></li>
+			<li><a id="tabs_a_1" href="#tabs-1"><?php echo $user_labels[personalInfo]?></a></li>
+			<li><a id="tabs_a_3" href="#tabs-3"><?php echo $user_labels[taskManagement]?></a></li>
+			<li id="org_member_li"><a  id="tabs_a_4" href="#tabs-4"><?php echo $user_labels['orgMembers']?></a></li>
 			
 		</ul>
 		<div id="tabs-1" style="height: 800px">
@@ -28,8 +28,8 @@ require 'module/Users/view/users/utils/user_label.php';
 	       'joinOrgForm' => $joinOrgForm, 
 	       'org' => $org))?>
 	   </div>
-	   <div id="tabs-3">
-	   add the tasks managements here.
+	   <div id="tabs-3" style="height: 800px">
+	   <?php echo $this->partial('users/task/taskManagement')?>	
 	   </div>
 	   <div id="tabs-4" style="height: 800px">
 	   <?php echo $this->partial('users/org-manager/get-org-struct-by-org-id')?>
