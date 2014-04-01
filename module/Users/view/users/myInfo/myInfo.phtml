@@ -1,0 +1,46 @@
+
+<?php
+require 'module/Users/view/users/utils/user_label.php';
+?>
+        <br>
+        <div>我的信息</div>
+        <table id="show_my_info_table">
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['firstName'] ?></th>
+    	        <td id="first_name_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['lastName'] ?></th>
+    	        <td id="last_name_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['selfDescript'] ?></th>
+    	        <td id="self_descript_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['position'] ?></th>
+    	        <td id="title_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['address'] ?></th>
+    	        <td id="address_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['email'] ?></th>
+    	        <td id="email_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['createTime'] ?></th>
+    	        <td id="create_time_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"><?php echo $user_labels['LastModifyTime'] ?></th>
+    	        <td id="last_modify_td"></td>
+            </tr>
+            <tr>
+                <th class="showInfoTd"></th>
+    	        <td><button id="edit_p_info_button">编辑</button></td>
+            </tr>
+        </table>
+<!-- myInfo.js -->
+<script src="/js/myInfo.js"></script>

@@ -1,0 +1,211 @@
+<?php 
+    $this->headTitle()->prepend('reset password'); 
+    require 'module/Users/view/users/utils/user_label.php';
+
+    // Make the page validate
+    ini_set('session.use_trans_sid', '0');
+    
+    // Include the random string file
+    //require 'captcha/rand.php';
+    // Create a random string, leaving out 'o' to avoid confusion with '0'
+    $char = strtoupper(substr(str_shuffle('abcdefghjkmnpqrstuvwxyz'), 0, 4));
+    
+    // Concatenate the random string onto the random numbers
+    // The font 'Anorexia' doesn't have a character for '8', so the numbers will only go up to 7
+    // '0' is left out to avoid confusion with 'O'
+    $str = rand(1, 7) . rand(1, 7) . $char;
+    
+    // Begin the session
+    session_start();
+    
+    // Set the session contents
+    $_SESSION['captcha_id'] = $str;    
+    
+?>
+<div class="wrap">
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1"><?php echo $user_labels[resetPassword]?></a></li>
+		</ul>
+		<div id="tabs-1">
+		<br>
+		  <div>
+    		  <ul class="mycenter" id="resetPassword">
+    		      <li id="resetPassword_list1" class="focusBackgroud" >1.<?php echo $user_labels[confirmAccount]?> &#62;&#62;&#62;</li>
+    		      <li id="resetPassword_list2" >2.<?php echo $user_labels[captchaCode]?> &#62;&#62;&#62;</li>
+    		      <li id="resetPassword_list3" >3.<?php echo $user_labels[resetPassword]?> </li>
+    		  </ul> 
+		  </div>
+		<br>
+		<br>
+		<br>
+		<div id="formArea" class="mycenter" style="width: 510px">
+		  <input type="hidden" id="captcha_check_result">
+		  <div class="error mycenter" id="emailError" hidden="hidden" style="width: 200px;"><?php echo $user_labels[emailError]?></div>
+		  <div class="error mycenter" id="captchaError" hidden="hidden" style="width: 200px;"><?php echo $user_labels[captchaError]?></div>
+		  <div class="error mycenter" id="passwordError" hidden="hidden" style="width: 200px;"><?php echo $user_labels[passwordError]?></div>
+		  <div class="success mycenter" id="emailSuccess" hidden="hidden" style="width: 200px;"><?php echo $user_labels[emailSuccess]?></div>
+		  <div class="success mycenter" id="captchaSuccess" hidden="hidden" style="width: 200px;"><?php echo $user_labels[captchaSuccess]?></div>
+		  <div class="success mycenter" id="passwordSuccess"  hidden="hidden" style="width: 200px; font-size: 120%;">
+		      <a href="/users/login" ><?php echo $user_labels[passwordSuccess]?></a>
+		  </div>
+		  <br>
+		  <div id="confirmEmailDiv">
+    		<?php 
+            $form = $this->form;
+            $form->prepare();
+            $form->setAttribute('action', $this->url(NULL, array('action' => 'sendMail')));
+            $form->setAttribute('method', 'post');
+            $form->setAttribute('id', 'confirmEmailForm');
+    
+            echo $this->form()->openTag($form);
+            ?>
+           <table>
+            <tr>
+                <th class="showInfoTd">
+                    <?php echo $this->formlabel($form->get('email'))?>
+                </th>
+                <td>
+                     <?php 
+                        echo $this->formElement($form->get('email'));
+                        echo $this->formElementErrors($form->get('email'));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                </th>
+                <td>
+                    <div id="captchaimage" class="captcha form-element"><a href="" 
+                         id="refreshimg" title="<?php echo $user_labels[changeImg]?>"><img 
+                         src="/captcha/images/image.php?<?php echo time(); ?>" 
+                         alt="<?php echo $user_labels[click]?>" id="captcha_image"/></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="showInfoTd">
+                    <?php echo $user_labels[captcha]?>
+                </th>
+                <td>
+                    <input type="text" maxlength="6" style="vertical-align:text-top;" class="form-element" name="captcha" id="captcha" placeholder="<?php echo $user_labels[captcha]?>"/>
+                    
+                </td>
+            </tr>
+    		<tr>
+    		  <th>
+    		  </th>
+    		  <td>
+    		      <?php
+                    echo $this->formElement($form->get('submit'));
+                    echo $this->formElementErrors($form->get('submit'));
+                  ?>
+    		  </td>
+    		</tr>
+         </table>
+         <?php echo $this->form()->closeTag()?>
+         </div>
+         <div hidden="hidden" id="captchaDiv">
+         
+    		<?php 
+            $form = $this->confirmCaptchaForm;
+            $form->prepare();
+            $form->setAttribute('action', $this->url(NULL, array('action' => 'verifyCaptcha')));
+            $form->setAttribute('method', 'post');
+            $form->setAttribute('id', 'confirmCaptchaForm');
+    
+            echo $this->form()->openTag($form);
+            ?>
+           <input type="hidden" name="email" id="hideEmail">
+           <table>
+            <tr>
+                <th class="showInfoTd">
+                    <?php echo $this->formlabel($form->get('captcha'))?>
+                </th>
+                <td>
+                     <?php 
+                        echo $this->formElement($form->get('captcha'));
+                        echo $this->formElementErrors($form->get('captcha'));
+                    ?>
+                </td>
+            </tr>
+    		<tr>
+    		  <th>
+    		  </th>
+    		  <td>
+    		      <?php
+                    echo $this->formElement($form->get('submit'));
+                    echo $this->formElementErrors($form->get('submit'));
+                  ?>
+    		  </td>
+    		</tr>
+         </table>
+         <?php echo $this->form()->closeTag()?>
+         </div><!-- end captchaDiv-->
+         <div hidden="hidden" id="resetPasswordDiv">
+         <?php 
+            $form = $this->resetPasswordForm;
+            $form->prepare();
+            $form->setAttribute('action', $this->url(NULL, array('action' => 'resetPassword')));
+            $form->setAttribute('method', 'post');
+            $form->setAttribute('id', 'resetPasswordForm');
+    
+            echo $this->form()->openTag($form);
+         ?>
+         <input type="hidden" name="email" id="hideEmail_reset">  
+         <input type="hidden" name="captcha" id="hideCaptcha"> 
+         <table>
+            <tr>
+                <th class="showInfoTd">
+                    <?php echo $this->formlabel($form->get('password'))?>
+                </th>
+                <td>
+                     <?php 
+                        echo $this->formElement($form->get('password'));
+                        echo $this->formElementErrors($form->get('password'));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <th class="showInfoTd">
+                    <?php echo $this->formlabel($form->get('confirmPassword'))?>
+                </th>
+                <td>
+                     <?php 
+                        echo $this->formElement($form->get('confirmPassword'));
+                        echo $this->formElementErrors($form->get('confirmPassword'));
+                    ?>
+                </td>
+            </tr>
+    		<tr>
+    		  <th>
+    		  </th>
+    		  <td>
+    		      <?php
+                    echo $this->formElement($form->get('submit'));
+                    echo $this->formElementErrors($form->get('submit'));
+                  ?>
+    		  </td>
+    		</tr>
+         </table> 
+         <?php echo $this->form()->closeTag()?>
+         </div><!-- end resetpassword div -->
+		</div>
+		<br>
+		<div style="width:20px;" class="mycenter">
+            <img hidden="hidden"  id="loadingImg"  alt="" src="/images/loading.gif">
+		</div>
+		
+		<br>
+		<br>
+		<br>
+	   </div><!-- end tabs-1 -->
+	</div>
+</div>
+<!-- load the relative js -->
+<script src="/js/reset-password.js" type="text/javascript"></script>
+<script src="/js/captcha.js" type="text/javascript"></script>
+
+
+
+

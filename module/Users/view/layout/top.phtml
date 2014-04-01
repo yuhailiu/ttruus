@@ -1,0 +1,33 @@
+<?php require_once 'layout_label.php';?>
+
+<!-- - - - - - - - - - - - - - Top Panel - - - - - - - - - - - - - - - - -->
+
+<div class="top-line clearfix  ui-corner-all">
+
+	<div class="topcenter">
+		<ul id="topleft">
+
+			<li class="ui-state-default ui-corner-all" title=".ui-icon-home"><a
+				href="/home"> <span class="ui-icon ui-icon-home"></span>
+			</a></li>
+			<li><a href="">| <?php echo $labels[join]; ?></a></li>
+			<li><a href="">| <?php echo $labels[about]; ?> </a></li>
+		</ul>
+
+		<ul id="topright">
+			<li class="ui-state-default ui-corner-all" title="<?php echo $labels[logout]; ?>"><a
+				href="/users/login/logout"> <span class="ui-icon ui-icon-extlink"></span>
+			</a></li>
+			<li class="ui-state-default ui-corner-all" title="<?php echo $labels[userSet]; ?>"><a
+				href="/users/setting/index"> <span class="ui-icon ui-icon-gear"></span>
+			</a></li>
+			<li ><a><?php echo date("D Y-m-d");  ?></a></li>
+			<li id="top_user_email"><?php echo $_SESSION['email'];?></li>
+		</ul>
+	</div>
+
+
+</div>
+<!--/ .top-line-->
+<!-- - - - - - - - - - - - - end Top Panel - - - - - - - - - - - - - - - -->
+

@@ -1,0 +1,131 @@
+            <?php 
+            require 'module/Users/view/users/utils/user_label.php';
+            $addinfo = '<i style="color: #90EE90;">'.$user_labels[addInfo].'</i>';
+            ?>
+        <div class="tab-left">
+            <div id="showPhoto">
+                <?php 
+                    echo $this->partial('layout/showTnPhoto.phtml', array(
+                        'key' => $user->email,
+                        'subaction' => 'thumb',
+                        'title' => $user->first_name,
+                        'dialogUrl' => $user->email
+                    ));
+                ?>
+            </div>
+        </div>
+		<div class="tab-right">
+		    <br>
+			<div id="showInfo">
+			<h5><?php echo $user_labels[baseInfo]?></h5>
+    			<table>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[firstName]?>:</td>
+    			         <td >
+    			         <?php echo $userInfo->first_name;?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[lastName]?>:</td>
+    			         <td>
+    			         <?php echo $userInfo->last_name;?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[sex]?>:</td>
+    			         <td>
+    			         <?php if ($userInfo->sex == 1) {
+    			         	echo $user_labels[male];
+    			         }elseif ($userInfo->sex == 2){
+                            echo $user_labels[female];
+                         }else {
+                         	echo $user_labels[unknown];
+                         }
+    			         ?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[position]?>:</td>
+    			         <td>
+    			         <?php if ($userInfo->title == null){
+    			         	echo $addinfo;
+    			         }else {echo $userInfo->title;}?>
+    			         </td>
+    			     </tr>
+    			     
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[CreateTime]?>:</td>
+    			         <td>
+    			         <?php echo $userInfo->create_time;?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[LastModifyTime]?>:</td>
+    			         <td>
+    			         <?php echo $userInfo->last_modify;?>
+    			         </td>
+    			     </tr>
+    			     
+    			</table>
+    		<hr>	
+			<h5><?php echo $user_labels[contactInfo]?></h5>
+			 <table>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[email]?>:</td>
+    			         <td class="">
+    			         <?php echo $user->email;?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[telephone1]?>:</td>
+    			         <td>
+    			         <?php if ($userInfo->telephone1 == null){
+    			         	echo $addinfo;
+    			         }else {echo $userInfo->telephone1;}?>
+    			         
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[telephone2]?>:</td>
+    			         <td>
+    			         <?php if ($userInfo->telephone2 == null){
+    			         	echo $addinfo;
+    			         }else {echo $userInfo->telephone2;}?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[address]?>:</td>
+    			         <td>
+    			         <?php if ($userInfo->address == null){
+    			         	echo $addinfo;
+    			         }else {echo $userInfo->address;}?>
+    			         </td>
+    			     </tr>
+    		</table>
+    		<hr>	
+    		<h5><?php echo $user_labels[myCreateOrgInfo]?></h5>
+    		<table>
+    			     <tr>
+    			         <td class="showInfoTd"><?php echo $user_labels[orgName]?></td>
+    			         <td class="showInfoTd"><?php echo $user_labels[orgInfo]?></td>
+    			     </tr>
+    			     <tr>
+    			         <td>
+    			             <?php if ($org->org_name == null){
+    			         	echo $addinfo;
+    			         }else {echo $org->org_name;}?>
+    			              
+    			         </td>
+    			         <td>
+    			             <?php if ($org->org_des == null){
+    			         	echo $addinfo;
+    			         }else {echo $org->org_des;}?>
+    			         </td>
+    			     </tr>
+    		</table>
+    		
+    		<hr>	
+    		<h6><?php echo $user_labels[myWorkInfo]?></h6>
+    		
+		  </div>
+		</div>

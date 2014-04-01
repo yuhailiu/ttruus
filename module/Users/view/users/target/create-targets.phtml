@@ -1,0 +1,34 @@
+
+<?php
+require 'module/Users/view/users/utils/user_label.php';
+?>
+<br>
+<div class="content-title">创建新目标</div>
+<div class="content-left">
+<form action="" class="target_create">
+    <input name="target_name" placeholder="target name"><br>
+    <input name="target_end_time" placeholder="target end time"><br>
+    <textarea name="target_content" placeholder="target content"></textarea><br>
+    <input type="radio" name="task_assign" id="single_member" value="single"><?php echo $user_labels['asignSigleMember']?>
+    <input type="radio" name="task_assign" id="mutiple_member" value="mutiple"><?php echo $user_labels['asignMutipleMember']?><br>
+    <select name="receiver" id="receiver_select">
+        <option>select helper</option>
+    </select><br>
+    <input type="submit" id="create_single_target_submit" value="<?php echo $user_labels['submit']?>">
+</form>
+</div>
+<div class="content-right">
+    <div class="create_sub-target">
+        <div>+ again</div>
+        <form action="" class="target_create">
+            <input name="target_name" placeholder="target name"><br>
+            <input name="target_end_time" placeholder="target end time"><br>
+            <textarea name="target_content" placeholder="target content"></textarea><br>
+            <select name="receiver" id="receiver_select">
+                <option>select helper</option>
+            </select><br>
+            <input type="submit" id="create_sub_target_submit" value="<?php echo $user_labels['submit']?>">
+        </form>
+    </div>
+</div>
+

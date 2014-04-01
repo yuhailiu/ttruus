@@ -1,0 +1,130 @@
+<?php
+require 'module/Users/view/users/utils/user_label.php';
+?>
+                 <!-- userSetForm -->
+			     <br>
+            <div id="showInfo">
+                <div class="error mycenter" id="settingError" hidden="hidden" style="width: 200px;"><?php echo $user_labels[systemBusy]?></div>
+                
+                <?php
+                    $form = $this->userSetForm;
+                    $form->prepare();
+                    $form->setAttribute('action', $this->url('users/setting', array(
+                        'action' => 'process'
+                    )));
+                    $form->setAttribute('method', 'post');
+                    $form->setAttribute('id', 'userSet');
+                    
+                    echo $this->form()->openTag($form);
+                    ?>
+                <h5><?php echo $user_labels[baseInfo]?></h5>
+                <script type="text/javascript">
+                $(function(){
+                	$("#first_name").attr("value", $("#first_name_value").val());
+                	$("#last_name").attr("value", $("#last_name_value").val());
+                	$("#title").attr("value", $("#title_value").val());
+                	$("#telephone1").attr("value", $("#telephone1_value").val());
+                	$("#telephone2").attr("value", $("#telephone2_value").val());
+                	//$("#address").attr("value", $("#address_value").val());
+                	document.getElementById('address').value=$("#address_value").val();
+                	//male 1, female 2
+                	if($("#sex_value").val()=='1'){
+                	    $("#male").attr("checked", "checked");
+                	}else if($("#sex_value").val()=='2'){
+                		$("#female").attr("checked", "checked");
+                	}else if($("#sex_value").val()=='3'){
+                		$("#unknown").attr("checked", "checked");
+                	}
+                });
+                </script>
+                <table>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('first_name')); ?></th>
+    			         <td >
+    			             <input type="hidden" id="first_name_value" value="<?php echo $userInfo->first_name;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('first_name'));
+                                echo $this->formElementErrors($form->get('first_name'));
+                             ?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('last_name')); ?></th>
+    			         <td>
+    			         <input type="hidden" id="last_name_value" value="<?php echo $userInfo->last_name;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('last_name'));
+                                echo $this->formElementErrors($form->get('last_name'));
+                             ?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('sex')); ?></th>
+    			         <td>
+    			             &nbsp;&nbsp;
+        			         <input type="hidden" id="sex_value" value="<?php echo $userInfo->sex;?>">
+        			         <input type="radio" id="male" name="sex" value="1">&nbsp;<?php echo $user_labels[male]?>&nbsp;&nbsp;
+        			         <input type="radio" id="female" name="sex" value="2">&nbsp;<?php echo $user_labels[female]?>&nbsp;&nbsp;
+        			         <input type="radio" id="unknown" name="sex" value="3">&nbsp;<?php echo $user_labels[unknown]?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('title')); ?></th>
+    			         <td>
+    			         <input type="hidden" id="title_value" value="<?php echo $userInfo->title;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('title'));
+                                echo $this->formElementErrors($form->get('title'));
+                             ?>
+    			         </td>
+    			     </tr>
+    			</table>
+                <hr>
+                <h5><?php echo $user_labels[contactInfo]?></h5>    
+                <table>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('telephone1')); ?></th>
+    			         <td>
+    			         <input type="hidden" id="telephone1_value" value="<?php echo $userInfo->telephone1;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('telephone1'));
+                                echo $this->formElementErrors($form->get('telephone1'));
+                             ?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('telephone2')); ?></th>
+    			         <td>
+    			         <input type="hidden" id="telephone2_value" value="<?php echo $userInfo->telephone2;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('telephone2'));
+                                echo $this->formElementErrors($form->get('telephone2'));
+                             ?>
+    			         </td>
+    			     </tr>
+    			     <tr>
+    			         <th class="showInfoTd"><?php echo $this->formLabel($form->get('address')); ?></th>
+    			         <td>
+    			         <input type="hidden" id="address_value" value="<?php echo $userInfo->address;?>">
+    			             <?php 
+                                echo $this->formElement($form->get('address'));
+                                echo $this->formElementErrors($form->get('address'));
+                             ?>
+    			             
+<!--     			         <textarea id="address" rows="8" cols="80"></textarea> -->
+    			         </td>
+    			     </tr>
+    		      </table>
+    		      <br>
+    			         <?php
+                            echo $this->formElement($form->get('submit'));
+                            echo $this->formElementErrors($form->get('submit'));
+                        ?>
+                <?php echo $this->form()->closeTag()?>
+                </div>
+        		<div style="width:20px;"  class="mycenter">
+                    <img id="loadingImg" hidden="hidden" alt="" src="/images/loading.gif">
+        		</div>
+        		<br>
+        		<br>
+				<div id="successUpdate" class="mycenter success" hidden="hidden"><?php echo $user_labels[confirm_closeWindow]?></div>  

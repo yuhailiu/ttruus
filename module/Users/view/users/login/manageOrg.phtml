@@ -1,0 +1,148 @@
+<?php 
+require 'module/Users/view/users/utils/user_label.php';
+?>
+<div>
+	<h5><?php echo $user_labels[myCreateOrgInfo]?></h5>
+	<div>
+	<?php if($org->org_name != null):?>
+		<table>
+			<tr>
+				<td class="showInfoTd"><?php echo $user_labels[name]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[logo]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[webSite]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[CreateTime]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[LastModifyTime]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[address]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[telephone]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[orgInfo]?>:</td>
+
+			</tr>
+			<tr class="showInfoTd">
+                <td id="td1" class="showInfoTd"><?php echo $org->org_name;?></td>
+                <td id="td2"><img alt="logo" style="width: 40px; height: 40px; vertical-align: -20px; margin-top: 10px;"
+                    src="<?php echo $this->url('users/media', array('action' => 'showImage', 
+                        'key' => $org->id, 'subaction' => 'logoThumb'));?>"></td>
+                <td id="td3"><a href="http://<?php echo $org->org_website;?>" target="_blank">
+                    <?php echo $org->org_website;?></a></td>
+                <td id="td4"><?php echo $org->org_CT;?></td>
+                <td id="td5"><?php echo $org->org_LM;?></td>
+                <td id="td6"><?php echo $org->org_address;?></td>
+                <td id="td7"><?php echo $org->org_tel;?></td>
+                <td id="td8"><?php echo $org->org_des;?></td>
+                <td ><div  class="ui-state-default ui-corner-all"  title=<?php echo $user_labels[updateInfo]?>>
+                    <a id="updateOrg" href="/users/orgmanager" target="_blank">
+                        <span class="ui-icon ui-icon-wrench"></span></a>
+                    </div>
+                    <br>
+                    <div class="ui-state-default ui-corner-all" title=<?php echo $user_labels[refresh]?> style="margin-top: -10px;">
+                    <input type="hidden" id="orgId" value="<?php echo $org->id?>">
+                    <a id="reloadOrg" href="#">
+                        <span class="ui-icon ui-icon-refresh"></span></a>
+                    </div>
+                </td>
+			</tr>
+		</table>
+	<?php else:?>
+	   <div><a id="create_org_button" href="/users/orgmanager" target="_blank"><?php echo $user_labels[createMyTeam]?></a></div>	
+    <?php endif ?>
+    </div>
+	<hr>
+	<h5><?php echo $user_labels['waitingRequest']?></h5>
+	<?php if($_SESSION['pendingNo'] == 0) :?>
+	   <p>没有等待回应的申请</p>
+	<?php else :?>
+	   <a href="/users/orgmanager/showPendingRequest"><?php echo $_SESSION['pendingNo']; echo $user_labels['unreadRequest']?></a>
+	<?php endif;?>
+	
+	<hr>
+	<h5><?php echo $user_labels[joinOrg]?></h5>
+	<div id="org_search_div">
+	<?php 
+        $form = $this->orgSearchForm;
+        $form->prepare();
+        $form->setAttribute('action', '/users/orgmanager/searchOrgByName');
+        $form->setAttribute('method', 'post');
+        $form->setAttribute('id', 'orgSearchForm');
+        echo $this->form()->openTag($form);
+        echo $this->formLabel($form->get('org_name'));
+        echo $this->formElement($form->get('org_name'));
+        echo $this->formElement($form->get('submit'));
+     ?>
+     <img id="loadingImg"  alt="loading" hidden="hidden" src="/images/loading.gif" style="width:20px; margin-left: 100px;">
+     <?php 
+	    echo $this->form()->closeTag() 
+	 ?>
+	 
+	</div>
+	<div id="org_search_result_div" hidden="hidden">
+	   <table id="org_search_result_table">
+	       <tr>
+				<td class="showInfoTd"><?php echo $user_labels[name]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[logo]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[webSite]?>:</td>
+				<td class="showInfoTd"><?php echo $user_labels[orgInfo]?>:</td>
+			</tr>
+	   </table>
+	   <div id="org_search_result_page_div"></div>
+	</div>
+	<div id="no_result_div" class="error" hidden="hidden"><?php echo $user_labels[searchError]?></div>
+	
+	<!-- ui-dialog -->
+    <div id="joinDialog" title="<?php echo $user_labels[addition]?>">
+        <div id="joinOrg_div">
+        <?php 
+        $form = $this->joinOrgForm;
+        $form->prepare();
+        $form->setAttribute('action', '/users/orgmanager/joinOrg');
+        $form->setAttribute('method', 'post');
+        $form->setAttribute('id', 'joinOrgForm');
+        echo $this->form()->openTag($form);
+        echo $this->formLabel($form->get('additionInfo'));
+        echo "<br><br>";
+        echo $this->formElement($form->get('additionInfo'));
+        echo "<br><br>";
+        echo $this->formElement($form->get('submit'))
+        ?>
+        <img id="dialogLoadingImg"  alt="loading" hidden="hidden" src="/images/loading.gif" style="width:20px; margin-left: 100px;">
+        <input type="hidden" name="id" id="dialogOrgId">
+        <?php 
+	    echo $this->form()->closeTag() 
+	    ?>
+	    <div id="failedJoinOrg_div" hidden="hidden" class="mycenter error">
+        <?php echo $user_labels[errorRepeat] ?>
+        </div>
+        </div>
+        <div id="successJoinOrg_div" hidden="hidden" class="mycenter success">
+        <?php echo $user_labels[sucesssWaiting] ?>
+        </div>
+    </div>
+	
+	<hr>
+	<h5><?php echo $user_labels['invitePeopelJoin']?></h5>
+	<div id="success_inivite_people" class="success" hidden="hidden">
+	   <p>邀请已经成功发出，请等待回复。</p>
+	</div>
+	<form action="/users/orgmanager/invitePeopleJoinOrg" method="post" id="invitePeopleForm">
+	<input type="hidden" name="orgId" value="<?php echo $org->id?>">
+	<div id="invite_div">
+	<span><?php echo $user_labels['inviterEmail']?>:</span><input name="invite_email" type="email" required />&nbsp;&nbsp;
+	<span id="addition_info"><?php echo $user_labels['requestAdditionInfo']?>:</span><textarea type="address" name="invite_addition_info"></textarea>
+	<br>
+	<br>
+	</div>
+	<div><a href="#" id="invite_more" style="float: left"><span class="ui-icon ui-icon-plus" style="float: left" ></span><?php echo $user_labels['more']?></a></div>
+	<br>
+	<br>
+	<input type="submit" id="invite_submit_button" value="<?php echo $user_labels['submit']?>">
+	<img  alt="loading" hidden="hidden" src="/images/loading.gif" style="width:20px; margin-left: 100px;">
+	</form>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('#create_org_button').button();
+	$('#org_submit_button').button();
+	$('#invite_submit_button').button();
+});
+</script>
+<!-- <script src="/js/bootstrap.min.js"></script> -->
+<script src="/js/bootstrap-paginator.min.js"></script>

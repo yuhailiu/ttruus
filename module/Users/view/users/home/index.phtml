@@ -1,0 +1,78 @@
+
+<?php
+$this->headTitle()->prepend('Home');
+require 'module/Users/view/users/utils/user_label.php';
+?>
+<!-- get the url from session -->
+<input type="hidden" id="owner_photo_img_url" value="/users/media/showImage/<?php echo $_SESSION['email']?>/thumb">
+<div class="wrap background">
+<div class="app-sidebar">
+    <div id="showPhoto" class="mycenter showPhoto">
+      <br><img id="owner_photo_img" alt=<?php echo $user_labels[pleaseUpdate]?>
+            class="ui-state-default ui-corner-all personalPhoto" >
+            <p></p>
+    </div>
+    <br>
+    <br>
+    <div class="menue">
+        <a id="targets_a">目标</a>
+        <ul>
+            <li id="create_target_li"><a>创建新目标</a></li>
+            <li id="waiting_target_li"><a>等待回复的目标</a></li>
+            <li id="close_target_li"><a>历史目标</a></li>
+        </ul>
+        <a id="helper_a">帮手</a>
+        <ul>
+            <li id="lookfor_helper_li"><a>找帮手</a></li>
+            <li id="help_others_li"><a>去帮忙</a></li>
+            <li id="waiting_helper_li"><a>等待回复的帮手</a></li>
+        </ul>
+        <a id="my_info_a">我的信息</a>
+        <ul>
+            <li id="edit_my_info_li"><a>更新信息</a></li>
+            <li id="change_password_li"><a><?php echo $user_labels['changePassword']?></a></li>
+        </ul>
+    </div>
+</div>
+<div class="app-content">
+    <!-- target -->
+    <div id="targets_div" class="content">
+        <?php echo $this->partial("users/target/targets")?>
+    </div>
+    <div id="create_target_div" class="content">
+        <?php echo $this->partial('users/target/create-targets')?>
+    </div>
+    <div id="waiting_target_div" class="content">
+        <?php echo $this->partial('users/target/waiting-targets')?>
+    </div>
+    <div id="close_target_div" class="content">
+        <?php echo $this->partial('users/target/close-targets')?>
+    </div>
+    <!-- helper -->
+    <div id="helper_div" class="content">
+        <?php echo $this->partial('users/helper/helperInfo')?>
+    </div>
+    <div id="lookfor_helper_div" class="content">
+        <?php echo $this->partial('users/helper/lookForHelper')?>
+    </div>
+    <div id="help_others_div" class="content">
+        <?php echo $this->partial('users/helper/helpOthers')?>
+    </div>
+    <div id="waiting_helper_div" class="content">
+        <?php echo $this->partial('users/helper/waiting-helper')?>
+    </div>
+    <!-- owner infomation -->
+    <div id="show_my_info_div" class="content">
+        <?php echo $this->partial('users/myInfo/myInfo')?>	
+    </div>
+    <div id="edit_my_info_div" class="content">
+        <?php echo $this->partial('users/myInfo/editMyInfo')?>
+    </div>
+    <div id="change_password_div" class="content">
+        <?php echo $this->partial('users/myInfo/changePassword')?>
+    </div>
+</div>
+</div>
+
+<!-- home.js -->
+<script src="/js/home.js"></script>

@@ -1,0 +1,14 @@
+<!-- show the tn photo, need params: key(id/email), subaction(logo,thumb), title(for dialog), dialogUrl(1/logo) -->
+<?php 
+require 'module/Users/view/users/utils/user_label.php';
+?>
+<!-- show TnPhoto -->
+<div id="files" class="files" style="height: 149px;">
+	<br> <a href="#" id="dialog-link"> <img alt=<?php echo $user_labels[pleaseUpdate]?>
+		class="ui-state-default ui-corner-all" id="photoImg" title=<?php echo $user_labels[hitEnlarge]?>
+		src="<?php echo $this->url('users/media', array('action' => 'showImage', 'key' => $_SESSION['email'], 'subaction' => 'thumb'));?>"
+		style="height: 130px; width: 120px">
+	</a>
+	<p><?php echo $_SESSION['username']?></p>
+</div>
+
