@@ -1,5 +1,5 @@
 $(function() {
-	
+
 	$("#tabs").tabs();
 	$(".confirm_button").button();
 	$("#joinOrg_submit_button").button();
@@ -87,39 +87,101 @@ $(function() {
 		}
 
 	});
-	
-	//select the focus tab
+
+	// select the focus tab
 	var id = $("#tabs_id_input").val();
 	$("#tabs_a_" + id).click();
 
+	// inivte add
+	var inviteId = 1;
+	$("#invite_more").click(
+			function() {
+				if (inviteId > 49) {
+					alert("max members are 50.");
+					return false;
+				}
+				var inputName = 'invite_email' + inviteId;
+				var textAreaName = 'invite_addition_info' + inviteId;
+				var input = "<div class='added'>" 
+						+$("#invite_div span:first").text()+ "<input type='email' name='"+ inputName+"' required>"
+						+ "&nbsp;&nbsp;&nbsp;"
+						+ $("#addition_info").text() 
+						+ "<textarea type='address' name='"
+						+ textAreaName + "'></textarea><br><br></div>";
+				inviteId++;
+				$("#invite_div").append(input);
+
+			});
+
+	// prepare options
+	var inviteFormOptions = {
+		beforeSubmit : beforeInviteFormSubmit,
+		success : successInviteFormSubmit, // post-submit callback
+		dataType : 'json', // 'xml', 'script', or 'json' (expected server
+		error : showError,
+	};
+
+	// validate the form
+	$("#invitePeopleForm").validate({
+		submitHandler : function(form) {
+			// Submit form by Ajax
+			jQuery(form).ajaxSubmit(inviteFormOptions);
+		}
+	});
+
 });
 
+//before inivite form
+function beforeInviteFormSubmit(){
+	//hidde the submit button
+	$("#invite_submit_button").hide();
+	$("#success_inivite_people").hide();
+	//show the loading img
+	$("#invitePeopleForm img").show();
+}
+
+// invite submit call back
+function successInviteFormSubmit(data) {
+	if (data.flag) {
+		// show the success message
+		$("#success_inivite_people").show();
+		// inite the form
+		$(".added").remove();
+		$("input[name='invite_email']").val(null);
+		$("textarea[name='invite_addition_info']").val(null);
+		$("#invite_submit_button").show();
+		$("#invitePeopleForm img").hide();
+	} else {
+		// show the error message
+		showError();
+	}
+}
 // JoinOrg submit call back
 function beforeJoinOrgFormSubmit() {
-	
-	//show loading img
+
+	// show loading img
 	$("#dialogLoadingImg").show();
-	
-	//disable submit button
+
+	// disable submit button
 	$("#joinOrg_submit_button").bind("click", function(event) {
 		event.preventDefault();
 	});
-	
+
 }
 
 function successJoinOrgFormSubmit(data) {
-	
-	//enable the submit button
+
+	// enable the submit button
 	$("#joinOrg_submit_button").unbind("click");
-	//hide the loading img
+	// hide the loading img
 	$("#dialogLoadingImg").hide();
-	if(data.flag){
-		//hide the form
+	if (data.flag) {
+		// hide the form
 		$("#joinOrg_div").hide();
-		//show the success message
+		// show the success message
 		$("#successJoinOrg_div").show();
-	}else{
-		//show the error message
+	} else {
+		// show the error message
 		$("#failedJoinOrg_div").show();
 	}
 }
@@ -182,7 +244,7 @@ function showResponse(data) {
 			// bind the event to join button
 			// Link to open the dialog
 			$("#org_search_result_table a").click(function(event) {
-				//init the dialog, hide success, show form
+				// init the dialog, hide success, show form
 				var orgId = $(this).attr("id");
 				$("#joinOrg_div").show();
 				$("#successJoinOrg_div").hide();
@@ -231,6 +293,6 @@ function showResponse(data) {
 
 	}
 }
-function showError(){
+function showError() {
 	alert("system busy, please try later");
 }

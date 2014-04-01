@@ -70,7 +70,8 @@ class Module implements AutoloaderProviderInterface
                 'Users\Controller\Index',
                 'Users\Controller\Register',
                 'Users\Controller\ResetPassword',
-                'Users\Controller\Login'
+                'Users\Controller\Login',
+                'Users\Controller\Home',
             ))) {
                 $controller->layout('layout/myaccount');
             }

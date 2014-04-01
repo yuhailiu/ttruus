@@ -17,7 +17,9 @@ return array(
             'Users\Controller\Setting' => 'Users\Controller\SettingController',
             'Users\Controller\MediaManager' => 'Users\Controller\MediaManagerController',
             'Users\Controller\OrgManager' => 'Users\Controller\OrgManagerController',
-            'Users\Controller\Task' => 'Users\Controller\TaskController'
+            'Users\Controller\Task' => 'Users\Controller\TaskController',
+            'Users\Controller\Target' => 'Users\Controller\TargetController',
+            'Users\Controller\Home' => 'Users\Controller\HomeController'
         )
     ),
     'router' => array(
@@ -30,11 +32,38 @@ return array(
                     'constraints' => array(
                     		'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                     ),
+                )
+            ),
+            'target' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    // Change this to something specific to your module
+                    'route' => '/target[/:action]',
+                    'constraints' => array(
+                    		'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
                         '__NAMESPACE__' => 'Users\Controller',
-                        'controller' => 'Task',
+                        'controller' => 'Target',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'home' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    // Change this to something specific to your module
+                    'route' => '/home[/:action]',
+                    'constraints' => array(
+                    		'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => array(
+                        // Change this value to reflect the namespace in which
+                        // the controllers for your module are found
+                        '__NAMESPACE__' => 'Users\Controller',
+                        'controller' => 'Home',
                         'action' => 'index'
                     )
                 )
@@ -173,7 +202,7 @@ return array(
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/default-layout.phtml',
             'layout/myaccount' => __DIR__ . '/../view/layout/myaccount-layout.phtml',
-            'layout/disable' => __DIR__ . '/../view/layout/disable-layout.phtml'
+            'layout/frame' => __DIR__ . '/../view/layout/frame-layout.phtml'
         )
     ),
     // MODULE CONFIGURATIONS

@@ -98,8 +98,11 @@ class LoginController extends AbstractActionController
                         ->getStorage()
                         ->write($email);
                     
-                    //save email and username to session
+                    //save email to session
                     $_SESSION['email'] = $user->email;
+                    $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
+                    $userInfo = $userInfoTable->getUserInfoByEmail($email);
+                    $_SESSION['username'] = $userInfo->first_name;
                     
                     // update failedTimes in DB with 0
                     $userTable->updateFailedTimesByEmail($email, 0);

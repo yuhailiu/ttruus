@@ -349,7 +349,7 @@ button.g-button,input.g-button[type="submit"] {
 
 .showInfoTd {
 	width: 200px;
-	font-size: 120%;
+	font-size: 150%;
 	margin-top: 10px;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -374,7 +374,7 @@ button.g-button,input.g-button[type="submit"] {
 	width: 930px;
 }
 
-.shortcut-menue dt {
+.shortcut-bar dt {
 	background: none repeat scroll 0 0 #F3F3F3;
 	width: 200px;
 	border-top: thin solid #DCDCDC;
@@ -452,4 +452,181 @@ button.g-button,input.g-button[type="submit"] {
 td{
 	padding-left: 0.5em;
 	padding-right: 0.5em;
+}
+.app-sidebar{
+	width: 220px;
+	border-right: thin solid #DCDCDC;
+}
+.content-title{
+	border-bottom: thin solid #DCDCDC;
+}
+
+.content-left{
+	width: 300px;
+	border-right: thin solid #DCDCDC;
+	height: 660px;
+}
+.background {
+	background-color: white;
+	width: 1180px
+}
+
+.app-sidebar, .app-content, .content-left, .content-right{
+	float: left; 
+	background-color: white;
+}
+.app-sidebar, .app-content, .tab_content, .content-right{
+	height: 690px; 
+}
+
+.showPhoto {
+	height: 149px;
+	width: 120px;
+}
+.menue {
+	margin-left: 20px;
+}
+.menue ul {
+	margin-left: 40px;
+}
+.content-title, .content-right, .target_create{
+	padding-left: 20px;
+}
+.content-title, .content{
+	width : 918px;
+}
+.content-right {
+	width : 596px;
+}
+.content-title div {
+	border: thin solid #DCDCDC;
+	width : 100px;
+	margin : 5px;
+	text-align:center;
+}
+
+.target_photo {
+	width: 40px;
+	height: 40px;
+	float: left;
+	margin-left : 2px;
+}
+
+.target{
+	width: 220px;
+	height: 70px;
+	border: thin solid #DCDCDC;
+	margin-bottom: 10px;
+}
+.target p{
+	float: right;
+	margin-top: 20px;
+	margin-right:5px;
+}
+.target h6{
+	margin-bottom: 0px;
+}
+.accordion_div {
+	height: 555px;
+}
+.sub-targets {
+	border: medium solid #DCDCDC;
+	width: 580px;
+}
+
+.sub-targets_td, .personalInfo{
+	border: thin solid #DCDCDC;
+}
+
+.comments, .target_create, .create_sub-target{
+	margin-top: 20px;
+}
+
+.target_create input, .target_create textarea, .target_create select {
+	margin-bottom : 20px;
+}
+.request_info {
+	width: 120px;
+	margin-top:10px;
+	margin-bottom: 10px;
+	padding-left: 10px;
+}
+.historyTarget {
+	margin-left : 20px;
+	margin-top : 10px;
+}
+.flag {
+	height : 10px;
+	width : 10px;
+}
+.personalInfo {
+	width : 120px;
+	height : 190px;
+	margin: 29px;
+	float: left;
+}
+.personalPhoto {
+	height: 130px; 
+	width: 120px;
+}
+.personalInfo p {
+	margin-bottom : 0;
+	margin-left : 2px;
+	margin-right : 2px;
+}
+.helpers_group {
+	padding: 20px;
+}
+.content-single {
+	margin: 10px;
+}
+.content-single input {
+	margin-bottom: 10px;
+}
+.single-element {
+	margin-top: 20px;
+	width: 290px;
+}
+.content-single h5 {
+	margin-top: 20px;
+	width: 340px;
+}
+
+.searchButton{
+	width: 60px;
+}
+
+.inviteButton {
+	width: 80px;
+}
+.description_td {
+	table-layout:fixed;
+	width: 400px;
+	word-break:keep-all;
+}
+.comment_td {
+	table-layout:fixed;
+	width: 400px;
+	word-break:keep-all;
+}
+
+.target_name {
+	position:relative;
+	display: block;
+	width: 220px;
+	height: 1.5em;
+	word-break:keep-all;
+	white-space:nowrap;/* 不换行 */
+	overflow: auto;/* 内容超出宽度时隐藏超出部分的内容 */
+	padding-left: 2px;
+}
+.comment-position {
+	float : left;
+}
+#comments_table {
+	table-layout:fixed;
+}
+.comments {
+	height : 30em;
+	overflow: auto;/* 内容超出宽度时隐藏超出部分的内容 */
 }

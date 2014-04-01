@@ -58,6 +58,25 @@ class SettingController extends AbstractActionController
         ));
         return $viewModel;
     }
+    
+    public function getOwnerInfoAction()
+    {
+        //authorize the request
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        //get userinfo by email
+        $userInfo = $this->getUserInfoByEmail($email);
+        
+        //return json response
+        return $this->returnJson($userInfo);
+    }
+   
+    protected function getUserInfoByEmail($email)
+    {
+        $userInfoTable = $this->getServiceLocator()->get('UserInfoTable');
+        $userInfo = $userInfoTable->getUserInfoByEmail($email);
+        return $userInfo;
+    }
 
     public function changePasswordAction()
     {

@@ -68,7 +68,7 @@ $(function() {
 			// show the failedTimes
 			$("#errorTimes").text(data.failedTimes);
 		} else {
-			window.location.href = "login/confirm";
+			window.location.href = "/home";
 		}
 
 	}

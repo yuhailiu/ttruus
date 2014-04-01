@@ -90,6 +90,8 @@ function beforeUpload() {
 // uplaod form afterUpload
 function afterUpload(data) {
 	if (data.flag) {
+		//clear sessionStrage
+		sessionStorage.clear();
 		
 		//hide the error message
 		$("#uploadError").hide();
@@ -153,6 +155,9 @@ function showAjaxWaiting() {
 // confirm email post-submit callback
 function showResponse(data) {
 	if (data.flag) {
+		//clear sessionStrage
+		sessionStorage.clear();
+
 		// hide form and others
 		$("#showInfo").hide();
 		$("#loadingImg").hide();
@@ -160,11 +165,9 @@ function showResponse(data) {
 		// show success message
 		$("#successUpdate").show();
 		
-		//close the window in 5 seconds
-		window.opener=null; 
-		window.open('', '_self', '');//mock open by self
-		setTimeout("window.close()", 5000);//close the window without prompt
-
+		//return home in 5 seconds
+		setTimeout("window.location.href = '/home'", 5000);//close the window without prompt
+		
 	} else {
 		// failed
 		// hidden loadingimg
