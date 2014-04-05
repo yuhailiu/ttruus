@@ -9,7 +9,7 @@ $(function(){
 	});
 	//validate address allow space and ","
 	jQuery.validator.addMethod("address", function(value, element) {
-		return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[；]|[\s])*$/.test(value);
+		return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[?]|[？]|[；]|[\s])*$/.test(value);
 	});
 	//validate telephone no 
 	jQuery.validator.addMethod("telephone", function(value, element) {

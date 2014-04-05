@@ -1,0 +1,41 @@
+2014-02-28T17:20:34+08:00 INFO (6): error when register userexception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'create_time' in 'field list'' in /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/Adapter/Driver/Pdo/Statement.php:240
+Stack trace:
+#0 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/Adapter/Driver/Pdo/Statement.php(240): PDOStatement->execute()
+#1 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/TableGateway/AbstractTableGateway.php(291): Zend\Db\Adapter\Driver\Pdo\Statement->execute()
+#2 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/TableGateway/AbstractTableGateway.php(258): Zend\Db\TableGateway\AbstractTableGateway->executeInsert(Object(Zend\Db\Sql\Insert))
+#3 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Model/UserTable.php(35): Zend\Db\TableGateway\AbstractTableGateway->insert(Array)
+#4 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Controller/RegisterController.php(103): Users\Model\UserTable->saveUser(Object(Users\Model\User))
+#5 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Controller/RegisterController.php(73): Users\Controller\RegisterController->createUser(Array)
+#6 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Controller/AbstractActionController.php(83): Users\Controller\RegisterController->processAction()
+#7 [internal function]: Zend\Mvc\Controller\AbstractActionController->onDispatch(Object(Zend\Mvc\MvcEvent))
+#8 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(468): call_user_func(Array, Object(Zend\Mvc\MvcEvent))
+#9 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(207): Zend\EventManager\EventManager->triggerListeners('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#10 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Controller/AbstractController.php(117): Zend\EventManager\EventManager->trigger('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#11 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/DispatchListener.php(114): Zend\Mvc\Controller\AbstractController->dispatch(Object(Zend\Http\PhpEnvironment\Request), Object(Zend\Http\PhpEnvironment\Response))
+#12 [internal function]: Zend\Mvc\DispatchListener->onDispatch(Object(Zend\Mvc\MvcEvent))
+#13 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(468): call_user_func(Array, Object(Zend\Mvc\MvcEvent))
+#14 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(207): Zend\EventManager\EventManager->triggerListeners('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#15 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Application.php(309): Zend\EventManager\EventManager->trigger('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#16 /Users/liuyuhai/Sites/ttruus/public/index.php(12): Zend\Mvc\Application->run()
+#17 {main}
+
+Next exception 'Zend\Db\Adapter\Exception\InvalidQueryException' with message 'Statement could not be executed' in /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/Adapter/Driver/Pdo/Statement.php:245
+Stack trace:
+#0 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/TableGateway/AbstractTableGateway.php(291): Zend\Db\Adapter\Driver\Pdo\Statement->execute()
+#1 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Db/TableGateway/AbstractTableGateway.php(258): Zend\Db\TableGateway\AbstractTableGateway->executeInsert(Object(Zend\Db\Sql\Insert))
+#2 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Model/UserTable.php(35): Zend\Db\TableGateway\AbstractTableGateway->insert(Array)
+#3 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Controller/RegisterController.php(103): Users\Model\UserTable->saveUser(Object(Users\Model\User))
+#4 /Users/liuyuhai/Sites/ttruus/module/Users/src/Users/Controller/RegisterController.php(73): Users\Controller\RegisterController->createUser(Array)
+#5 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Controller/AbstractActionController.php(83): Users\Controller\RegisterController->processAction()
+#6 [internal function]: Zend\Mvc\Controller\AbstractActionController->onDispatch(Object(Zend\Mvc\MvcEvent))
+#7 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(468): call_user_func(Array, Object(Zend\Mvc\MvcEvent))
+#8 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(207): Zend\EventManager\EventManager->triggerListeners('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#9 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Controller/AbstractController.php(117): Zend\EventManager\EventManager->trigger('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#10 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/DispatchListener.php(114): Zend\Mvc\Controller\AbstractController->dispatch(Object(Zend\Http\PhpEnvironment\Request), Object(Zend\Http\PhpEnvironment\Response))
+#11 [internal function]: Zend\Mvc\DispatchListener->onDispatch(Object(Zend\Mvc\MvcEvent))
+#12 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(468): call_user_func(Array, Object(Zend\Mvc\MvcEvent))
+#13 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/EventManager/EventManager.php(207): Zend\EventManager\EventManager->triggerListeners('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#14 /Users/liuyuhai/Sites/ttruus/vendor/ZF2/library/Zend/Mvc/Application.php(309): Zend\EventManager\EventManager->trigger('dispatch', Object(Zend\Mvc\MvcEvent), Object(Closure))
+#15 /Users/liuyuhai/Sites/ttruus/public/index.php(12): Zend\Mvc\Application->run()
+#16 {main}
+2014-03-04T10:09:45+08:00 INFO (6): can not save UserOrg

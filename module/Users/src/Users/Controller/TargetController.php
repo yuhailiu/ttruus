@@ -52,34 +52,142 @@ class TargetController extends AbstractActionController
             'webpage' => 'index'
         ));
     }
+
+    public function updateStatusByIdAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        // get id and status
+        $target_id = (int) $_POST['target_id'];
+        $target_status = (int) $_POST['target_status'];
+        
+        // update the status with id and creater or receiver
+        try {
+            $this->updateStatusById($target_id, $target_status, $email);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                false
+            ));
+        }
+        
+        return $this->returnJson(array(
+            true
+        ));
+    }
+
+    /**
+     * update status by id and make sure the right authorization
+     *
+     * @param int $target_id            
+     * @param int $target_status            
+     * @param string $email
+     *            creater or receiver
+     */
+    protected function updateStatusById($target_id, $target_status, $email)
+    {
+        $sql = "UPDATE target set target_status = '$target_status'
+            where target_id = '$target_id' 
+            and (target_creater = '$email' or receiver = '$email')";
+        
+        // excute
+        $adapter = $this->getAdapter();
+        $adapter->query($sql)->execute();
+    }
+    
+    // insert comment by targetId
+    public function addCommentByTargetIdAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        // get target id and comment and who
+        $who = (int) $_POST['who'];
+        $target_id = (int) $_POST['target_id'];
+        $comment = $_POST['comment'];
+        
+        // validate the comment
+        if (MyUtils::isValidateAddress($comment) && $comment) {
+            // insert the comment into table
+            try {
+                $this->insertCommentByTargetId($comment, $target_id, $who);
+            } catch (\Exception $e) {
+                return $this->returnJson(array(
+                    false
+                ));
+            }
+            // if success return true to web
+            return $this->returnJson(array(
+                true
+            ));
+        } else {
+            // return false to web
+            return $this->returnJson(array(
+                false
+            ));
+        }
+    }
+
+    /**
+     * insert comment
+     *
+     * @param string $comment            
+     * @param int $target_id            
+     * @param int $who            
+     */
+    protected function insertCommentByTargetId($comment, $target_id, $who)
+    {
+        // sql
+        $sql = "INSERT into `comment` (target_id , comment , who)
+            VALUES ('$target_id', '$comment', '$who') ";
+        
+        // excute
+        $adapter = $this->getAdapter();
+        $adapter->query($sql)->execute();
+    }
     
     // get targets by email which is getten in Session, both receiver and creater
-    public function getTargetsAction()
+    public function getAgreeTargetsAction()
     {
         // authrize user
         require 'module/Users/src/Users/Tools/AuthUser.php';
         
         // get targets by emaill
         try {
-            $targets = $this->getTargets($email);
+            $targets = $this->getAgreeTargets($email);
         } catch (\Exception $e) {
-            return $this->returnJson(array(false));
+            return $this->returnJson(array(
+                false
+            ));
         }
         
         // return the Json results
         return $this->returnJson($targets);
     }
-    
+
     /**
-     * get targets where the creater or receiver is the email
-     * 
-     * @param unknown $email
+     * get agree targets where the creater or receiver is the email
+     *
+     * @param unknown $email            
      * @return array
      */
-    protected function getTargets($email)
+    protected function getAgreeTargets($email)
     {
+        // $sql = "SELECT * from target
+        // where (target_creater = '$email' or receiver = '$email') and
+        // (target_status between '7' and '10')
+        // ORDER BY target_end_time";
         $sql = "SELECT * from target 
-            where target_creater = '$email' or receiver = '$email'
+            where parent_target_id IN (SELECT target_id from target 
+            where (target_creater = '$email' or receiver = '$email') 
+            and (target_status between '7' and '9')
+            and parent_target_id = '0'
+            ORDER BY target_end_time)
+            or target_id in (SELECT target_id from target 
+            where (target_creater = '$email' or receiver = '$email') 
+            and (target_status between '7' and '9')
+            and parent_target_id = '0'
+            ORDER BY target_end_time)
             ORDER BY target_end_time";
         $adapter = $this->getAdapter();
         
@@ -93,27 +201,61 @@ class TargetController extends AbstractActionController
             $array[$i] = $row;
             $i ++;
         }
-        return $array;
+        
+        // sort the targets by target and sub-target
+        $sortedTargets = $this->sortTargetsBySubtarget($array);
+        
+        return $sortedTargets;
     }
-    
+
+    /**
+     * get the $targets from table by endtime, sort them by subtarget
+     *
+     * @param
+     *            $targets
+     * @return sortedTargets
+     */
+    protected function sortTargetsBySubtarget($targets)
+    {
+        $i = 1;
+        $sortedTargets = array();
+        foreach ($targets as $target) {
+            // if it's a maintarget
+            if (! $target['parent_target_id']) {
+                // push it to sortedTargets
+                $sortedTargets[$i] = $target;
+                $i ++;
+                
+                // put the relative subTargets to the target
+                foreach ($targets as $subTarget) {
+                    if ($target['target_id'] == $subTarget['parent_target_id']) {
+                        $sortedTargets[$i] = $subTarget;
+                        $i ++;
+                    }
+                }
+            }
+        }
+        return $sortedTargets;
+    }
+
     public function getCommentsByIdAction()
     {
         // authrize user
         require 'module/Users/src/Users/Tools/AuthUser.php';
         
-        $target_id = (int)$_GET['target_id'];
+        $target_id = (int) $_GET['target_id'];
         
-        //get comments by target id
+        // get comments by target id
         $comments = $this->getCommentsById($target_id);
         
-        //return comments in Json format
+        // return comments in Json format
         return $this->returnJson($comments);
     }
-    
+
     /**
      * get the comments from comment by target id
-     * 
-     * @param unknown $target_id
+     *
+     * @param unknown $target_id            
      * @return unknown
      */
     protected function getCommentsById($target_id)
@@ -128,13 +270,13 @@ class TargetController extends AbstractActionController
         // switch the rows to array
         $i = 1;
         foreach ($rows as $row) {
-        	$array[$i] = $row;
-        	$i ++;
+            $array[$i] = $row;
+            $i ++;
         }
         return $array;
     }
     
-    
+    // -------------------------------------------------
     // the old version for reference
     public function editTaskAction()
     {

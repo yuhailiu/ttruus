@@ -37,7 +37,7 @@ class MyUtils
     public static function isValidateAddress($address)
     {
         $validator = new Regex(array(
-            'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[；]|[\s]){0,140}$/u'
+            'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[；]|[?]|[？]|[\s]){0,140}$/u'
         ));
         $flag = $validator->isValid($address);
         return $flag;

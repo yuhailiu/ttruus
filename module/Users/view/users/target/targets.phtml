@@ -8,68 +8,97 @@ require 'module/Users/view/users/utils/user_label.php';
 <div class="content-left">
 	<div id="accordion">
 		<h5>我创建的目标</h5>
-		<div class="accordion_div" id="my_create_targets_div">
-		</div>
+		<div class="accordion_div" id="my_create_targets_div"></div>
 		<h5>与我分享的目标</h5>
 		<div class="accordion_div" id="my_shared_targets_div"></div>
 	</div>
 </div>
 <div class="content-right">
-<div id="target_right_div">
-<br>
-	<h5 id="target_name_h">Hit fy14 targets</h5>
-	<p id="target_end_time_p">2014/5/1</p>
-	<p id="target_content_p">This is a very important year to my company. It's the first year.</p>
-	<div class="sub-targets">
-		<table>
-			<tr class="sub-targets_td">
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="description_td">put website online</td>
-				<td>2014/6/1</td>
-				<td>delete</td>
-			</tr>
-			<tr class="sub-targets_td">
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="description_td">get 100m vc</td>
-				<td>2014/12/31</td>
-			</tr>
-			<tr class="sub-targets_td">
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="description_td">accounting balance</td>
-				<td>2014/12/31</td>
-			</tr>
-		</table>
+	<div id="target_right_div">
+		<h5 id="target_name_h">Hit fy14 targets</h5>
+		<div id="target_status" class="ui-corner-all">
+<!-- 		  <span class="ui-icon ui-icon-close"></span> -->
+		</div>
+		<p id="target_end_time_p">2014/5/1</p>
+		<p id="target_content_p">This is a very important year to my company.
+			It's the first year.</p>
+		<div style="height: 40px;">
+			<div id="operate">
+				<div id="hit_target"
+					class="ui-state-highlight ui-corner-all request_info">完成目标</div>
+				<div id="miss_target"
+					class="ui-state-error ui-corner-all request_info">错失目标</div>
+				<input type="hidden" name="target_id" id="target_id">
+				<div id="radioset">
+				    <button class="js_button" id="check_target"><span class="ui-icon ui-icon-check"></span></button>
+				    <button class="js_button" id="reject_target"><span class="ui-icon ui-icon-close"></span></button>
+				</div>
+			</div>
+		</div>
+		<div class="sub-targets" hidden="hidden">
+			<table>
+				<tr class="sub-targets_td">
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="description_td">put website online</td>
+					<td>2014/6/1</td>
+					<td>delete</td>
+				</tr>
+				<tr class="sub-targets_td">
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="description_td">get 100m vc</td>
+					<td>2014/12/31</td>
+				</tr>
+				<tr class="sub-targets_td">
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="description_td">accounting balance</td>
+					<td>2014/12/31</td>
+				</tr>
+			</table>
+		</div>
+		<div class="write_comment_div">
+			<form action="/target/addCommentByTargetId" method="post"
+				id="add_comment_form">
+				<input name="target_id" type="hidden" class="target_id"> <input
+					name="who" type="hidden" class="who">
+				<textarea name="comment" id="comment" class="write_comment_textarea"
+					rows=5 placeholder="write a comment..."></textarea>
+				<br>
+				<button type="submit" id="comment_submit">
+					<span class="ui-icon ui-icon-check"></span>
+				</button>
+			</form>
+		</div>
+		<div class="comments">
+			<table id="comments_table">
+				<tr>
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="comment_td">I have I have made a plan and email it to
+						you yesterday.---------------------------------made a plan and
+						-----------------------------email it to
+						you--------------------------------- yesterday.</td>
+					<td>2014/6/1</td>
+				</tr>
+				<tr>
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="comment_td">I have made a plan and email it to you
+						yesterday.</td>
+					<td>2014/6/1</td>
+				</tr>
+				<tr>
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="comment_td">I have made a plan and email it to you
+						yesterday.</td>
+					<td>2014/6/1</td>
+				</tr>
+				<tr>
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="comment_td">I have made a plan and email it to you
+						yesterday.</td>
+					<td>2014/6/1</td>
+				</tr>
+			</table>
+		</div>
 	</div>
-	<div class="comments">
-		<table id="comments_table">
-			<tr>
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="comment_td">I have I have made a plan and email it to you
-					yesterday.---------------------------------made a plan and -----------------------------email it to you---------------------------------
-					yesterday.</td>
-				<td>2014/6/1</td>
-			</tr>
-			<tr>
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="comment_td">I have made a plan and email it to you
-					yesterday.</td>
-				<td>2014/6/1</td>
-			</tr>
-			<tr>
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="comment_td">I have made a plan and email it to you
-					yesterday.</td>
-				<td>2014/6/1</td>
-			</tr>
-			<tr>
-				<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
-				<td class="comment_td">I have made a plan and email it to you
-					yesterday.</td>
-				<td>2014/6/1</td>
-			</tr>
-		</table>
-	</div>
-</div>
 </div>
 <!-- target -->
 <script src="/js/target.js"></script>
