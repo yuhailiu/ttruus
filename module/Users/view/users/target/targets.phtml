@@ -4,6 +4,7 @@ require 'module/Users/view/users/utils/user_label.php';
 ?>
 <div class="content-title">
 	<div class="ui-corner-all">目标</div>
+	<div class="ui-corner-all ui-state-default">+创建新目标</div>
 </div>
 <div class="content-left">
 	<div id="accordion">
@@ -22,21 +23,27 @@ require 'module/Users/view/users/utils/user_label.php';
 		<p id="target_end_time_p">2014/5/1</p>
 		<p id="target_content_p">This is a very important year to my company.
 			It's the first year.</p>
-		<div style="height: 40px;">
+		<div style="height: 40px;" hidden="hidden">
 			<div id="operate">
 				<div id="hit_target"
 					class="ui-state-highlight ui-corner-all request_info">完成目标</div>
+				<div id="close_target"
+					class="ui-state-highlight ui-corner-all request_info" title="关闭后的目标可以在历史目标中查询📖">关闭目标</div>
+				<div id="agree_target"
+					class="ui-state-highlight ui-corner-all request_info">共识目标</div>
 				<div id="miss_target"
 					class="ui-state-error ui-corner-all request_info">错失目标</div>
 				<input type="hidden" name="target_id" id="target_id">
 				<div id="radioset">
-				    <button class="js_button" id="check_target"><span class="ui-icon ui-icon-check"></span></button>
-				    <button class="js_button" id="reject_target"><span class="ui-icon ui-icon-close"></span></button>
+				    <button class="js_button owner" id="check_target" title="同意"><span class="ui-icon ui-icon-check"></span></button>
+				    <button class="js_button owner" id="reject_target" title="拒绝"><span class="ui-icon ui-icon-close"></span></button>
+				    <button class="js_button shared" id="apply_achive" title="完成"><span class="ui-icon ui-icon-check"></span></button>
+				    <button class="js_button shared" id="apply_miss" title="错失"><span class="ui-icon ui-icon-close"></span></button>
 				</div>
 			</div>
 		</div>
 		<div class="sub-targets" hidden="hidden">
-			<table>
+			<table id="sub_targets_table">
 				<tr class="sub-targets_td">
 					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
 					<td class="description_td">put website online</td>
@@ -53,13 +60,18 @@ require 'module/Users/view/users/utils/user_label.php';
 					<td class="description_td">accounting balance</td>
 					<td>2014/12/31</td>
 				</tr>
+				<tr class="sub-targets_td">
+					<td><img alt="" src="images/defaultphoto.jpg" class="target_photo"></td>
+					<td class="description_td">accounting balance</td>
+					<td>2014/12/31</td>
+				</tr>
 			</table>
 		</div>
 		<div class="write_comment_div">
 			<form action="/target/addCommentByTargetId" method="post"
 				id="add_comment_form">
-				<input name="target_id" type="hidden" class="target_id"> <input
-					name="who" type="hidden" class="who">
+				<input name="target_id" type="hidden" class="target_id"> 
+				<input name="who" type="hidden" class="who">
 				<textarea name="comment" id="comment" class="write_comment_textarea"
 					rows=5 placeholder="write a comment..."></textarea>
 				<br>

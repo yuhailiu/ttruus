@@ -2,33 +2,60 @@
 <?php
 require 'module/Users/view/users/utils/user_label.php';
 ?>
-<br>
-<div class="content-title">创建新目标</div>
+<div class="content-title">
+	<div class="ui-corner-all">创建新目标</div>
+</div>
 <div class="content-left">
-<form action="" class="target_create">
-    <input name="target_name" placeholder="target name"><br>
-    <input name="target_end_time" placeholder="target end time"><br>
-    <textarea name="target_content" placeholder="target content"></textarea><br>
-    <input type="radio" name="task_assign" id="single_member" value="single"><?php echo $user_labels['asignSigleMember']?>
-    <input type="radio" name="task_assign" id="mutiple_member" value="mutiple"><?php echo $user_labels['asignMutipleMember']?><br>
-    <select name="receiver" id="receiver_select">
-        <option>select helper</option>
-    </select><br>
-    <input type="submit" id="create_single_target_submit" value="<?php echo $user_labels['submit']?>">
-</form>
+	<form action="target/insertTarget" class="target_create"
+		id="single_helper_form">
+		<input name="target_name" class="ui-corner-all"
+			placeholder="<?php echo $user_labels['targetName']?>"><br> <input
+			id="target_end_time_main" name="target_end_time"
+			class="ui-corner-all"
+			placeholder="<?php echo $user_labels['targetEndTime']?>"><br>
+		<textarea name="target_content" class="ui-corner-all"
+			placeholder="<?php echo $user_labels['targetDescript']?>"></textarea>
+		<br>
+		<p><?php echo $user_labels['shareTarget']?></p>
+		<input type="radio" name="task_assign" id="single_member" checked="checked"
+			value="single"><?php echo $user_labels['asignSigleMember']?>&nbsp;&nbsp;
+        <input type="radio" name="task_assign" id="mutiple_member"
+			value="mutiple"><?php echo $user_labels['asignMutipleMember']?><br>
+		<div id="single_helper_div" hidden="hidden">
+			<select name="receiver" class="ui-corner-all showPhoto4Select"
+				id="receiver_select">
+				<option value=""><?php echo $user_labels['selectReceiver']?></option>
+			</select> <img id="select_photo"
+				class="target_photo ui-state-default ui-corner-all"
+				src="images/defaultphoto.jpg"> <br> <br> <br> <br>
+			<button class="js_button" id="create_single_target_submit"
+				style="clear: both" title="<?php echo $user_labels['submit']?>">
+				<span class="ui-icon ui-icon-check"></span>
+			</button>
+            <img alt="loading" class="loading" src="images/loading.gif" hidden="hidden">
+		</div>
+	</form>
+
 </div>
 <div class="content-right">
-    <div class="create_sub-target">
-        <div>+ again</div>
-        <form action="" class="target_create">
-            <input name="target_name" placeholder="target name"><br>
-            <input name="target_end_time" placeholder="target end time"><br>
-            <textarea name="target_content" placeholder="target content"></textarea><br>
-            <select name="receiver" id="receiver_select">
-                <option>select helper</option>
-            </select><br>
-            <input type="submit" id="create_sub_target_submit" value="<?php echo $user_labels['submit']?>">
-        </form>
-    </div>
+	<div class="create_sub-target" hidden="hidden">
+		<div><?php echo $user_labels['subTarget']?>？</div>
+		<form action="" class="target_create">
+			<input name="target_name" class="ui-corner-all"
+				placeholder="<?php echo $user_labels['targetName']?>"><br> <input
+				name="target_end_time" class="ui-corner-all"
+				placeholder="<?php echo $user_labels['targetEndTime']?>"><br>
+			<textarea name="target_content" class="ui-corner-all"
+				placeholder="<?php echo $user_labels['targetDescript']?>"></textarea>
+			<br> <select name="receiver" class="ui-corner-all"
+				id="receiver_select">
+				<option><?php echo $user_labels['selectReceiver']?></option>
+			</select><br>
+			<button type="submit" class="js_button" id="create_sub_target_submit"
+				title="<?php echo $user_labels['submit']?>">
+				<span class="ui-icon ui-icon-check"></span>
+			</button>
+		</form>
+	</div>
 </div>
 

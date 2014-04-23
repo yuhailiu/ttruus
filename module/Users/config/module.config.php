@@ -19,6 +19,7 @@ return array(
             'Users\Controller\OrgManager' => 'Users\Controller\OrgManagerController',
             'Users\Controller\Task' => 'Users\Controller\TaskController',
             'Users\Controller\Target' => 'Users\Controller\TargetController',
+            'Users\Controller\Helper' => 'Users\Controller\HelperController',
             'Users\Controller\Home' => 'Users\Controller\HomeController'
         )
     ),
@@ -47,6 +48,23 @@ return array(
                         // the controllers for your module are found
                         '__NAMESPACE__' => 'Users\Controller',
                         'controller' => 'Target',
+                        'action' => 'index'
+                    )
+                )
+            ),
+            'helper' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    // Change this to something specific to your module
+                    'route' => '/helper[/:action]',
+                    'constraints' => array(
+                    		'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => array(
+                        // Change this value to reflect the namespace in which
+                        // the controllers for your module are found
+                        '__NAMESPACE__' => 'Users\Controller',
+                        'controller' => 'Helper',
                         'action' => 'index'
                     )
                 )

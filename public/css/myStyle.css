@@ -464,6 +464,8 @@ td {
 
 .content-title {
 	border-bottom: thin solid #DCDCDC;
+	clear : both;
+	height: 2.5em;
 }
 
 .content-left {
@@ -491,7 +493,7 @@ td {
 	width: 120px;
 }
 
-.menue {
+.menue,#helpers_page_div {
 	margin-left: 20px;
 }
 
@@ -512,11 +514,12 @@ td {
 	padding-right: 20px;
 }
 
-.content-title div {
+.content-title > div {
 	border: thin solid #DCDCDC;
 	width: 100px;
 	margin: 5px;
 	text-align: center;
+	float : left;
 }
 
 .target_photo {
@@ -550,13 +553,16 @@ td {
 .sub-targets {
 	border: medium solid #DCDCDC;
 	width: 580px;
+	margin-bottom: 10px;
+	height: 12em;
+	overflow: auto;
 }
 
 .sub-targets_td,.personalInfo {
 	border: thin solid #DCDCDC;
 }
 
-.comments,.target_create,.create_sub-target {
+.comments,.target_create,.create_sub-target,.commentsShort {
 	margin-top: 20px;
 }
 
@@ -569,19 +575,22 @@ td {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	padding-left: 10px;
-	float : left;
+	float: left;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 #radioset {
-	float : right;
+	float: right;
 }
 
 #target_name_h {
-	margin-top: 10px;	
-	float : left;
+	margin-top: 10px;
+	float: left;
 	width: 220px;
 	overflow: auto;
 }
+
 #target_right_div p {
 	margin-bottom: 10px;
 }
@@ -599,7 +608,7 @@ td {
 .personalInfo {
 	width: 120px;
 	height: 190px;
-	margin: 29px;
+	margin: 26px;
 	float: left;
 }
 
@@ -667,7 +676,7 @@ td {
 	padding-left: 2px;
 }
 
-.comment-position, .float-left {
+.comment-position,.float-left {
 	float: left;
 }
 
@@ -681,11 +690,17 @@ td {
 	clear: both;
 }
 
+.commentsShort {
+	height: 15em;
+	overflow: auto; /* 内容超出宽度时隐藏超出部分的内容 */
+	clear: both;
+}
+
 .write_comment_textarea {
 	width: 100%;
 }
 
-.write_comment_div, #target_end_time_p{
+.write_comment_div,#target_end_time_p,#helpers_page_div {
 	clear: both;
 }
 
@@ -701,7 +716,7 @@ td {
 	margin-bottom: 10px;
 }
 
-input.text, textarea.text {
+input.text,textarea.text {
 	margin-bottom: 12px;
 	width: 95%;
 	padding: .4em;
@@ -712,13 +727,24 @@ input.text, textarea.text {
 }
 
 .sub-target {
-	margin-left : 30px;
-}
-#target_status {
-	float : right;
-	margin-top: 10px;
-	border: thin solid #DCDCDC;
-	width : 16px;
-	height : 16px;
+	margin-left: 30px;
 }
 
+#target_status {
+	float: right;
+	margin-top: 10px;
+	border: thin solid #DCDCDC;
+	width: 16px;
+	height: 16px;
+}
+
+.showPhoto4Select {
+	float: left;
+	width: 150px;
+	margin-right: 20px
+}
+
+.loading {
+	width: 40px;
+	height: 40px;
+}

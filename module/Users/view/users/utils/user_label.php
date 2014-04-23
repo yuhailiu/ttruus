@@ -11,6 +11,7 @@ $user_labels = array(
     'forgetPassword' => '忘记密码',
     'no' => '第',
     'loginErrorTimes' => '次登录错误，总共有10次机会',
+    
     //request
     'requestName' => '申请者名称',
     'requestTime' => '申请时间',
@@ -22,6 +23,7 @@ $user_labels = array(
     'inviterEmail' => '被邀请人邮箱',
     //regiter user
     'createAccount' => '创建帐户',
+    'emailPrompt' => '邮箱是您找回密码的唯一途径',
     'name' => '名称',
     'changeImg' => '换一张',
     'click' => '请点击',
@@ -51,7 +53,7 @@ $user_labels = array(
     'createTime' => '创建时间',
     'LastModifyTime' => '最后一次修改时间',
     'contactInfo' => '我的通讯信息',
-    'email' => '电子邮箱',
+    'email' => '电子邮箱📮',
     'selfDescript' => '个性签名',
     'telephone' => '电话',
     'telephone1' => '电话 1',
@@ -60,12 +62,12 @@ $user_labels = array(
     'telephone2Prompt' => '例如：010-656588xx',
     'address' => '地区',
     'addressPrompt' => '例如：北京市 朝阳区 xx大厦 100号, 邮编：1000xx',
-    //
+    //others
     'myWorkInfo' => '我的工作信息',
     'login' => '登录',
-    'password' => '密码',
+    'password' => '密码🔑',
     'passwordPrompt' => '密码(5到22个字符)',
-    'confirmPassword' => '确认密码',
+    'confirmPassword' => '确认密码🔑',
     'oldPassword' => '原密码',
     'newPassword' => '新密码',
     'confirmNewPassword' => '确认新密码',
@@ -140,12 +142,17 @@ $user_labels = array(
     'beginTime' => '开始时间',
     'endTime' => '结束时间',
     'taskAsign' => '任务分配',
-    'asignSigleMember' => '分配给一个帮手',
-    'asignMutipleMember' => '分配给多个帮手',
-    'selectReceiver' => '选择接受任务成员',
+    'asignSigleMember' => '一个帮手',
+    'asignMutipleMember' => '多个帮手',
+    'selectReceiver' => '选择帮手',
     
     //target management
     'targetManagement' => '目标管理',
+    'targetName' => '目标名称',
+    'targetEndTime' => '目标完成时间✅⌚️',
+    'targetDescript' => '目标描述️',
+    'shareTarget' => '目标分享',
+    'subTarget' => '子目标',
     
     //help management
     'helpManagement' => '帮手管理',

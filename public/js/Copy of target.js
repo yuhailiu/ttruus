@@ -158,7 +158,7 @@ $(function() {
 		    $("#target_content_p").text(target.target_content);
 
 		    //put target id to input
-		    $("#target_id").val(target_id);
+		    $(".target_id").val(target_id);
 
 		    //init operate div
 		    $("#operate").hide();
@@ -312,7 +312,7 @@ function beforeComment() {
 }
 //
 function commentSuccess(data) {
-    if (data) {
+    if (data.flag) {
 	//add the comment to comments list
 	//create an array
 	var json = {
@@ -326,7 +326,9 @@ function commentSuccess(data) {
 	var tr = createComment(1, json);
 	$("#comments_table").prepend(tr);
 
-	//clear the comment
+	//clear the comment field
 	$("#comment").clearFields();
+    }else{
+	alert("failed update the comments");
     }
 }

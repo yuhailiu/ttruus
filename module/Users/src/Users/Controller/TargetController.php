@@ -7,6 +7,7 @@ use Zend\Json\Json;
 use Users\Tools\MyUtils;
 use Zend\Validator\Date;
 use Zend\Validator\EmailAddress;
+use Users\Model\Target;
 
 class TargetController extends AbstractActionController
 {
@@ -48,9 +49,122 @@ class TargetController extends AbstractActionController
     public function indexAction()
     {
         // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
         return $this->returnJson(array(
             'webpage' => 'index'
         ));
+    }
+
+    public function insertTargetAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        // validate the input data
+        $target = new Target();
+        $target->target_name = MyUtils::isValidateName($_GET['target_name']) ? $_GET['target_name'] : - 1;
+        $target->parent_target_id = (int) $_GET['parent_target_id'];
+        $end_date = date('Y-m-d', strtotime($_GET['target_end_time']));
+        $date = new Date();
+        $target->target_end_time = $date->isValid($end_date) ? $end_date : - 1;
+        $target->target_content = MyUtils::isValidateAddress($_GET['target_content']) ? $_GET['target_content'] : - 1;
+        $target->target_creater = $email;
+        $email = new EmailAddress();
+        $target->receiver = $email->isValid($_GET['receiver']) ? $_GET['receiver'] : - 1;
+        $target->target_status = 1;
+        foreach ($target as $item) {
+            if ($item == - 1) {
+                return $this->returnJson(array(
+                    'flag' => false,
+                    'message' => 'invalidate data'
+                ));
+            }
+        }
+        
+        // insert the target
+        try {
+            // get the auto increamental id
+            $id = $this->insertTarget($target);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => "cant insert the target"
+            ));
+        }
+        // return result
+        return $this->returnJson(array(
+            'flag' => true,
+            'new_id' => $id->getGeneratedValue()
+        ));
+    }
+
+    /**
+     *
+     * @param Target $target            
+     */
+    protected function insertTarget(Target $target)
+    {
+        $sql = "insert into target (target_name, target_creater, target_end_time, 
+            target_content, target_status, parent_target_id, receiver) 
+            values ('$target->target_name', '$target->target_creater', '$target->target_end_time',
+            '$target->target_content', '$target->target_status', '$target->parent_target_id', '$target->receiver')";
+        // excute
+        $adapter = $this->getAdapter();
+        $id = $adapter->query($sql)->execute();
+        return $id;
+    }
+
+    public function getSubTargetsByIdAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        // get id
+        $target_id = (int) $_GET['target_id'];
+        
+        // validate the target id
+        if (! $target_id) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'invalidate target id'
+            ));
+        }
+        
+        // get subtargets
+        try {
+            $subTargets = $this->getSubTargetsById($target_id);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'cant get sub targets'
+            ));
+        }
+        // return subtargets
+        return $this->returnJson(array(
+            'flag' => true,
+            'subTargets' => $subTargets
+        ));
+    }
+
+    protected function getSubTargetsById($id)
+    {
+        $sql = "select * from target
+            where parent_target_id = '$id' ORDER BY target_end_time";
+        $adapter = $this->getAdapter();
+        
+        $rows = $adapter->query($sql)->execute();
+        
+        // push the result to a sub_targets array
+        $subTargets = array();
+        foreach ($rows as $row) {
+            // format the time "Y-m-d"
+            $unixTime = strtotime($row[target_end_time]);
+            $row[target_end_time] = date('Y-m-d', $unixTime);
+            
+            array_push($subTargets, $row);
+        }
+        
+        return $subTargets;
     }
 
     public function updateStatusByIdAction()
@@ -61,19 +175,24 @@ class TargetController extends AbstractActionController
         // get id and status
         $target_id = (int) $_POST['target_id'];
         $target_status = (int) $_POST['target_status'];
-        
-        // update the status with id and creater or receiver
-        try {
-            $this->updateStatusById($target_id, $target_status, $email);
-        } catch (\Exception $e) {
+        if ($target_id) {
+            // update the status with id and creater or receiver
+            try {
+                $this->updateStatusById($target_id, $target_status, $email);
+            } catch (\Exception $e) {
+                return $this->returnJson(array(
+                    false
+                ));
+            }
+            
+            return $this->returnJson(array(
+                true
+            ));
+        } else {
             return $this->returnJson(array(
                 false
             ));
         }
-        
-        return $this->returnJson(array(
-            true
-        ));
     }
 
     /**
@@ -113,17 +232,17 @@ class TargetController extends AbstractActionController
                 $this->insertCommentByTargetId($comment, $target_id, $who);
             } catch (\Exception $e) {
                 return $this->returnJson(array(
-                    false
+                    flag => false
                 ));
             }
             // if success return true to web
             return $this->returnJson(array(
-                true
+                flag => true
             ));
         } else {
             // return false to web
             return $this->returnJson(array(
-                false
+                flag => false
             ));
         }
     }
@@ -173,21 +292,13 @@ class TargetController extends AbstractActionController
      */
     protected function getAgreeTargets($email)
     {
-        // $sql = "SELECT * from target
-        // where (target_creater = '$email' or receiver = '$email') and
-        // (target_status between '7' and '10')
-        // ORDER BY target_end_time";
         $sql = "SELECT * from target 
             where parent_target_id IN (SELECT target_id from target 
-            where (target_creater = '$email' or receiver = '$email') 
-            and (target_status between '7' and '9')
-            and parent_target_id = '0'
-            ORDER BY target_end_time)
-            or target_id in (SELECT target_id from target 
-            where (target_creater = '$email' or receiver = '$email') 
-            and (target_status between '7' and '9')
-            and parent_target_id = '0'
-            ORDER BY target_end_time)
+            where target_creater = '$email' 
+            and (target_status in ('2', '3','4','7','8','9'))
+            and parent_target_id = '0')
+            or (target_creater = '$email' and (target_status in ('2', '3','4','7','8','9')) and parent_target_id = '0') 
+            or (receiver = '$email' and  (target_status in ('2', '3','4','7','8','9')))
             ORDER BY target_end_time";
         $adapter = $this->getAdapter();
         
@@ -203,7 +314,7 @@ class TargetController extends AbstractActionController
         }
         
         // sort the targets by target and sub-target
-        $sortedTargets = $this->sortTargetsBySubtarget($array);
+        $sortedTargets = $this->sortTargetsBySubtarget($array, $email);
         
         return $sortedTargets;
     }
@@ -215,7 +326,7 @@ class TargetController extends AbstractActionController
      *            $targets
      * @return sortedTargets
      */
-    protected function sortTargetsBySubtarget($targets)
+    protected function sortTargetsBySubtarget($targets, $email)
     {
         $i = 1;
         $sortedTargets = array();
@@ -233,9 +344,59 @@ class TargetController extends AbstractActionController
                         $i ++;
                     }
                 }
+                // shared targets
+            } elseif ($target['receiver'] == $email and $target['target_creater'] != $email) {
+                $sortedTargets[$i] = $target;
+                $i ++;
             }
         }
         return $sortedTargets;
+    }
+
+    public function getCommentsOfSubAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        $target_id = (int) $_GET['target_id'];
+        
+        // get comments by target id
+        try {
+            $comments = $this->getCommentsOfSub($target_id);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'cant get comments'
+            ));
+        }
+        
+        // return comments in Json format
+        return $this->returnJson($comments);
+    }
+
+    /**
+     *
+     * @param unknown $target_id            
+     * @return unknown
+     */
+    protected function getCommentsOfSub($target_id)
+    {
+        $sql = "select * from `comment`
+            where target_id = '$target_id' or target_id = (
+            SELECT parent_target_id from target
+            where target_id = '$target_id')
+            ORDER BY create_time DESC";
+        $adapter = $this->getAdapter();
+        
+        $rows = $adapter->query($sql)->execute();
+        
+        // switch the rows to array
+        $i = 1;
+        foreach ($rows as $row) {
+            $array[$i] = $row;
+            $i ++;
+        }
+        return $array;
     }
 
     public function getCommentsByIdAction()
@@ -274,241 +435,5 @@ class TargetController extends AbstractActionController
             $i ++;
         }
         return $array;
-    }
-    
-    // -------------------------------------------------
-    // the old version for reference
-    public function editTaskAction()
-    {
-        // authrize user
-        require 'module/Users/src/Users/Tools/AuthUser.php';
-        
-        // get the user belong org id and name
-        $orgs = $this->getOrgsByEmail($email);
-        $view = new ViewModel(array(
-            'orgs' => $orgs
-        ));
-        return $view;
-    }
-
-    public function insertOrUpdateTaskAction()
-    {
-        // authrize user
-        require 'module/Users/src/Users/Tools/AuthUser.php';
-        
-        // get post data from web
-        // validate the data from post
-        $post = $this->getRequest()->getPost();
-        $flag = false;
-        
-        if (MyUtils::isValidateName($post->task_name)) {
-            if (MyUtils::isValidateAddress($post->task_content)) {
-                $validateReceiver = new EmailAddress();
-                if ($validateReceiver->isValid($post->receiver)) {
-                    // change the time format to Y-m-d
-                    $post->task_begin_time = date('Y-m-d', strtotime($post->task_begin_time));
-                    $post->task_end_time = date('Y-m-d', strtotime($post->task_end_time));
-                    $validate = new Date();
-                    if ($validate->isValid($post->task_begin_time) && $validate->isValid($post->task_end_time)) {
-                        $post->org_id = (int) $post->org_id;
-                        $post->task_creater = $email;
-                        $flag = true;
-                    }
-                }
-            }
-        }
-        
-        if (! $flag) {
-            return $this->returnJson(array(
-                'flag' => false,
-                'message' => 'data is invalidate'
-            ));
-        }
-        
-        // insert the task into mainTask table
-        try {
-            $mainTaskId = $this->insertOrUpdateTask($post);
-        } catch (\Exception $e) {
-            return $this->returnJson(array(
-                'flag' => false,
-                'message' => 'can not update or save the task'
-            ));
-        }
-        
-        // return json result
-        return $this->returnJson(array(
-            'flag' => true,
-            'message' => 'the task has been update or save',
-            'type' => $post->task_assign,
-            'mainTaskId' => $mainTaskId,
-            'task_name' => $post->task_name
-        ));
-    }
-
-    public function insertOrUpdateSubTaskAction()
-    {
-        // authrize user
-        require 'module/Users/src/Users/Tools/AuthUser.php';
-        
-        // get post data from web
-        // validate the data from post
-        $post = $this->getRequest()->getPost();
-        $flag = false;
-        
-        if (MyUtils::isValidateName($post->sub_task_name)) {
-            if (MyUtils::isValidateAddress($post->sub_task_content)) {
-                // validate receiver
-                $validateReceiver = new EmailAddress();
-                if ($validateReceiver->isValid($post->receiver)) {
-                    // change the time format to Y-m-d
-                    $post->sub_task_begin_time = date('Y-m-d', strtotime($post->sub_task_begin_time));
-                    $post->sub_task_end_time = date('Y-m-d', strtotime($post->sub_task_end_time));
-                    $validate = new Date();
-                    if ($validate->isValid($post->sub_task_begin_time) && $validate->isValid($post->sub_task_end_time)) {
-                        $post->task_id = (int) $post->task_id;
-                        if ($post->task_id) {
-                            $flag = true;
-                        }
-                    }
-                }
-            }
-        }
-        
-        if (! $flag) {
-            return $this->returnJson(array(
-                'flag' => false,
-                'message' => 'data is invalidate'
-            ));
-        }
-        
-        // insert the task into subTask table
-        try {
-            $subTaskId = $this->insertOrUpdateSubTask($post);
-        } catch (\Exception $e) {
-            return $this->returnJson(array(
-                'flag' => false,
-                'message' => 'can not update or save the task'
-            ));
-        }
-        
-        // return json result
-        return $this->returnJson(array(
-            'flag' => true,
-            'message' => 'the sub task has been update or save'
-        ));
-    }
-
-    /**
-     * insert or update task if there is a task_id in post
-     *
-     * @param post $data            
-     * @throws \Exception
-     * @return genertatedValue task_id
-     */
-    protected function insertOrUpdateTask($data)
-    {
-        if ($data->task_id) {
-            // update the task in table
-            throw new \Exception('waiting for your input');
-        } else {
-            // insert the task in table
-            $sql = "INSERT into mainTask
-                    (org_id, receiver, task_begin_time, task_end_time, task_content, task_creater, task_name, task_status)
-                    VALUES ('$data->org_id', '$data->receiver', '$data->task_begin_time', 
-                    '$data->task_end_time', '$data->task_content', '$data->task_creater', '$data->task_name', 1)";
-            $adapter = $this->getAdapter();
-            $result = $adapter->query($sql)->execute();
-            return $result->getGeneratedValue();
-        }
-    }
-
-    /**
-     * insert the sub task by main task id
-     *
-     * @param post $data            
-     * @throws \Exception
-     * @return genertatedValue sub_task_id
-     */
-    protected function insertOrUpdateSubTask($data)
-    {
-        if ($data->sub_task_id) {
-            // update the task in table
-            throw new \Exception('waiting for your input');
-        } else {
-            // insert the task in table
-            $sql = "INSERT into subTask
-                (task_id, receiver, sub_task_begin_time, sub_task_end_time, sub_task_content, weights, sub_task_name, sub_task_status)
-                VALUES ('$data->task_id', '$data->receiver', '$data->sub_task_begin_time', 
-                '$data->sub_task_end_time', '$data->sub_task_content', 1, '$data->sub_task_name', 1)";
-            $adapter = $this->getAdapter();
-            $result = $adapter->query($sql)->execute();
-            return $result->getGeneratedValue();
-        }
-    }
-
-    public function getOrgMemberByOrgIdAction()
-    {
-        // authrize user
-        require 'module/Users/src/Users/Tools/AuthUser.php';
-        
-        // get orgId from post
-        $orgId = (int) $this->request->getPost()->orgId;
-        
-        // get members by orgId
-        try {
-            $members = $this->getOrgMemberByOrgId($orgId);
-        } catch (\Exception $e) {
-            return $this->returnJson(array(
-                'flag' => false
-            ));
-        }
-        
-        // return the member by Json
-        return $this->returnJson(array(
-            'flag' => true,
-            'members' => $members
-        ));
-    }
-
-    /**
-     *
-     * @param int $orgId            
-     * @return \Zend\Db\Adapter\Driver\ResultInterface
-     */
-    protected function getOrgMemberByOrgId($orgId)
-    {
-        $sql = "SELECT * from userInfo JOIN user_org 
-                ON userInfo.email = user_org.user_email
-                WHERE user_org.org_id = $orgId 
-                LIMIT 0,50";
-        $adapter = $this->getAdapter();
-        
-        $rows = $adapter->query($sql)->execute();
-        
-        // switch the rows to array
-        $i = 1;
-        foreach ($rows as $row) {
-            $array[$i] = $row;
-            $i ++;
-        }
-        
-        return $array;
-    }
-
-    /**
-     * get current user's belong org by his email
-     *
-     * @param string $email            
-     * @return \Zend\Db\Adapter\Driver\ResultInterface
-     */
-    protected function getOrgsByEmail($email)
-    {
-        $sql = "select * from orgnization 
-            WHERE id IN (SELECT org_id from user_org where user_email = '$email')
-            ORDER BY org_name
-            LIMIT 0, 20";
-        $adapter = $this->getAdapter();
-        $rows = $adapter->query($sql)->execute();
-        return $rows;
     }
 }

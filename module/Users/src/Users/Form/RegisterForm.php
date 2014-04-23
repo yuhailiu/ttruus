@@ -52,7 +52,7 @@ class RegisterForm extends Form
                 'required' => 'required',
                 'class' => 'form-element',
                 'id' => 'email',
-                'placeholder' => '...@ttruus.com'
+                'placeholder' => $user_labels[emailPrompt],
             ),
             'options' => array(
                 'label' => $user_labels[email]
