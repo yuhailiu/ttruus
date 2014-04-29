@@ -69,9 +69,16 @@ class TargetController extends AbstractActionController
         $target->target_end_time = $date->isValid($end_date) ? $end_date : - 1;
         $target->target_content = MyUtils::isValidateAddress($_GET['target_content']) ? $_GET['target_content'] : - 1;
         $target->target_creater = $email;
-        $email = new EmailAddress();
-        $target->receiver = $email->isValid($_GET['receiver']) ? $_GET['receiver'] : - 1;
-        $target->target_status = 1;
+        $validateEmail = new EmailAddress();
+        $target->receiver = $validateEmail->isValid($_GET['receiver']) ? $_GET['receiver'] : - 1;
+        // if the receiver is the owner, status is 7, otherwise is 2
+        if ($email == $target->receiver) {
+            // receiver is the owner
+            $target->target_status = 7;
+        } else {
+            // receiver is a helper
+            $target->target_status = 2;
+        }
         foreach ($target as $item) {
             if ($item == - 1) {
                 return $this->returnJson(array(
@@ -91,10 +98,12 @@ class TargetController extends AbstractActionController
                 'message' => "cant insert the target"
             ));
         }
+        
+        $target->target_id = $id->getGeneratedValue();
         // return result
         return $this->returnJson(array(
             'flag' => true,
-            'new_id' => $id->getGeneratedValue()
+            'target' => $target
         ));
     }
 
@@ -114,6 +123,59 @@ class TargetController extends AbstractActionController
         return $id;
     }
 
+    public function getTargetByIdAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        
+        // get id
+        $target_id = (int) $_GET['target_id'];
+        
+        // validate the target id
+        if (! $target_id) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'invalidate target id'
+            ));
+        }
+        
+        // get subtargets
+        try {
+            $target = $this->getTargetById($target_id);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'cant get sub targets'
+            ));
+        }
+        // return subtargets
+        return $this->returnJson(array(
+            'flag' => true,
+            'target' => $target
+        ));
+    }
+    
+    
+    /**
+     * 
+     * @param unknown $target_id
+     * @return multitype:
+     */
+    protected function getTargetById($target_id)
+    {
+        $sql = "select * from target
+            where target_id = '$target_id'";
+        $adapter = $this->getAdapter();
+        
+        $row = $adapter->query($sql)->execute();
+        $row = $row->current();
+        
+        $unixTime = strtotime($row[target_end_time]);
+        $row[target_end_time] = date('Y-m-d', $unixTime);
+        
+        return $row;
+    }
+    
     public function getSubTargetsByIdAction()
     {
         // authrize user

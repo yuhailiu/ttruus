@@ -464,7 +464,7 @@ td {
 
 .content-title {
 	border-bottom: thin solid #DCDCDC;
-	clear : both;
+	clear: both;
 	height: 2.5em;
 }
 
@@ -514,12 +514,12 @@ td {
 	padding-right: 20px;
 }
 
-.content-title > div {
+.content-title>div {
 	border: thin solid #DCDCDC;
 	width: 100px;
 	margin: 5px;
 	text-align: center;
-	float : left;
+	float: left;
 }
 
 .target_photo {
@@ -553,8 +553,8 @@ td {
 .sub-targets {
 	border: medium solid #DCDCDC;
 	width: 580px;
-	margin-bottom: 10px;
-	height: 12em;
+	margin-bottom: -10px;
+	height: 10em;
 	overflow: auto;
 }
 
@@ -668,12 +668,13 @@ td {
 .target_name {
 	position: relative;
 	display: block;
-	width: 220px;
+	width: 180px;
 	height: 1.5em;
 	word-break: keep-all;
 	white-space: nowrap; /* 不换行 */
 	overflow: auto; /* 内容超出宽度时隐藏超出部分的内容 */
 	padding-left: 2px;
+	float: left;
 }
 
 .comment-position,.float-left {
@@ -739,12 +740,32 @@ input.text,textarea.text {
 }
 
 .showPhoto4Select {
-	float: left;
-	width: 150px;
+	float: right;
+	width: 40px;
 	margin-right: 20px
 }
 
 .loading {
 	width: 40px;
 	height: 40px;
+}
+
+.icon_in_div {
+	width: 16px;
+	height: 16px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 5px;
+}
+
+.receiver_select {
+	width: 180px;
+}
+
+.add_subTarget {
+	font-size: 200%;
+	float: right
+}
+#target_content_p {
+	margin-top : 5px;
 }
