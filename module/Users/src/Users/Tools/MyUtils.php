@@ -22,7 +22,7 @@ class MyUtils
     public static function isValidateName($name)
     {
         $validator = new Regex(array(
-            'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[\s])+$/u'
+            'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[\s]|[-]){1,140}$/u'
         ));
         $flag = $validator->isValid($name);
         return $flag;
@@ -40,6 +40,35 @@ class MyUtils
             'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[；]|[?]|[？]|[\s]){0,140}$/u'
         ));
         $flag = $validator->isValid($address);
+        return $flag;
+    }
+
+    /**
+     * 
+     * @param unknown $status
+     * @return boolean
+     */
+    public static function isValidateStatus($status)
+    {
+        $status = (int) $status;
+        if(0 <= $status && $status < 12){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param unknown $content            
+     * @return boolean
+     */
+    public static function isValidateContent($content)
+    {
+        $validator = new Regex(array(
+            'pattern' => '/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9]|[,]|[，]|[.]|[。]|[:]|[：]|[；]|[?]|[？]|[\s]){0,140}$/u'
+        ));
+        $flag = $validator->isValid($content);
         return $flag;
     }
 
@@ -103,7 +132,6 @@ class MyUtils
         $adapter->query("set names utf8")->execute();
         return $adapter;
     }
-    
 
     /**
      * return false if the telephone no doesn't match '/(^(\d{3,4}-)?\d{7,8})$|(1[0-9][0-9]{9})$|(^(\d{3,4}-)?\d{7,8}-)/'
@@ -141,29 +169,28 @@ class MyUtils
 
     /**
      * exchange the data to object and return the new object
-     * 
-     * @param array $data
-     * @param Object $object
+     *
+     * @param array $data            
+     * @param Object $object            
      * @return Object
      */
     public static function exchangeDataToObject($data, $object)
     {
         foreach ($object as $key => $value) {
-            $object->$key =  (isset($data[$key])) ? $data[$key] : $value;
+            $object->$key = (isset($data[$key])) ? $data[$key] : null;
         }
-        
         return $object;
     }
-    
+
     /**
      * exchange an object to an array
-     * 
-     * @param Object $object
+     *
+     * @param Object $object            
      * @return array $data
      */
     public static function exchangeObjectToData($object)
     {
-        foreach ($object as $key => $value){
+        foreach ($object as $key => $value) {
             $data[$key] = $value;
         }
         

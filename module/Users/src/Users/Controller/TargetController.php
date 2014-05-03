@@ -154,11 +154,10 @@ class TargetController extends AbstractActionController
             'target' => $target
         ));
     }
-    
-    
+
     /**
-     * 
-     * @param unknown $target_id
+     *
+     * @param unknown $target_id            
      * @return multitype:
      */
     protected function getTargetById($target_id)
@@ -175,7 +174,7 @@ class TargetController extends AbstractActionController
         
         return $row;
     }
-    
+
     public function getSubTargetsByIdAction()
     {
         // authrize user
@@ -227,6 +226,75 @@ class TargetController extends AbstractActionController
         }
         
         return $subTargets;
+    }
+
+    public function updateTargetAction()
+    {
+        // authrize user
+        require 'module/Users/src/Users/Tools/AuthUser.php';
+        // exchange the array to target
+        $target = new Target();
+        $target = MyUtils::exchangeDataToObject($_GET, $target);
+        // isValidate target
+        if (! $target->isValidate()) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'invalidate target'
+            ));
+        }
+        
+        // update target by id
+        try {
+            $this->updateTarget($target);
+        } catch (\Exception $e) {
+            return $this->returnJson(array(
+                'flag' => false,
+                'message' => 'cant update target:' . $target->target_id
+            ));
+        }
+        // return target
+        return $this->returnJson(array(
+            'flag' => true,
+            'target' => $target
+        ));
+    }
+    
+    protected function hasRight($target, $who) {
+    	;
+    }
+
+    /**
+     *
+     * @return \Users\Model\Target
+     */
+    protected function mockTarget()
+    {
+        $target = new Target();
+        $target->parent_target_id = 0;
+        $target->receiver = 'l.yuhai@foxmail.com';
+        $target->target_content = "this is a mocked target";
+        $target->target_creater = 'l.yuhai@gmail.com';
+        $target->target_end_time = '2014-12-31';
+        $target->target_id = 2;
+        $target->target_name = 'mock target';
+        $target->target_status = 2;
+        return $target;
+    }
+
+    /**
+     *
+     * @param unknown $target            
+     * @return \Zend\Db\Adapter\Driver\ResultInterface
+     */
+    protected function updateTarget(Target $target)
+    {
+        $sql = "update target set parent_target_id = '$target->parent_target_id', receiver = '$target->receiver',
+            target_content = '$target->target_content', target_creater = '$target->target_creater',
+            target_end_time = '$target->target_end_time', target_name = '$target->target_name', target_status = '$target->target_status'
+            where  target_id = '$target->target_id'";
+        // excute
+        $adapter = $this->getAdapter();
+        $adapter->query($sql)->execute();
     }
 
     public function updateStatusByIdAction()
